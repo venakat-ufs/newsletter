@@ -1,0 +1,44 @@
+{
+  "name": "dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=20.17.0"
+  },
+  "scripts": {
+    "predev": "node scripts/ensure-dev-lock-free.mjs && npm run db:prepare",
+    "dev": "dotenv -e ../.env -- node scripts/run-next-dev.mjs",
+    "dev:playwright": "dotenv -e ../.env -- node scripts/playwright-dev.mjs",
+    "prebuild": "npm run db:prepare",
+    "build": "dotenv -e ../.env -- next build --webpack",
+    "start": "dotenv -e ../.env -- next start",
+    "lint": "dotenv -e ../.env -- eslint",
+    "pretest:e2e": "npm run db:prepare",
+    "test:e2e": "dotenv -e ../.env -- playwright test",
+    "db:generate": "dotenv -e ../.env -- prisma generate --schema prisma/schema.prisma",
+    "db:prepare": "dotenv -e ../.env -- prisma db push --skip-generate --schema prisma/schema.prisma",
+    "db:push": "npm run db:prepare && npm run db:generate",
+    "postinstall": "npm run db:generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.2",
+    "dotenv-cli": "^11.0.0",
+    "next": "16.1.6",
+    "nodemailer": "^8.0.2",
+    "prisma": "^6.19.2",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/nodemailer": "^7.0.11",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

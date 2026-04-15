@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s \"https://api.fdic.gov/banks/failures?limit=5&sort_by=FAILDATE&sort_order=DESC&output=json\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(f['data'].get\\('NAME','?'\\), '|', f['data'].get\\('FAILDATE','?'\\), '|', f['data'].get\\('SAVR','?'\\), '|', f['data'].get\\('ASSET','?'\\)\\) for f in d.get\\('data',[]\\)]\")",
+      "Bash(where graphify:*)",
+      "Bash(python -m graphify --version)",
+      "Bash(where python:*)",
+      "Bash(python -c \"import urllib.request, json; r=urllib.request.urlopen\\('https://api.fdic.gov/banks/failures?limit=5&sort_by=FAILDATE&sort_order=DESC&output=json',timeout=10\\); d=json.loads\\(r.read\\(\\)\\); [print\\(f['data'].get\\('NAME','?'\\),'|',f['data'].get\\('FAILDATE','?'\\),'|',f['data'].get\\('ASSET','?'\\)\\) for f in d.get\\('data',[]\\)]\")",
+      "Bash(python -c \"import urllib.request,json; r=urllib.request.urlopen\\('https://api.fdic.gov/banks/failures?limit=5&sort_by=FAILDATE&sort_order=DESC&output=json',timeout=10\\); d=json.loads\\(r.read\\(\\)\\); print\\(json.dumps\\(d['data'][0],indent=2\\)\\)\")",
+      "Bash(python -c \"import graphify; print\\(graphify.__version__\\)\")"
+    ]
+  }
+}

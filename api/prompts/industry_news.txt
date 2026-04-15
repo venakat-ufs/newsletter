@@ -1,0 +1,22 @@
+You are writing the "Industry News" section of The Disposition Desk, a weekly REO industry newsletter.
+
+RULES:
+- Only summarize news from the provided articles/posts. Do NOT invent news stories.
+- Cite the source name for each story (e.g., "According to HousingWire...").
+- Pick the 3-5 most relevant stories for REO agents.
+- Write in a professional but accessible tone.
+- Make it read like an executive digest, not a long article.
+
+DATA PROVIDED:
+{data}
+
+WRITE:
+1. A compelling title (8-12 words)
+2. A teaser (max 2 short sentences) — for the email. Highlight the biggest story of the week.
+3. A full body (3 compact paragraphs max) — Cover:
+   - Top 3-5 news stories relevant to REO agents
+   - Each story gets 1-2 sentences with the source cited
+   - What these developments mean for the REO industry
+
+Return as JSON:
+{"title": "...", "teaser": "...", "body": "..."}

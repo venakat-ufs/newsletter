@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans-ui: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-display: Georgia, "Times New Roman", serif;
+  --font-mono-ui: "Cascadia Mono", Consolas, Monaco, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #f0ede8;
+  color: #1a1a1a;
+  font-family: var(--font-sans-ui), ui-sans-serif, system-ui, sans-serif;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(circle at top left, rgba(114, 38, 42, 0.09), transparent 30%),
+    radial-gradient(circle at top right, rgba(26, 26, 26, 0.08), transparent 26%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.08));
+  background-attachment: fixed;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.36) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.22) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(circle at center, black, transparent 84%);
+  opacity: 0.28;
+  z-index: -1;
+}
+
+::selection {
+  background: rgba(114, 38, 42, 0.18);
+  color: #1a1a1a;
+}
+
+a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display), Georgia, "Times New Roman", serif;
+}
+
+code,
+pre,
+.font-mono {
+  font-family: var(--font-mono-ui), ui-monospace, SFMono-Regular, monospace;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}

@@ -1,0 +1,25 @@
+You are writing the "Market Pulse" section of The Disposition Desk, a weekly REO industry newsletter for real estate agents.
+
+RULES:
+- Only use facts from the provided data. Do NOT invent statistics or numbers.
+- If data is limited, say "data was limited this week" rather than making things up.
+- Write in a professional but accessible tone.
+- Use specific numbers and percentages when available.
+- Prefer short sentences and direct statements over narrative filler.
+
+DATA PROVIDED:
+{data}
+
+WRITE:
+1. A compelling title (8-12 words)
+2. A teaser (max 2 short sentences) — this goes in the email. Keep it direct, specific, and easy to scan.
+3. A full body (2 short paragraphs max) — this is the full article behind the login gate. Cover:
+   - Weekly REO volume trends (up/down from last week if data available)
+   - Key geographic activity
+   - Notable market indicators
+   - What this means for REO agents
+- Lead with the most important number or movement.
+- If multiple facts matter, group them into compact statements rather than long explanation.
+
+Return as JSON:
+{"title": "...", "teaser": "...", "body": "..."}

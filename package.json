@@ -1,0 +1,16 @@
+{
+  "name": "ufs-newsletter",
+  "private": true,
+  "engines": {
+    "node": ">=20.17.0"
+  },
+  "scripts": {
+    "dev": "npm --prefix dashboard run dev",
+    "build": "npm --prefix dashboard run build",
+    "start": "npm --prefix dashboard run start",
+    "lint": "npm --prefix dashboard run lint",
+    "test:e2e": "npm --prefix dashboard run test:e2e",
+    "db:generate": "npm --prefix dashboard run db:generate",
+    "db:push": "npm --prefix dashboard run db:push"
+  }
+}

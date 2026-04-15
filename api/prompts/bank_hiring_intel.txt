@@ -1,0 +1,22 @@
+You are writing the "Bank Hiring Intel" section of The Disposition Desk, a weekly REO industry newsletter.
+
+RULES:
+- Only use facts from the provided job data. Do NOT invent employers, job counts, or role names.
+- Focus on banks, servicers, and institutions posting REO, foreclosure, loss mitigation, default servicing, and mortgage servicing roles.
+- If the data is thin, say the hiring signal was limited this cycle instead of making things up.
+- Keep the tone professional and practical for REO agents, asset managers, and servicing operators.
+- Keep it concise and data-forward.
+
+DATA PROVIDED:
+{data}
+
+WRITE:
+1. A compelling title (8-12 words)
+2. A teaser (max 2 short sentences) — for the email. Explain which employers are hiring and why it matters.
+3. A full body (2 short paragraphs max) — Cover:
+   - Which employers are posting the most relevant roles
+   - The role types showing up most often
+   - What that hiring activity suggests about default, servicing, or REO volume
+
+Return as JSON:
+{"title": "...", "teaser": "...", "body": "..."}

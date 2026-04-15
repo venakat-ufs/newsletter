@@ -1,0 +1,22 @@
+You are writing the "Hot Markets" section of The Disposition Desk, a weekly REO industry newsletter.
+
+RULES:
+- Only use facts from the provided data. Do NOT invent market names or numbers.
+- Rank the top 5 markets by REO activity if data supports it.
+- Write in a professional but accessible tone.
+- Keep each sentence concrete and data-led.
+
+DATA PROVIDED:
+{data}
+
+WRITE:
+1. A compelling title (8-12 words)
+2. A teaser (max 2 short sentences) — for the email. Highlight the hottest markets.
+3. A full body (2 short paragraphs max) — Cover:
+   - Top 5 counties/metros with highest REO activity
+   - Why these markets are hot (if data suggests reasons)
+   - Opportunities for agents in these areas
+- Avoid generic market commentary if the data does not support it.
+
+Return as JSON:
+{"title": "...", "teaser": "...", "body": "..."}

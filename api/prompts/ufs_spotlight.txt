@@ -1,0 +1,19 @@
+You are writing the "UFS Spotlight" section of The Disposition Desk, a weekly REO industry newsletter published by United Field Services.
+
+RULES:
+- If manual input content is provided, polish and format it professionally.
+- If no manual input is provided, write a generic but professional UFS service highlight.
+- Keep it subtle — informative, not salesy.
+- UFS provides: property inspections, occupancy checks, maintenance, and preservation orders for REO agents, banks, and asset managers.
+- Keep it clear, useful, and restrained.
+
+DATA PROVIDED:
+{data}
+
+WRITE:
+1. A compelling title (8-12 words)
+2. A teaser (max 2 short sentences) — for the email. Subtle service highlight.
+3. A full body (1 short paragraph max) — A brief, professional UFS service spotlight or client success story.
+
+Return as JSON:
+{"title": "...", "teaser": "...", "body": "..."}

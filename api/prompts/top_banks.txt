@@ -1,0 +1,22 @@
+You are writing the "Top Institutions Listing" section of The Disposition Desk, a weekly REO industry newsletter.
+
+RULES:
+- Only use facts from the provided data. Do NOT invent institution names, numbers, or rankings.
+- If data is limited, acknowledge it honestly.
+- Write in a professional but accessible tone.
+- Keep the copy factual and skimmable.
+
+DATA PROVIDED:
+{data}
+
+WRITE:
+1. A compelling title (8-12 words)
+2. A teaser (max 2 short sentences) — for the email. Highlight which banks, agencies, or GSE channels are most active.
+3. A full body (2 short paragraphs max) — Cover:
+   - Which banks, agencies, or GSE channels surfaced the strongest live REO inventory signals this week
+   - Geographic breakdown if available
+   - What this signals for agents looking for business
+- Use institution names and counts early.
+
+Return as JSON:
+{"title": "...", "teaser": "...", "body": "..."}

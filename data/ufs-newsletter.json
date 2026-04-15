@@ -1,0 +1,2294 @@
+{
+  "newsletters": [
+    {
+      "id": 1,
+      "issue_number": 1,
+      "issue_date": "2026-03-17T21:32:58.994Z",
+      "status": "draft",
+      "mailchimp_campaign_id": null,
+      "created_at": "2026-03-17T21:32:58.994Z",
+      "updated_at": "2026-03-17T21:32:58.994Z"
+    }
+  ],
+  "drafts": [
+    {
+      "id": 1,
+      "newsletter_id": 1,
+      "raw_data": {
+        "sources": {
+          "grok": {
+            "collected_at": "2026-03-17T21:32:48.949Z",
+            "data": [],
+            "errors": [
+              "GROK_API_KEY not configured"
+            ],
+            "success": false,
+            "source": "grok"
+          },
+          "reddit": {
+            "collected_at": "2026-03-17T21:32:51.353Z",
+            "data": [
+              {
+                "subreddit": "realestate",
+                "title": "Neighbor's house up for auction - what do I do?",
+                "text": "Update: Talked to the neighbor yesterday.  She just found out last week and was still in panic mode. An old medical bill came up out of nowhere a few months ago and started garnishing a gigantic portion of her paycheck, so that's when she fell behind. As I suspected, she didn't really know where to start or have anyone close to her that could give her advice. Luckily she was grateful for the offer of help (I didn't want to butt into her business too hard, I was a bit nervous about the conversation.)\n\nWe don't know exactly how we'll move forward, but our plan was always to buy her place when she moved out in 4-5 years. I talked to the title company and they gave me a lawyer recommendation. We can't even get a consult for next Friday, so we'll probably help her file for the 5 month extension to the foreclosure auction and see what we can get worked out that protects both of us. Maybe we can do some sort of creative C for D thing or who knows what. It would be kond of nice not to have leg",
+                "score": 170,
+                "num_comments": 161,
+                "author": "Formal_Goose",
+                "url": "https://reddit.com/r/RealEstate/comments/1rrazpv/neighbors_house_up_for_auction_what_do_i_do/",
+                "created_utc": 1773273408,
+                "retrieval_mode": "public_json"
+              },
+              {
+                "subreddit": "realestate",
+                "title": "Seeing more underwater homeowners lately?",
+                "text": "Been noticing maybe 6-7 posts here over the past day or two from people worried their houses dropped in value big time since they bought. Also seeing way more foreclosure notices popping up around where I live compared to like 6 months ago. Anyone else picking up on this pattern or is it just coincidence",
+                "score": 165,
+                "num_comments": 197,
+                "author": "Responsible-Yard1654",
+                "url": "https://reddit.com/r/RealEstate/comments/1rti735/seeing_more_underwater_homeowners_lately/",
+                "created_utc": 1773491403,
+                "retrieval_mode": "public_json"
+              }
+            ],
+            "errors": [
+              "Subreddit r/foreclosure failed: HTTP 403"
+            ],
+            "success": true,
+            "source": "reddit"
+          },
+          "news_api_mock": {
+            "collected_at": "2026-03-17T21:32:49.062Z",
+            "data": [
+              {
+                "title": "HUD Announces Updated REO Disposition Guidelines for 2026",
+                "description": "The Department of Housing and Urban Development released new guidelines for the disposition of Real Estate Owned properties, affecting how banks and servicers handle foreclosed assets.",
+                "source_name": "HousingWire",
+                "url": "https://example.com/hud-reo-guidelines-2026",
+                "published_at": "2026-03-12T14:00:00Z",
+                "content_preview": "HUD has announced updated guidelines for the Real Estate Owned (REO) disposition process that will take effect in Q2 2026. The new rules aim to streamline the sale of government-owned foreclosed properties and increase opportunities for owner-occupant buyers."
+              },
+              {
+                "title": "Foreclosure Activity Rises 8% in February as Pandemic Moratoriums Fully Expire",
+                "description": "New data shows foreclosure filings increased across the US in February 2026, with the highest activity in Florida, Illinois, and Ohio.",
+                "source_name": "ATTOM Data Solutions",
+                "url": "https://example.com/foreclosure-rise-feb-2026",
+                "published_at": "2026-03-11T10:30:00Z",
+                "content_preview": "According to ATTOM's latest U.S. Foreclosure Market Report, there were 35,196 U.S. properties with foreclosure filings in February 2026, up 8 percent from the previous month and up 12 percent from a year ago."
+              },
+              {
+                "title": "Wells Fargo Expands REO Agent Network in Southeast Markets",
+                "description": "Wells Fargo is actively recruiting field service agents and REO listing agents across Florida, Georgia, and the Carolinas to handle increased foreclosure volume.",
+                "source_name": "National Mortgage News",
+                "url": "https://example.com/wells-fargo-reo-expansion",
+                "published_at": "2026-03-10T09:00:00Z",
+                "content_preview": "Wells Fargo has begun expanding its network of REO listing agents and field service providers in the Southeast, signaling expectations of continued growth in bank-owned property inventory through 2026."
+              },
+              {
+                "title": "Commercial REO Volume Expected to Peak in Q3 2026, Analysts Say",
+                "description": "Industry analysts predict commercial real estate foreclosures will reach their highest point in the third quarter, driven by office and retail property distress.",
+                "source_name": "Commercial Observer",
+                "url": "https://example.com/commercial-reo-peak-q3",
+                "published_at": "2026-03-09T16:00:00Z",
+                "content_preview": "Multiple industry forecasters now project that commercial REO volume will peak in Q3 2026 as office and retail properties continue to face valuation pressures and loan maturities force lender decisions."
+              },
+              {
+                "title": "New Legislation Would Require 90-Day Owner-Occupant Exclusivity on All REO Sales",
+                "description": "A bipartisan bill introduced in Congress would mandate a 90-day exclusive marketing period for owner-occupant buyers on all REO property sales.",
+                "source_name": "Inman News",
+                "url": "https://example.com/reo-exclusivity-bill",
+                "published_at": "2026-03-13T11:00:00Z",
+                "content_preview": "The proposed Homeowner First Act would require all financial institutions selling REO properties to provide a 90-day exclusive marketing window for owner-occupant and nonprofit buyers before opening sales to investors."
+              }
+            ],
+            "errors": [
+              "Using mock news articles because NEWS_API_KEY is not configured."
+            ],
+            "success": true,
+            "source": "news_api_mock"
+          },
+          "foreclosure_com_mock": {
+            "collected_at": "2026-03-17T21:32:58.993Z",
+            "data": [
+              {
+                "state": "FL",
+                "total_listings": 2847,
+                "top_counties": [
+                  {
+                    "name": "Miami-Dade County",
+                    "count": 412
+                  },
+                  {
+                    "name": "Broward County",
+                    "count": 287
+                  },
+                  {
+                    "name": "Hillsborough County",
+                    "count": 198
+                  },
+                  {
+                    "name": "Duval County",
+                    "count": 176
+                  },
+                  {
+                    "name": "Palm Beach County",
+                    "count": 165
+                  }
+                ],
+                "banks_mentioned": [
+                  "Wells Fargo",
+                  "Chase",
+                  "Bank of America",
+                  "Ocwen",
+                  "Fannie Mae"
+                ]
+              },
+              {
+                "state": "CA",
+                "total_listings": 1923,
+                "top_counties": [
+                  {
+                    "name": "Los Angeles County",
+                    "count": 345
+                  },
+                  {
+                    "name": "San Bernardino County",
+                    "count": 213
+                  },
+                  {
+                    "name": "Riverside County",
+                    "count": 189
+                  },
+                  {
+                    "name": "Sacramento County",
+                    "count": 134
+                  },
+                  {
+                    "name": "Fresno County",
+                    "count": 98
+                  }
+                ],
+                "banks_mentioned": [
+                  "Chase",
+                  "Wells Fargo",
+                  "Fannie Mae",
+                  "Freddie Mac"
+                ]
+              },
+              {
+                "state": "TX",
+                "total_listings": 2134,
+                "top_counties": [
+                  {
+                    "name": "Harris County",
+                    "count": 378
+                  },
+                  {
+                    "name": "Dallas County",
+                    "count": 256
+                  },
+                  {
+                    "name": "Bexar County",
+                    "count": 187
+                  },
+                  {
+                    "name": "Tarrant County",
+                    "count": 145
+                  },
+                  {
+                    "name": "Travis County",
+                    "count": 89
+                  }
+                ],
+                "banks_mentioned": [
+                  "Wells Fargo",
+                  "Carrington",
+                  "US Bank",
+                  "Chase"
+                ]
+              },
+              {
+                "state": "IL",
+                "total_listings": 1567,
+                "top_counties": [
+                  {
+                    "name": "Cook County",
+                    "count": 623
+                  },
+                  {
+                    "name": "Will County",
+                    "count": 112
+                  },
+                  {
+                    "name": "DuPage County",
+                    "count": 87
+                  },
+                  {
+                    "name": "Lake County",
+                    "count": 76
+                  },
+                  {
+                    "name": "Kane County",
+                    "count": 54
+                  }
+                ],
+                "banks_mentioned": [
+                  "Bank of America",
+                  "Chase",
+                  "HUD",
+                  "Fannie Mae"
+                ]
+              },
+              {
+                "state": "OH",
+                "total_listings": 1245,
+                "top_counties": [
+                  {
+                    "name": "Cuyahoga County",
+                    "count": 287
+                  },
+                  {
+                    "name": "Franklin County",
+                    "count": 198
+                  },
+                  {
+                    "name": "Hamilton County",
+                    "count": 134
+                  },
+                  {
+                    "name": "Summit County",
+                    "count": 98
+                  },
+                  {
+                    "name": "Montgomery County",
+                    "count": 76
+                  }
+                ],
+                "banks_mentioned": [
+                  "US Bank",
+                  "Wells Fargo",
+                  "Freddie Mac",
+                  "HUD"
+                ]
+              },
+              {
+                "state": "AZ",
+                "total_listings": 987,
+                "top_counties": [
+                  {
+                    "name": "Maricopa County",
+                    "count": 534
+                  },
+                  {
+                    "name": "Pima County",
+                    "count": 145
+                  },
+                  {
+                    "name": "Pinal County",
+                    "count": 98
+                  },
+                  {
+                    "name": "Yavapai County",
+                    "count": 45
+                  },
+                  {
+                    "name": "Mohave County",
+                    "count": 34
+                  }
+                ],
+                "banks_mentioned": [
+                  "Fannie Mae",
+                  "Nationstar",
+                  "Shellpoint",
+                  "Wells Fargo"
+                ]
+              },
+              {
+                "state": "GA",
+                "total_listings": 1098,
+                "top_counties": [
+                  {
+                    "name": "Fulton County",
+                    "count": 213
+                  },
+                  {
+                    "name": "DeKalb County",
+                    "count": 178
+                  },
+                  {
+                    "name": "Gwinnett County",
+                    "count": 134
+                  },
+                  {
+                    "name": "Cobb County",
+                    "count": 98
+                  },
+                  {
+                    "name": "Clayton County",
+                    "count": 87
+                  }
+                ],
+                "banks_mentioned": [
+                  "Freddie Mac",
+                  "Bank of America",
+                  "Chase",
+                  "PHH"
+                ]
+              },
+              {
+                "state": "MI",
+                "total_listings": 1345,
+                "top_counties": [
+                  {
+                    "name": "Wayne County",
+                    "count": 456
+                  },
+                  {
+                    "name": "Oakland County",
+                    "count": 167
+                  },
+                  {
+                    "name": "Macomb County",
+                    "count": 134
+                  },
+                  {
+                    "name": "Kent County",
+                    "count": 89
+                  },
+                  {
+                    "name": "Genesee County",
+                    "count": 78
+                  }
+                ],
+                "banks_mentioned": [
+                  "HUD",
+                  "Wells Fargo",
+                  "Fannie Mae",
+                  "Bank of America"
+                ]
+              },
+              {
+                "state": "NJ",
+                "total_listings": 876,
+                "top_counties": [
+                  {
+                    "name": "Essex County",
+                    "count": 134
+                  },
+                  {
+                    "name": "Passaic County",
+                    "count": 98
+                  },
+                  {
+                    "name": "Camden County",
+                    "count": 87
+                  },
+                  {
+                    "name": "Hudson County",
+                    "count": 76
+                  },
+                  {
+                    "name": "Bergen County",
+                    "count": 54
+                  }
+                ],
+                "banks_mentioned": [
+                  "Chase",
+                  "Bank of America",
+                  "Wells Fargo",
+                  "Ocwen"
+                ]
+              },
+              {
+                "state": "PA",
+                "total_listings": 934,
+                "top_counties": [
+                  {
+                    "name": "Philadelphia County",
+                    "count": 234
+                  },
+                  {
+                    "name": "Allegheny County",
+                    "count": 123
+                  },
+                  {
+                    "name": "Delaware County",
+                    "count": 87
+                  },
+                  {
+                    "name": "Montgomery County",
+                    "count": 76
+                  },
+                  {
+                    "name": "Bucks County",
+                    "count": 54
+                  }
+                ],
+                "banks_mentioned": [
+                  "Bank of America",
+                  "Chase",
+                  "Freddie Mac",
+                  "Shellpoint"
+                ]
+              }
+            ],
+            "errors": [
+              "Foreclosure.com /listings/FL failed: HTTP 403",
+              "Foreclosure.com /listings/CA failed: HTTP 403",
+              "Foreclosure.com /listings/TX failed: HTTP 403",
+              "Foreclosure.com /listings/OH failed: HTTP 403",
+              "Foreclosure.com /listings/IL failed: HTTP 403",
+              "Foreclosure.com /listings/GA failed: HTTP 403",
+              "Foreclosure.com /listings/MI failed: HTTP 403",
+              "Foreclosure.com /listings/NJ failed: HTTP 403",
+              "Foreclosure.com /listings/PA failed: HTTP 403",
+              "Foreclosure.com /listings/AZ failed: HTTP 403",
+              "Using mock foreclosure stats because the live scrape returned no data."
+            ],
+            "success": true,
+            "source": "foreclosure_com_mock"
+          },
+          "zillow_mock": {
+            "collected_at": "2026-03-17T21:32:49.062Z",
+            "data": [
+              {
+                "property_address": "1234 Oak St, Miami, FL 33101",
+                "listing_agent": "Sarah Johnson",
+                "agent_email": "sjohnson@remax.com",
+                "agent_phone": "305-555-0101",
+                "listing_date": "2026-03-10",
+                "price": 285000,
+                "bank_servicer": "Wells Fargo",
+                "property_type": "Single Family",
+                "mls_number": "A11234567",
+                "county": "Miami-Dade",
+                "state": "FL"
+              },
+              {
+                "property_address": "5678 Elm Ave, Fort Lauderdale, FL 33301",
+                "listing_agent": "Michael Chen",
+                "agent_email": "mchen@kw.com",
+                "agent_phone": "954-555-0202",
+                "listing_date": "2026-03-11",
+                "price": 340000,
+                "bank_servicer": "Chase",
+                "property_type": "Single Family",
+                "mls_number": "A11234568",
+                "county": "Broward",
+                "state": "FL"
+              },
+              {
+                "property_address": "910 Pine Rd, Phoenix, AZ 85001",
+                "listing_agent": "Lisa Martinez",
+                "agent_email": "lmartinez@coldwellbanker.com",
+                "agent_phone": "602-555-0303",
+                "listing_date": "2026-03-09",
+                "price": 210000,
+                "bank_servicer": "Fannie Mae",
+                "property_type": "Townhouse",
+                "mls_number": "AZ5567890",
+                "county": "Maricopa",
+                "state": "AZ"
+              },
+              {
+                "property_address": "2468 Maple Dr, Chicago, IL 60601",
+                "listing_agent": "David Kim",
+                "agent_email": "dkim@compass.com",
+                "agent_phone": "312-555-0404",
+                "listing_date": "2026-03-12",
+                "price": 175000,
+                "bank_servicer": "Bank of America",
+                "property_type": "Condo",
+                "mls_number": "IL3345678",
+                "county": "Cook",
+                "state": "IL"
+              },
+              {
+                "property_address": "1357 Cedar Ln, Houston, TX 77001",
+                "listing_agent": "Amanda Thompson",
+                "agent_email": "athompson@berkshire.com",
+                "agent_phone": "713-555-0505",
+                "listing_date": "2026-03-10",
+                "price": 195000,
+                "bank_servicer": "Wells Fargo",
+                "property_type": "Single Family",
+                "mls_number": "TX7789012",
+                "county": "Harris",
+                "state": "TX"
+              },
+              {
+                "property_address": "8642 Birch St, Atlanta, GA 30301",
+                "listing_agent": "James Williams",
+                "agent_email": "jwilliams@exp.com",
+                "agent_phone": "404-555-0606",
+                "listing_date": "2026-03-11",
+                "price": 230000,
+                "bank_servicer": "Freddie Mac",
+                "property_type": "Single Family",
+                "mls_number": "GA4456789",
+                "county": "Fulton",
+                "state": "GA"
+              },
+              {
+                "property_address": "9753 Walnut Ave, Detroit, MI 48201",
+                "listing_agent": "Patricia Brown",
+                "agent_email": "pbrown@century21.com",
+                "agent_phone": "313-555-0707",
+                "listing_date": "2026-03-09",
+                "price": 95000,
+                "bank_servicer": "HUD",
+                "property_type": "Single Family",
+                "mls_number": "MI2234567",
+                "county": "Wayne",
+                "state": "MI"
+              },
+              {
+                "property_address": "3141 Spruce Ct, Newark, NJ 07101",
+                "listing_agent": "Robert Garcia",
+                "agent_email": "rgarcia@sothebys.com",
+                "agent_phone": "973-555-0808",
+                "listing_date": "2026-03-12",
+                "price": 310000,
+                "bank_servicer": "Chase",
+                "property_type": "Multi-Family",
+                "mls_number": "NJ8890123",
+                "county": "Essex",
+                "state": "NJ"
+              },
+              {
+                "property_address": "7531 Ash Blvd, Columbus, OH 43201",
+                "listing_agent": "Jennifer Davis",
+                "agent_email": "jdavis@remax.com",
+                "agent_phone": "614-555-0909",
+                "listing_date": "2026-03-10",
+                "price": 155000,
+                "bank_servicer": "US Bank",
+                "property_type": "Single Family",
+                "mls_number": "OH6678901",
+                "county": "Franklin",
+                "state": "OH"
+              },
+              {
+                "property_address": "2580 Willow Way, Scottsdale, AZ 85251",
+                "listing_agent": "Thomas Wilson",
+                "agent_email": "twilson@redfin.com",
+                "agent_phone": "480-555-1010",
+                "listing_date": "2026-03-13",
+                "price": 425000,
+                "bank_servicer": "Nationstar",
+                "property_type": "Single Family",
+                "mls_number": "AZ5567891",
+                "county": "Maricopa",
+                "state": "AZ"
+              },
+              {
+                "property_address": "4826 Poplar St, Tampa, FL 33601",
+                "listing_agent": "Karen Lee",
+                "agent_email": "klee@bhhs.com",
+                "agent_phone": "813-555-1111",
+                "listing_date": "2026-03-11",
+                "price": 265000,
+                "bank_servicer": "Wells Fargo",
+                "property_type": "Single Family",
+                "mls_number": "A11234570",
+                "county": "Hillsborough",
+                "state": "FL"
+              },
+              {
+                "property_address": "6173 Hickory Rd, San Antonio, TX 78201",
+                "listing_agent": "Daniel Rodriguez",
+                "agent_email": "drodriguez@kw.com",
+                "agent_phone": "210-555-1212",
+                "listing_date": "2026-03-12",
+                "price": 185000,
+                "bank_servicer": "Carrington",
+                "property_type": "Single Family",
+                "mls_number": "TX7789013",
+                "county": "Bexar",
+                "state": "TX"
+              },
+              {
+                "property_address": "8395 Sycamore Dr, Jacksonville, FL 32201",
+                "listing_agent": "Emily Clark",
+                "agent_email": "eclark@compass.com",
+                "agent_phone": "904-555-1313",
+                "listing_date": "2026-03-09",
+                "price": 198000,
+                "bank_servicer": "Ocwen",
+                "property_type": "Single Family",
+                "mls_number": "A11234571",
+                "county": "Duval",
+                "state": "FL"
+              },
+              {
+                "property_address": "1592 Magnolia Ct, Philadelphia, PA 19101",
+                "listing_agent": "Brian Anderson",
+                "agent_email": "banderson@coldwellbanker.com",
+                "agent_phone": "215-555-1414",
+                "listing_date": "2026-03-13",
+                "price": 145000,
+                "bank_servicer": "Bank of America",
+                "property_type": "Townhouse",
+                "mls_number": "PA5567890",
+                "county": "Philadelphia",
+                "state": "PA"
+              },
+              {
+                "property_address": "3710 Redwood Ave, Mesa, AZ 85201",
+                "listing_agent": "Stephanie White",
+                "agent_email": "swhite@exp.com",
+                "agent_phone": "480-555-1515",
+                "listing_date": "2026-03-10",
+                "price": 275000,
+                "bank_servicer": "Shellpoint",
+                "property_type": "Single Family",
+                "mls_number": "AZ5567892",
+                "county": "Maricopa",
+                "state": "AZ"
+              }
+            ],
+            "errors": [],
+            "success": true,
+            "source": "zillow_mock"
+          }
+        },
+        "sections": {
+          "market_pulse": {
+            "description": "Weekly REO volume, foreclosure activity, key market indicators",
+            "data": [
+              {
+                "state": "FL",
+                "total_listings": 2847,
+                "top_counties": [
+                  {
+                    "name": "Miami-Dade County",
+                    "count": 412
+                  },
+                  {
+                    "name": "Broward County",
+                    "count": 287
+                  },
+                  {
+                    "name": "Hillsborough County",
+                    "count": 198
+                  },
+                  {
+                    "name": "Duval County",
+                    "count": 176
+                  },
+                  {
+                    "name": "Palm Beach County",
+                    "count": 165
+                  }
+                ],
+                "banks_mentioned": [
+                  "Wells Fargo",
+                  "Chase",
+                  "Bank of America",
+                  "Ocwen",
+                  "Fannie Mae"
+                ]
+              },
+              {
+                "state": "CA",
+                "total_listings": 1923,
+                "top_counties": [
+                  {
+                    "name": "Los Angeles County",
+                    "count": 345
+                  },
+                  {
+                    "name": "San Bernardino County",
+                    "count": 213
+                  },
+                  {
+                    "name": "Riverside County",
+                    "count": 189
+                  },
+                  {
+                    "name": "Sacramento County",
+                    "count": 134
+                  },
+                  {
+                    "name": "Fresno County",
+                    "count": 98
+                  }
+                ],
+                "banks_mentioned": [
+                  "Chase",
+                  "Wells Fargo",
+                  "Fannie Mae",
+                  "Freddie Mac"
+                ]
+              },
+              {
+                "state": "TX",
+                "total_listings": 2134,
+                "top_counties": [
+                  {
+                    "name": "Harris County",
+                    "count": 378
+                  },
+                  {
+                    "name": "Dallas County",
+                    "count": 256
+                  },
+                  {
+                    "name": "Bexar County",
+                    "count": 187
+                  },
+                  {
+                    "name": "Tarrant County",
+                    "count": 145
+                  },
+                  {
+                    "name": "Travis County",
+                    "count": 89
+                  }
+                ],
+                "banks_mentioned": [
+                  "Wells Fargo",
+                  "Carrington",
+                  "US Bank",
+                  "Chase"
+                ]
+              },
+              {
+                "state": "IL",
+                "total_listings": 1567,
+                "top_counties": [
+                  {
+                    "name": "Cook County",
+                    "count": 623
+                  },
+                  {
+                    "name": "Will County",
+                    "count": 112
+                  },
+                  {
+                    "name": "DuPage County",
+                    "count": 87
+                  },
+                  {
+                    "name": "Lake County",
+                    "count": 76
+                  },
+                  {
+                    "name": "Kane County",
+                    "count": 54
+                  }
+                ],
+                "banks_mentioned": [
+                  "Bank of America",
+                  "Chase",
+                  "HUD",
+                  "Fannie Mae"
+                ]
+              },
+              {
+                "state": "OH",
+                "total_listings": 1245,
+                "top_counties": [
+                  {
+                    "name": "Cuyahoga County",
+                    "count": 287
+                  },
+                  {
+                    "name": "Franklin County",
+                    "count": 198
+                  },
+                  {
+                    "name": "Hamilton County",
+                    "count": 134
+                  },
+                  {
+                    "name": "Summit County",
+                    "count": 98
+                  },
+                  {
+                    "name": "Montgomery County",
+                    "count": 76
+                  }
+                ],
+                "banks_mentioned": [
+                  "US Bank",
+                  "Wells Fargo",
+                  "Freddie Mac",
+                  "HUD"
+                ]
+              },
+              {
+                "state": "AZ",
+                "total_listings": 987,
+                "top_counties": [
+                  {
+                    "name": "Maricopa County",
+                    "count": 534
+                  },
+                  {
+                    "name": "Pima County",
+                    "count": 145
+                  },
+                  {
+                    "name": "Pinal County",
+                    "count": 98
+                  },
+                  {
+                    "name": "Yavapai County",
+                    "count": 45
+                  },
+                  {
+                    "name": "Mohave County",
+                    "count": 34
+                  }
+                ],
+                "banks_mentioned": [
+                  "Fannie Mae",
+                  "Nationstar",
+                  "Shellpoint",
+                  "Wells Fargo"
+                ]
+              },
+              {
+                "state": "GA",
+                "total_listings": 1098,
+                "top_counties": [
+                  {
+                    "name": "Fulton County",
+                    "count": 213
+                  },
+                  {
+                    "name": "DeKalb County",
+                    "count": 178
+                  },
+                  {
+                    "name": "Gwinnett County",
+                    "count": 134
+                  },
+                  {
+                    "name": "Cobb County",
+                    "count": 98
+                  },
+                  {
+                    "name": "Clayton County",
+                    "count": 87
+                  }
+                ],
+                "banks_mentioned": [
+                  "Freddie Mac",
+                  "Bank of America",
+                  "Chase",
+                  "PHH"
+                ]
+              },
+              {
+                "state": "MI",
+                "total_listings": 1345,
+                "top_counties": [
+                  {
+                    "name": "Wayne County",
+                    "count": 456
+                  },
+                  {
+                    "name": "Oakland County",
+                    "count": 167
+                  },
+                  {
+                    "name": "Macomb County",
+                    "count": 134
+                  },
+                  {
+                    "name": "Kent County",
+                    "count": 89
+                  },
+                  {
+                    "name": "Genesee County",
+                    "count": 78
+                  }
+                ],
+                "banks_mentioned": [
+                  "HUD",
+                  "Wells Fargo",
+                  "Fannie Mae",
+                  "Bank of America"
+                ]
+              },
+              {
+                "state": "NJ",
+                "total_listings": 876,
+                "top_counties": [
+                  {
+                    "name": "Essex County",
+                    "count": 134
+                  },
+                  {
+                    "name": "Passaic County",
+                    "count": 98
+                  },
+                  {
+                    "name": "Camden County",
+                    "count": 87
+                  },
+                  {
+                    "name": "Hudson County",
+                    "count": 76
+                  },
+                  {
+                    "name": "Bergen County",
+                    "count": 54
+                  }
+                ],
+                "banks_mentioned": [
+                  "Chase",
+                  "Bank of America",
+                  "Wells Fargo",
+                  "Ocwen"
+                ]
+              },
+              {
+                "state": "PA",
+                "total_listings": 934,
+                "top_counties": [
+                  {
+                    "name": "Philadelphia County",
+                    "count": 234
+                  },
+                  {
+                    "name": "Allegheny County",
+                    "count": 123
+                  },
+                  {
+                    "name": "Delaware County",
+                    "count": 87
+                  },
+                  {
+                    "name": "Montgomery County",
+                    "count": 76
+                  },
+                  {
+                    "name": "Bucks County",
+                    "count": 54
+                  }
+                ],
+                "banks_mentioned": [
+                  "Bank of America",
+                  "Chase",
+                  "Freddie Mac",
+                  "Shellpoint"
+                ]
+              },
+              {
+                "property_address": "1234 Oak St, Miami, FL 33101",
+                "listing_agent": "Sarah Johnson",
+                "agent_email": "sjohnson@remax.com",
+                "agent_phone": "305-555-0101",
+                "listing_date": "2026-03-10",
+                "price": 285000,
+                "bank_servicer": "Wells Fargo",
+                "property_type": "Single Family",
+                "mls_number": "A11234567",
+                "county": "Miami-Dade",
+                "state": "FL"
+              },
+              {
+                "property_address": "5678 Elm Ave, Fort Lauderdale, FL 33301",
+                "listing_agent": "Michael Chen",
+                "agent_email": "mchen@kw.com",
+                "agent_phone": "954-555-0202",
+                "listing_date": "2026-03-11",
+                "price": 340000,
+                "bank_servicer": "Chase",
+                "property_type": "Single Family",
+                "mls_number": "A11234568",
+                "county": "Broward",
+                "state": "FL"
+              },
+              {
+                "property_address": "910 Pine Rd, Phoenix, AZ 85001",
+                "listing_agent": "Lisa Martinez",
+                "agent_email": "lmartinez@coldwellbanker.com",
+                "agent_phone": "602-555-0303",
+                "listing_date": "2026-03-09",
+                "price": 210000,
+                "bank_servicer": "Fannie Mae",
+                "property_type": "Townhouse",
+                "mls_number": "AZ5567890",
+                "county": "Maricopa",
+                "state": "AZ"
+              },
+              {
+                "property_address": "2468 Maple Dr, Chicago, IL 60601",
+                "listing_agent": "David Kim",
+                "agent_email": "dkim@compass.com",
+                "agent_phone": "312-555-0404",
+                "listing_date": "2026-03-12",
+                "price": 175000,
+                "bank_servicer": "Bank of America",
+                "property_type": "Condo",
+                "mls_number": "IL3345678",
+                "county": "Cook",
+                "state": "IL"
+              },
+              {
+                "property_address": "1357 Cedar Ln, Houston, TX 77001",
+                "listing_agent": "Amanda Thompson",
+                "agent_email": "athompson@berkshire.com",
+                "agent_phone": "713-555-0505",
+                "listing_date": "2026-03-10",
+                "price": 195000,
+                "bank_servicer": "Wells Fargo",
+                "property_type": "Single Family",
+                "mls_number": "TX7789012",
+                "county": "Harris",
+                "state": "TX"
+              },
+              {
+                "property_address": "8642 Birch St, Atlanta, GA 30301",
+                "listing_agent": "James Williams",
+                "agent_email": "jwilliams@exp.com",
+                "agent_phone": "404-555-0606",
+                "listing_date": "2026-03-11",
+                "price": 230000,
+                "bank_servicer": "Freddie Mac",
+                "property_type": "Single Family",
+                "mls_number": "GA4456789",
+                "county": "Fulton",
+                "state": "GA"
+              },
+              {
+                "property_address": "9753 Walnut Ave, Detroit, MI 48201",
+                "listing_agent": "Patricia Brown",
+                "agent_email": "pbrown@century21.com",
+                "agent_phone": "313-555-0707",
+                "listing_date": "2026-03-09",
+                "price": 95000,
+                "bank_servicer": "HUD",
+                "property_type": "Single Family",
+                "mls_number": "MI2234567",
+                "county": "Wayne",
+                "state": "MI"
+              },
+              {
+                "property_address": "3141 Spruce Ct, Newark, NJ 07101",
+                "listing_agent": "Robert Garcia",
+                "agent_email": "rgarcia@sothebys.com",
+                "agent_phone": "973-555-0808",
+                "listing_date": "2026-03-12",
+                "price": 310000,
+                "bank_servicer": "Chase",
+                "property_type": "Multi-Family",
+                "mls_number": "NJ8890123",
+                "county": "Essex",
+                "state": "NJ"
+              },
+              {
+                "property_address": "7531 Ash Blvd, Columbus, OH 43201",
+                "listing_agent": "Jennifer Davis",
+                "agent_email": "jdavis@remax.com",
+                "agent_phone": "614-555-0909",
+                "listing_date": "2026-03-10",
+                "price": 155000,
+                "bank_servicer": "US Bank",
+                "property_type": "Single Family",
+                "mls_number": "OH6678901",
+                "county": "Franklin",
+                "state": "OH"
+              },
+              {
+                "property_address": "2580 Willow Way, Scottsdale, AZ 85251",
+                "listing_agent": "Thomas Wilson",
+                "agent_email": "twilson@redfin.com",
+                "agent_phone": "480-555-1010",
+                "listing_date": "2026-03-13",
+                "price": 425000,
+                "bank_servicer": "Nationstar",
+                "property_type": "Single Family",
+                "mls_number": "AZ5567891",
+                "county": "Maricopa",
+                "state": "AZ"
+              },
+              {
+                "source": "news_api",
+                "article_count": 5,
+                "top_headlines": [
+                  "HUD Announces Updated REO Disposition Guidelines for 2026",
+                  "Foreclosure Activity Rises 8% in February as Pandemic Moratoriums Fully Expire",
+                  "Wells Fargo Expands REO Agent Network in Southeast Markets",
+                  "Commercial REO Volume Expected to Peak in Q3 2026, Analysts Say",
+                  "New Legislation Would Require 90-Day Owner-Occupant Exclusivity on All REO Sales"
+                ]
+              }
+            ]
+          },
+          "top_banks": {
+            "description": "Which banks/servicers listed the most REO this week",
+            "data": [
+              {
+                "source": "foreclosure_com",
+                "banks": [
+                  "Wells Fargo",
+                  "Chase",
+                  "Bank of America",
+                  "Ocwen",
+                  "Fannie Mae",
+                  "Freddie Mac",
+                  "Carrington",
+                  "US Bank",
+                  "HUD",
+                  "Nationstar",
+                  "Shellpoint",
+                  "PHH"
+                ],
+                "state_data": [
+                  {
+                    "state": "FL",
+                    "total_listings": 2847,
+                    "top_counties": [
+                      {
+                        "name": "Miami-Dade County",
+                        "count": 412
+                      },
+                      {
+                        "name": "Broward County",
+                        "count": 287
+                      },
+                      {
+                        "name": "Hillsborough County",
+                        "count": 198
+                      },
+                      {
+                        "name": "Duval County",
+                        "count": 176
+                      },
+                      {
+                        "name": "Palm Beach County",
+                        "count": 165
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Wells Fargo",
+                      "Chase",
+                      "Bank of America",
+                      "Ocwen",
+                      "Fannie Mae"
+                    ]
+                  },
+                  {
+                    "state": "CA",
+                    "total_listings": 1923,
+                    "top_counties": [
+                      {
+                        "name": "Los Angeles County",
+                        "count": 345
+                      },
+                      {
+                        "name": "San Bernardino County",
+                        "count": 213
+                      },
+                      {
+                        "name": "Riverside County",
+                        "count": 189
+                      },
+                      {
+                        "name": "Sacramento County",
+                        "count": 134
+                      },
+                      {
+                        "name": "Fresno County",
+                        "count": 98
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Chase",
+                      "Wells Fargo",
+                      "Fannie Mae",
+                      "Freddie Mac"
+                    ]
+                  },
+                  {
+                    "state": "TX",
+                    "total_listings": 2134,
+                    "top_counties": [
+                      {
+                        "name": "Harris County",
+                        "count": 378
+                      },
+                      {
+                        "name": "Dallas County",
+                        "count": 256
+                      },
+                      {
+                        "name": "Bexar County",
+                        "count": 187
+                      },
+                      {
+                        "name": "Tarrant County",
+                        "count": 145
+                      },
+                      {
+                        "name": "Travis County",
+                        "count": 89
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Wells Fargo",
+                      "Carrington",
+                      "US Bank",
+                      "Chase"
+                    ]
+                  },
+                  {
+                    "state": "IL",
+                    "total_listings": 1567,
+                    "top_counties": [
+                      {
+                        "name": "Cook County",
+                        "count": 623
+                      },
+                      {
+                        "name": "Will County",
+                        "count": 112
+                      },
+                      {
+                        "name": "DuPage County",
+                        "count": 87
+                      },
+                      {
+                        "name": "Lake County",
+                        "count": 76
+                      },
+                      {
+                        "name": "Kane County",
+                        "count": 54
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Bank of America",
+                      "Chase",
+                      "HUD",
+                      "Fannie Mae"
+                    ]
+                  },
+                  {
+                    "state": "OH",
+                    "total_listings": 1245,
+                    "top_counties": [
+                      {
+                        "name": "Cuyahoga County",
+                        "count": 287
+                      },
+                      {
+                        "name": "Franklin County",
+                        "count": 198
+                      },
+                      {
+                        "name": "Hamilton County",
+                        "count": 134
+                      },
+                      {
+                        "name": "Summit County",
+                        "count": 98
+                      },
+                      {
+                        "name": "Montgomery County",
+                        "count": 76
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "US Bank",
+                      "Wells Fargo",
+                      "Freddie Mac",
+                      "HUD"
+                    ]
+                  },
+                  {
+                    "state": "AZ",
+                    "total_listings": 987,
+                    "top_counties": [
+                      {
+                        "name": "Maricopa County",
+                        "count": 534
+                      },
+                      {
+                        "name": "Pima County",
+                        "count": 145
+                      },
+                      {
+                        "name": "Pinal County",
+                        "count": 98
+                      },
+                      {
+                        "name": "Yavapai County",
+                        "count": 45
+                      },
+                      {
+                        "name": "Mohave County",
+                        "count": 34
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Fannie Mae",
+                      "Nationstar",
+                      "Shellpoint",
+                      "Wells Fargo"
+                    ]
+                  },
+                  {
+                    "state": "GA",
+                    "total_listings": 1098,
+                    "top_counties": [
+                      {
+                        "name": "Fulton County",
+                        "count": 213
+                      },
+                      {
+                        "name": "DeKalb County",
+                        "count": 178
+                      },
+                      {
+                        "name": "Gwinnett County",
+                        "count": 134
+                      },
+                      {
+                        "name": "Cobb County",
+                        "count": 98
+                      },
+                      {
+                        "name": "Clayton County",
+                        "count": 87
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Freddie Mac",
+                      "Bank of America",
+                      "Chase",
+                      "PHH"
+                    ]
+                  },
+                  {
+                    "state": "MI",
+                    "total_listings": 1345,
+                    "top_counties": [
+                      {
+                        "name": "Wayne County",
+                        "count": 456
+                      },
+                      {
+                        "name": "Oakland County",
+                        "count": 167
+                      },
+                      {
+                        "name": "Macomb County",
+                        "count": 134
+                      },
+                      {
+                        "name": "Kent County",
+                        "count": 89
+                      },
+                      {
+                        "name": "Genesee County",
+                        "count": 78
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "HUD",
+                      "Wells Fargo",
+                      "Fannie Mae",
+                      "Bank of America"
+                    ]
+                  },
+                  {
+                    "state": "NJ",
+                    "total_listings": 876,
+                    "top_counties": [
+                      {
+                        "name": "Essex County",
+                        "count": 134
+                      },
+                      {
+                        "name": "Passaic County",
+                        "count": 98
+                      },
+                      {
+                        "name": "Camden County",
+                        "count": 87
+                      },
+                      {
+                        "name": "Hudson County",
+                        "count": 76
+                      },
+                      {
+                        "name": "Bergen County",
+                        "count": 54
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Chase",
+                      "Bank of America",
+                      "Wells Fargo",
+                      "Ocwen"
+                    ]
+                  },
+                  {
+                    "state": "PA",
+                    "total_listings": 934,
+                    "top_counties": [
+                      {
+                        "name": "Philadelphia County",
+                        "count": 234
+                      },
+                      {
+                        "name": "Allegheny County",
+                        "count": 123
+                      },
+                      {
+                        "name": "Delaware County",
+                        "count": 87
+                      },
+                      {
+                        "name": "Montgomery County",
+                        "count": 76
+                      },
+                      {
+                        "name": "Bucks County",
+                        "count": 54
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Bank of America",
+                      "Chase",
+                      "Freddie Mac",
+                      "Shellpoint"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "hot_markets": {
+            "description": "Top 5 counties/metros with highest REO activity this week",
+            "data": [
+              {
+                "source": "foreclosure_com",
+                "states": [
+                  {
+                    "state": "FL",
+                    "total_listings": 2847,
+                    "top_counties": [
+                      {
+                        "name": "Miami-Dade County",
+                        "count": 412
+                      },
+                      {
+                        "name": "Broward County",
+                        "count": 287
+                      },
+                      {
+                        "name": "Hillsborough County",
+                        "count": 198
+                      },
+                      {
+                        "name": "Duval County",
+                        "count": 176
+                      },
+                      {
+                        "name": "Palm Beach County",
+                        "count": 165
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Wells Fargo",
+                      "Chase",
+                      "Bank of America",
+                      "Ocwen",
+                      "Fannie Mae"
+                    ]
+                  },
+                  {
+                    "state": "CA",
+                    "total_listings": 1923,
+                    "top_counties": [
+                      {
+                        "name": "Los Angeles County",
+                        "count": 345
+                      },
+                      {
+                        "name": "San Bernardino County",
+                        "count": 213
+                      },
+                      {
+                        "name": "Riverside County",
+                        "count": 189
+                      },
+                      {
+                        "name": "Sacramento County",
+                        "count": 134
+                      },
+                      {
+                        "name": "Fresno County",
+                        "count": 98
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Chase",
+                      "Wells Fargo",
+                      "Fannie Mae",
+                      "Freddie Mac"
+                    ]
+                  },
+                  {
+                    "state": "TX",
+                    "total_listings": 2134,
+                    "top_counties": [
+                      {
+                        "name": "Harris County",
+                        "count": 378
+                      },
+                      {
+                        "name": "Dallas County",
+                        "count": 256
+                      },
+                      {
+                        "name": "Bexar County",
+                        "count": 187
+                      },
+                      {
+                        "name": "Tarrant County",
+                        "count": 145
+                      },
+                      {
+                        "name": "Travis County",
+                        "count": 89
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Wells Fargo",
+                      "Carrington",
+                      "US Bank",
+                      "Chase"
+                    ]
+                  },
+                  {
+                    "state": "IL",
+                    "total_listings": 1567,
+                    "top_counties": [
+                      {
+                        "name": "Cook County",
+                        "count": 623
+                      },
+                      {
+                        "name": "Will County",
+                        "count": 112
+                      },
+                      {
+                        "name": "DuPage County",
+                        "count": 87
+                      },
+                      {
+                        "name": "Lake County",
+                        "count": 76
+                      },
+                      {
+                        "name": "Kane County",
+                        "count": 54
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Bank of America",
+                      "Chase",
+                      "HUD",
+                      "Fannie Mae"
+                    ]
+                  },
+                  {
+                    "state": "OH",
+                    "total_listings": 1245,
+                    "top_counties": [
+                      {
+                        "name": "Cuyahoga County",
+                        "count": 287
+                      },
+                      {
+                        "name": "Franklin County",
+                        "count": 198
+                      },
+                      {
+                        "name": "Hamilton County",
+                        "count": 134
+                      },
+                      {
+                        "name": "Summit County",
+                        "count": 98
+                      },
+                      {
+                        "name": "Montgomery County",
+                        "count": 76
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "US Bank",
+                      "Wells Fargo",
+                      "Freddie Mac",
+                      "HUD"
+                    ]
+                  },
+                  {
+                    "state": "AZ",
+                    "total_listings": 987,
+                    "top_counties": [
+                      {
+                        "name": "Maricopa County",
+                        "count": 534
+                      },
+                      {
+                        "name": "Pima County",
+                        "count": 145
+                      },
+                      {
+                        "name": "Pinal County",
+                        "count": 98
+                      },
+                      {
+                        "name": "Yavapai County",
+                        "count": 45
+                      },
+                      {
+                        "name": "Mohave County",
+                        "count": 34
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Fannie Mae",
+                      "Nationstar",
+                      "Shellpoint",
+                      "Wells Fargo"
+                    ]
+                  },
+                  {
+                    "state": "GA",
+                    "total_listings": 1098,
+                    "top_counties": [
+                      {
+                        "name": "Fulton County",
+                        "count": 213
+                      },
+                      {
+                        "name": "DeKalb County",
+                        "count": 178
+                      },
+                      {
+                        "name": "Gwinnett County",
+                        "count": 134
+                      },
+                      {
+                        "name": "Cobb County",
+                        "count": 98
+                      },
+                      {
+                        "name": "Clayton County",
+                        "count": 87
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Freddie Mac",
+                      "Bank of America",
+                      "Chase",
+                      "PHH"
+                    ]
+                  },
+                  {
+                    "state": "MI",
+                    "total_listings": 1345,
+                    "top_counties": [
+                      {
+                        "name": "Wayne County",
+                        "count": 456
+                      },
+                      {
+                        "name": "Oakland County",
+                        "count": 167
+                      },
+                      {
+                        "name": "Macomb County",
+                        "count": 134
+                      },
+                      {
+                        "name": "Kent County",
+                        "count": 89
+                      },
+                      {
+                        "name": "Genesee County",
+                        "count": 78
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "HUD",
+                      "Wells Fargo",
+                      "Fannie Mae",
+                      "Bank of America"
+                    ]
+                  },
+                  {
+                    "state": "NJ",
+                    "total_listings": 876,
+                    "top_counties": [
+                      {
+                        "name": "Essex County",
+                        "count": 134
+                      },
+                      {
+                        "name": "Passaic County",
+                        "count": 98
+                      },
+                      {
+                        "name": "Camden County",
+                        "count": 87
+                      },
+                      {
+                        "name": "Hudson County",
+                        "count": 76
+                      },
+                      {
+                        "name": "Bergen County",
+                        "count": 54
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Chase",
+                      "Bank of America",
+                      "Wells Fargo",
+                      "Ocwen"
+                    ]
+                  },
+                  {
+                    "state": "PA",
+                    "total_listings": 934,
+                    "top_counties": [
+                      {
+                        "name": "Philadelphia County",
+                        "count": 234
+                      },
+                      {
+                        "name": "Allegheny County",
+                        "count": 123
+                      },
+                      {
+                        "name": "Delaware County",
+                        "count": 87
+                      },
+                      {
+                        "name": "Montgomery County",
+                        "count": 76
+                      },
+                      {
+                        "name": "Bucks County",
+                        "count": 54
+                      }
+                    ],
+                    "banks_mentioned": [
+                      "Bank of America",
+                      "Chase",
+                      "Freddie Mac",
+                      "Shellpoint"
+                    ]
+                  }
+                ],
+                "counties": [
+                  {
+                    "name": "Miami-Dade County",
+                    "count": 412
+                  },
+                  {
+                    "name": "Broward County",
+                    "count": 287
+                  },
+                  {
+                    "name": "Hillsborough County",
+                    "count": 198
+                  },
+                  {
+                    "name": "Duval County",
+                    "count": 176
+                  },
+                  {
+                    "name": "Palm Beach County",
+                    "count": 165
+                  },
+                  {
+                    "name": "Los Angeles County",
+                    "count": 345
+                  },
+                  {
+                    "name": "San Bernardino County",
+                    "count": 213
+                  },
+                  {
+                    "name": "Riverside County",
+                    "count": 189
+                  },
+                  {
+                    "name": "Sacramento County",
+                    "count": 134
+                  },
+                  {
+                    "name": "Fresno County",
+                    "count": 98
+                  },
+                  {
+                    "name": "Harris County",
+                    "count": 378
+                  },
+                  {
+                    "name": "Dallas County",
+                    "count": 256
+                  },
+                  {
+                    "name": "Bexar County",
+                    "count": 187
+                  },
+                  {
+                    "name": "Tarrant County",
+                    "count": 145
+                  },
+                  {
+                    "name": "Travis County",
+                    "count": 89
+                  },
+                  {
+                    "name": "Cook County",
+                    "count": 623
+                  },
+                  {
+                    "name": "Will County",
+                    "count": 112
+                  },
+                  {
+                    "name": "DuPage County",
+                    "count": 87
+                  },
+                  {
+                    "name": "Lake County",
+                    "count": 76
+                  },
+                  {
+                    "name": "Kane County",
+                    "count": 54
+                  },
+                  {
+                    "name": "Cuyahoga County",
+                    "count": 287
+                  },
+                  {
+                    "name": "Franklin County",
+                    "count": 198
+                  },
+                  {
+                    "name": "Hamilton County",
+                    "count": 134
+                  },
+                  {
+                    "name": "Summit County",
+                    "count": 98
+                  },
+                  {
+                    "name": "Montgomery County",
+                    "count": 76
+                  },
+                  {
+                    "name": "Maricopa County",
+                    "count": 534
+                  },
+                  {
+                    "name": "Pima County",
+                    "count": 145
+                  },
+                  {
+                    "name": "Pinal County",
+                    "count": 98
+                  },
+                  {
+                    "name": "Yavapai County",
+                    "count": 45
+                  },
+                  {
+                    "name": "Mohave County",
+                    "count": 34
+                  },
+                  {
+                    "name": "Fulton County",
+                    "count": 213
+                  },
+                  {
+                    "name": "DeKalb County",
+                    "count": 178
+                  },
+                  {
+                    "name": "Gwinnett County",
+                    "count": 134
+                  },
+                  {
+                    "name": "Cobb County",
+                    "count": 98
+                  },
+                  {
+                    "name": "Clayton County",
+                    "count": 87
+                  },
+                  {
+                    "name": "Wayne County",
+                    "count": 456
+                  },
+                  {
+                    "name": "Oakland County",
+                    "count": 167
+                  },
+                  {
+                    "name": "Macomb County",
+                    "count": 134
+                  },
+                  {
+                    "name": "Kent County",
+                    "count": 89
+                  },
+                  {
+                    "name": "Genesee County",
+                    "count": 78
+                  },
+                  {
+                    "name": "Essex County",
+                    "count": 134
+                  },
+                  {
+                    "name": "Passaic County",
+                    "count": 98
+                  },
+                  {
+                    "name": "Camden County",
+                    "count": 87
+                  },
+                  {
+                    "name": "Hudson County",
+                    "count": 76
+                  },
+                  {
+                    "name": "Bergen County",
+                    "count": 54
+                  },
+                  {
+                    "name": "Philadelphia County",
+                    "count": 234
+                  },
+                  {
+                    "name": "Allegheny County",
+                    "count": 123
+                  },
+                  {
+                    "name": "Delaware County",
+                    "count": 87
+                  },
+                  {
+                    "name": "Montgomery County",
+                    "count": 76
+                  },
+                  {
+                    "name": "Bucks County",
+                    "count": 54
+                  }
+                ]
+              },
+              {
+                "source": "zillow",
+                "listings": [
+                  {
+                    "property_address": "1234 Oak St, Miami, FL 33101",
+                    "listing_agent": "Sarah Johnson",
+                    "agent_email": "sjohnson@remax.com",
+                    "agent_phone": "305-555-0101",
+                    "listing_date": "2026-03-10",
+                    "price": 285000,
+                    "bank_servicer": "Wells Fargo",
+                    "property_type": "Single Family",
+                    "mls_number": "A11234567",
+                    "county": "Miami-Dade",
+                    "state": "FL"
+                  },
+                  {
+                    "property_address": "5678 Elm Ave, Fort Lauderdale, FL 33301",
+                    "listing_agent": "Michael Chen",
+                    "agent_email": "mchen@kw.com",
+                    "agent_phone": "954-555-0202",
+                    "listing_date": "2026-03-11",
+                    "price": 340000,
+                    "bank_servicer": "Chase",
+                    "property_type": "Single Family",
+                    "mls_number": "A11234568",
+                    "county": "Broward",
+                    "state": "FL"
+                  },
+                  {
+                    "property_address": "910 Pine Rd, Phoenix, AZ 85001",
+                    "listing_agent": "Lisa Martinez",
+                    "agent_email": "lmartinez@coldwellbanker.com",
+                    "agent_phone": "602-555-0303",
+                    "listing_date": "2026-03-09",
+                    "price": 210000,
+                    "bank_servicer": "Fannie Mae",
+                    "property_type": "Townhouse",
+                    "mls_number": "AZ5567890",
+                    "county": "Maricopa",
+                    "state": "AZ"
+                  },
+                  {
+                    "property_address": "2468 Maple Dr, Chicago, IL 60601",
+                    "listing_agent": "David Kim",
+                    "agent_email": "dkim@compass.com",
+                    "agent_phone": "312-555-0404",
+                    "listing_date": "2026-03-12",
+                    "price": 175000,
+                    "bank_servicer": "Bank of America",
+                    "property_type": "Condo",
+                    "mls_number": "IL3345678",
+                    "county": "Cook",
+                    "state": "IL"
+                  },
+                  {
+                    "property_address": "1357 Cedar Ln, Houston, TX 77001",
+                    "listing_agent": "Amanda Thompson",
+                    "agent_email": "athompson@berkshire.com",
+                    "agent_phone": "713-555-0505",
+                    "listing_date": "2026-03-10",
+                    "price": 195000,
+                    "bank_servicer": "Wells Fargo",
+                    "property_type": "Single Family",
+                    "mls_number": "TX7789012",
+                    "county": "Harris",
+                    "state": "TX"
+                  },
+                  {
+                    "property_address": "8642 Birch St, Atlanta, GA 30301",
+                    "listing_agent": "James Williams",
+                    "agent_email": "jwilliams@exp.com",
+                    "agent_phone": "404-555-0606",
+                    "listing_date": "2026-03-11",
+                    "price": 230000,
+                    "bank_servicer": "Freddie Mac",
+                    "property_type": "Single Family",
+                    "mls_number": "GA4456789",
+                    "county": "Fulton",
+                    "state": "GA"
+                  },
+                  {
+                    "property_address": "9753 Walnut Ave, Detroit, MI 48201",
+                    "listing_agent": "Patricia Brown",
+                    "agent_email": "pbrown@century21.com",
+                    "agent_phone": "313-555-0707",
+                    "listing_date": "2026-03-09",
+                    "price": 95000,
+                    "bank_servicer": "HUD",
+                    "property_type": "Single Family",
+                    "mls_number": "MI2234567",
+                    "county": "Wayne",
+                    "state": "MI"
+                  },
+                  {
+                    "property_address": "3141 Spruce Ct, Newark, NJ 07101",
+                    "listing_agent": "Robert Garcia",
+                    "agent_email": "rgarcia@sothebys.com",
+                    "agent_phone": "973-555-0808",
+                    "listing_date": "2026-03-12",
+                    "price": 310000,
+                    "bank_servicer": "Chase",
+                    "property_type": "Multi-Family",
+                    "mls_number": "NJ8890123",
+                    "county": "Essex",
+                    "state": "NJ"
+                  },
+                  {
+                    "property_address": "7531 Ash Blvd, Columbus, OH 43201",
+                    "listing_agent": "Jennifer Davis",
+                    "agent_email": "jdavis@remax.com",
+                    "agent_phone": "614-555-0909",
+                    "listing_date": "2026-03-10",
+                    "price": 155000,
+                    "bank_servicer": "US Bank",
+                    "property_type": "Single Family",
+                    "mls_number": "OH6678901",
+                    "county": "Franklin",
+                    "state": "OH"
+                  },
+                  {
+                    "property_address": "2580 Willow Way, Scottsdale, AZ 85251",
+                    "listing_agent": "Thomas Wilson",
+                    "agent_email": "twilson@redfin.com",
+                    "agent_phone": "480-555-1010",
+                    "listing_date": "2026-03-13",
+                    "price": 425000,
+                    "bank_servicer": "Nationstar",
+                    "property_type": "Single Family",
+                    "mls_number": "AZ5567891",
+                    "county": "Maricopa",
+                    "state": "AZ"
+                  },
+                  {
+                    "property_address": "4826 Poplar St, Tampa, FL 33601",
+                    "listing_agent": "Karen Lee",
+                    "agent_email": "klee@bhhs.com",
+                    "agent_phone": "813-555-1111",
+                    "listing_date": "2026-03-11",
+                    "price": 265000,
+                    "bank_servicer": "Wells Fargo",
+                    "property_type": "Single Family",
+                    "mls_number": "A11234570",
+                    "county": "Hillsborough",
+                    "state": "FL"
+                  },
+                  {
+                    "property_address": "6173 Hickory Rd, San Antonio, TX 78201",
+                    "listing_agent": "Daniel Rodriguez",
+                    "agent_email": "drodriguez@kw.com",
+                    "agent_phone": "210-555-1212",
+                    "listing_date": "2026-03-12",
+                    "price": 185000,
+                    "bank_servicer": "Carrington",
+                    "property_type": "Single Family",
+                    "mls_number": "TX7789013",
+                    "county": "Bexar",
+                    "state": "TX"
+                  },
+                  {
+                    "property_address": "8395 Sycamore Dr, Jacksonville, FL 32201",
+                    "listing_agent": "Emily Clark",
+                    "agent_email": "eclark@compass.com",
+                    "agent_phone": "904-555-1313",
+                    "listing_date": "2026-03-09",
+                    "price": 198000,
+                    "bank_servicer": "Ocwen",
+                    "property_type": "Single Family",
+                    "mls_number": "A11234571",
+                    "county": "Duval",
+                    "state": "FL"
+                  },
+                  {
+                    "property_address": "1592 Magnolia Ct, Philadelphia, PA 19101",
+                    "listing_agent": "Brian Anderson",
+                    "agent_email": "banderson@coldwellbanker.com",
+                    "agent_phone": "215-555-1414",
+                    "listing_date": "2026-03-13",
+                    "price": 145000,
+                    "bank_servicer": "Bank of America",
+                    "property_type": "Townhouse",
+                    "mls_number": "PA5567890",
+                    "county": "Philadelphia",
+                    "state": "PA"
+                  },
+                  {
+                    "property_address": "3710 Redwood Ave, Mesa, AZ 85201",
+                    "listing_agent": "Stephanie White",
+                    "agent_email": "swhite@exp.com",
+                    "agent_phone": "480-555-1515",
+                    "listing_date": "2026-03-10",
+                    "price": 275000,
+                    "bank_servicer": "Shellpoint",
+                    "property_type": "Single Family",
+                    "mls_number": "AZ5567892",
+                    "county": "Maricopa",
+                    "state": "AZ"
+                  }
+                ]
+              }
+            ]
+          },
+          "industry_news": {
+            "description": "Regulatory changes, servicer announcements, market trends",
+            "data": [
+              {
+                "title": "HUD Announces Updated REO Disposition Guidelines for 2026",
+                "description": "The Department of Housing and Urban Development released new guidelines for the disposition of Real Estate Owned properties, affecting how banks and servicers handle foreclosed assets.",
+                "source_name": "HousingWire",
+                "url": "https://example.com/hud-reo-guidelines-2026",
+                "published_at": "2026-03-12T14:00:00Z",
+                "content_preview": "HUD has announced updated guidelines for the Real Estate Owned (REO) disposition process that will take effect in Q2 2026. The new rules aim to streamline the sale of government-owned foreclosed properties and increase opportunities for owner-occupant buyers."
+              },
+              {
+                "title": "Foreclosure Activity Rises 8% in February as Pandemic Moratoriums Fully Expire",
+                "description": "New data shows foreclosure filings increased across the US in February 2026, with the highest activity in Florida, Illinois, and Ohio.",
+                "source_name": "ATTOM Data Solutions",
+                "url": "https://example.com/foreclosure-rise-feb-2026",
+                "published_at": "2026-03-11T10:30:00Z",
+                "content_preview": "According to ATTOM's latest U.S. Foreclosure Market Report, there were 35,196 U.S. properties with foreclosure filings in February 2026, up 8 percent from the previous month and up 12 percent from a year ago."
+              },
+              {
+                "title": "Wells Fargo Expands REO Agent Network in Southeast Markets",
+                "description": "Wells Fargo is actively recruiting field service agents and REO listing agents across Florida, Georgia, and the Carolinas to handle increased foreclosure volume.",
+                "source_name": "National Mortgage News",
+                "url": "https://example.com/wells-fargo-reo-expansion",
+                "published_at": "2026-03-10T09:00:00Z",
+                "content_preview": "Wells Fargo has begun expanding its network of REO listing agents and field service providers in the Southeast, signaling expectations of continued growth in bank-owned property inventory through 2026."
+              },
+              {
+                "title": "Commercial REO Volume Expected to Peak in Q3 2026, Analysts Say",
+                "description": "Industry analysts predict commercial real estate foreclosures will reach their highest point in the third quarter, driven by office and retail property distress.",
+                "source_name": "Commercial Observer",
+                "url": "https://example.com/commercial-reo-peak-q3",
+                "published_at": "2026-03-09T16:00:00Z",
+                "content_preview": "Multiple industry forecasters now project that commercial REO volume will peak in Q3 2026 as office and retail properties continue to face valuation pressures and loan maturities force lender decisions."
+              },
+              {
+                "title": "New Legislation Would Require 90-Day Owner-Occupant Exclusivity on All REO Sales",
+                "description": "A bipartisan bill introduced in Congress would mandate a 90-day exclusive marketing period for owner-occupant buyers on all REO property sales.",
+                "source_name": "Inman News",
+                "url": "https://example.com/reo-exclusivity-bill",
+                "published_at": "2026-03-13T11:00:00Z",
+                "content_preview": "The proposed Homeowner First Act would require all financial institutions selling REO properties to provide a 90-day exclusive marketing window for owner-occupant and nonprofit buyers before opening sales to investors."
+              },
+              {
+                "subreddit": "realestate",
+                "title": "Neighbor's house up for auction - what do I do?",
+                "text": "Update: Talked to the neighbor yesterday.  She just found out last week and was still in panic mode. An old medical bill came up out of nowhere a few months ago and started garnishing a gigantic portion of her paycheck, so that's when she fell behind. As I suspected, she didn't really know where to start or have anyone close to her that could give her advice. Luckily she was grateful for the offer of help (I didn't want to butt into her business too hard, I was a bit nervous about the conversation.)\n\nWe don't know exactly how we'll move forward, but our plan was always to buy her place when she moved out in 4-5 years. I talked to the title company and they gave me a lawyer recommendation. We can't even get a consult for next Friday, so we'll probably help her file for the 5 month extension to the foreclosure auction and see what we can get worked out that protects both of us. Maybe we can do some sort of creative C for D thing or who knows what. It would be kond of nice not to have leg",
+                "score": 170,
+                "num_comments": 161,
+                "author": "Formal_Goose",
+                "url": "https://reddit.com/r/RealEstate/comments/1rrazpv/neighbors_house_up_for_auction_what_do_i_do/",
+                "created_utc": 1773273408,
+                "retrieval_mode": "public_json"
+              },
+              {
+                "subreddit": "realestate",
+                "title": "Seeing more underwater homeowners lately?",
+                "text": "Been noticing maybe 6-7 posts here over the past day or two from people worried their houses dropped in value big time since they bought. Also seeing way more foreclosure notices popping up around where I live compared to like 6 months ago. Anyone else picking up on this pattern or is it just coincidence",
+                "score": 165,
+                "num_comments": 197,
+                "author": "Responsible-Yard1654",
+                "url": "https://reddit.com/r/RealEstate/comments/1rti735/seeing_more_underwater_homeowners_lately/",
+                "created_utc": 1773491403,
+                "retrieval_mode": "public_json"
+              }
+            ]
+          },
+          "ufs_spotlight": {
+            "description": "UFS service highlight or client success story",
+            "data": []
+          }
+        }
+      },
+      "ai_draft": {},
+      "human_edits": null,
+      "status": "pending",
+      "reviewer_email": null,
+      "reviewed_at": null,
+      "sources_used": [
+        "reddit",
+        "news_api_mock",
+        "foreclosure_com_mock",
+        "zillow_mock"
+      ],
+      "sources_failed": [
+        "grok"
+      ],
+      "created_at": "2026-03-17T21:32:58.994Z",
+      "updated_at": "2026-03-17T21:32:58.994Z"
+    }
+  ],
+  "articles": [],
+  "approval_logs": []
+}

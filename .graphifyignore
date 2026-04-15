@@ -1,0 +1,12 @@
+node_modules/
+.venv/
+.venv_api/
+venv/
+dist/
+.next/
+build/
+__pycache__/
+*.pyc
+*.pyo
+graphify-out/
+.git/

@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Newsletter {
+  id                  Int    @id
+  issueNumber         Int    @map("issue_number")
+  issueDate           String @map("issue_date")
+  status              String
+  mailchimpCampaignId String? @map("mailchimp_campaign_id")
+  createdAt           String @map("created_at")
+  updatedAt           String @map("updated_at")
+
+  @@map("newsletters")
+}
+
+model Draft {
+  id            Int    @id
+  newsletterId  Int    @map("newsletter_id")
+  rawData       String @map("raw_data")
+  aiDraft       String @map("ai_draft")
+  humanEdits    String? @map("human_edits")
+  status        String
+  reviewerEmail String? @map("reviewer_email")
+  reviewedAt    String? @map("reviewed_at")
+  sourcesUsed   String? @map("sources_used")
+  sourcesWarning String? @map("sources_warning")
+  sourcesFailed String? @map("sources_failed")
+  createdAt     String @map("created_at")
+  updatedAt     String @map("updated_at")
+
+  @@map("drafts")
+}
+
+model Article {
+  id            Int    @id
+  newsletterId  Int    @map("newsletter_id")
+  sectionType   String @map("section_type")
+  title         String
+  teaser        String
+  body          String
+  audienceTag   String @map("audience_tag")
+  publishDate   String? @map("publish_date")
+  msPlatformUrl String? @map("ms_platform_url")
+  createdAt     String @map("created_at")
+
+  @@map("articles")
+}
+
+model ApprovalLog {
+  id       Int    @id
+  draftId  Int    @map("draft_id")
+  action   String
+  reviewer String
+  notes    String?
+  timestamp String
+
+  @@map("approval_logs")
+}

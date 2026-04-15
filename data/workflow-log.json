@@ -1,0 +1,2713 @@
+[
+  {
+    "id": "1776278695560-9fba2e92",
+    "timestamp": "2026-04-15T18:44:55.560Z",
+    "scope": "sources",
+    "step": "grok",
+    "status": "success",
+    "message": "Grok collected 13 items.",
+    "context": {
+      "source": "grok",
+      "requested_source": "grok",
+      "item_count": 13,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 24056
+    }
+  },
+  {
+    "id": "1776278694803-198e2d99",
+    "timestamp": "2026-04-15T18:44:54.803Z",
+    "scope": "sources",
+    "step": "grok",
+    "status": "success",
+    "message": "Grok collected 20 items.",
+    "context": {
+      "source": "grok",
+      "requested_source": "grok",
+      "item_count": 20,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 29287
+    }
+  },
+  {
+    "id": "1776278691469-cf64b805",
+    "timestamp": "2026-04-15T18:44:51.469Z",
+    "scope": "sources",
+    "step": "auction_com",
+    "status": "success",
+    "message": "Auction Com collected 1 items.",
+    "context": {
+      "source": "auction_com",
+      "requested_source": "auction_com",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 19966
+    }
+  },
+  {
+    "id": "1776278689384-1a0d5e56",
+    "timestamp": "2026-04-15T18:44:49.384Z",
+    "scope": "sources",
+    "step": "auction_com",
+    "status": "success",
+    "message": "Auction Com collected 1 items.",
+    "context": {
+      "source": "auction_com",
+      "requested_source": "auction_com",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 23869
+    }
+  },
+  {
+    "id": "1776278680423-d7d18fd0",
+    "timestamp": "2026-04-15T18:44:40.423Z",
+    "scope": "sources",
+    "step": "hud_homestore",
+    "status": "success",
+    "message": "Hud Homestore collected 12 items.",
+    "context": {
+      "source": "hud_homestore",
+      "requested_source": "hud_homestore",
+      "item_count": 12,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 8920
+    }
+  },
+  {
+    "id": "1776278679190-e6860508",
+    "timestamp": "2026-04-15T18:44:39.190Z",
+    "scope": "sources",
+    "step": "phh_mortgage_reo",
+    "status": "success",
+    "message": "Phh Mortgage Reo collected 1 items.",
+    "context": {
+      "source": "phh_mortgage_reo",
+      "requested_source": "phh_mortgage_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 13675
+    }
+  },
+  {
+    "id": "1776278678865-d93a2623",
+    "timestamp": "2026-04-15T18:44:38.865Z",
+    "scope": "sources",
+    "step": "hud_homestore",
+    "status": "success",
+    "message": "Hud Homestore collected 12 items.",
+    "context": {
+      "source": "hud_homestore",
+      "requested_source": "hud_homestore",
+      "item_count": 12,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 13349
+    }
+  },
+  {
+    "id": "1776278677316-bbf34d11",
+    "timestamp": "2026-04-15T18:44:37.316Z",
+    "scope": "sources",
+    "step": "reddit",
+    "status": "success",
+    "message": "Reddit collected 6 items.",
+    "context": {
+      "source": "reddit",
+      "requested_source": "reddit",
+      "item_count": 6,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 5812
+    }
+  },
+  {
+    "id": "1776278677190-7319109c",
+    "timestamp": "2026-04-15T18:44:37.190Z",
+    "scope": "sources",
+    "step": "linkedin_jobs",
+    "status": "success",
+    "message": "Linkedin Jobs collected 45 items.",
+    "context": {
+      "source": "linkedin_jobs",
+      "requested_source": "linkedin_jobs",
+      "item_count": 45,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 5686
+    }
+  },
+  {
+    "id": "1776278676451-4051d861",
+    "timestamp": "2026-04-15T18:44:36.451Z",
+    "scope": "sources",
+    "step": "redfin_foreclosure",
+    "status": "success",
+    "message": "Redfin Foreclosure collected 1 items.",
+    "context": {
+      "source": "redfin_foreclosure",
+      "requested_source": "redfin_foreclosure",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 4948
+    }
+  },
+  {
+    "id": "1776278675791-7d0e49c7",
+    "timestamp": "2026-04-15T18:44:35.791Z",
+    "scope": "sources",
+    "step": "redfin_foreclosure",
+    "status": "success",
+    "message": "Redfin Foreclosure collected 1 items.",
+    "context": {
+      "source": "redfin_foreclosure",
+      "requested_source": "redfin_foreclosure",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 10276
+    }
+  },
+  {
+    "id": "1776278675633-0dd0195b",
+    "timestamp": "2026-04-15T18:44:35.633Z",
+    "scope": "sources",
+    "step": "hubzu",
+    "status": "success",
+    "message": "Hubzu collected 1 items.",
+    "context": {
+      "source": "hubzu",
+      "requested_source": "hubzu",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 4130
+    }
+  },
+  {
+    "id": "1776278675586-93568daf",
+    "timestamp": "2026-04-15T18:44:35.586Z",
+    "scope": "sources",
+    "step": "bank_of_america_reo",
+    "status": "success",
+    "message": "Bank Of America Reo collected 4 items.",
+    "context": {
+      "source": "bank_of_america_reo",
+      "requested_source": "bank_of_america_reo",
+      "item_count": 4,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 4083
+    }
+  },
+  {
+    "id": "1776278675263-33685427",
+    "timestamp": "2026-04-15T18:44:35.263Z",
+    "scope": "sources",
+    "step": "phh_mortgage_reo",
+    "status": "success",
+    "message": "Phh Mortgage Reo collected 1 items.",
+    "context": {
+      "source": "phh_mortgage_reo",
+      "requested_source": "phh_mortgage_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 3760
+    }
+  },
+  {
+    "id": "1776278674672-7788176e",
+    "timestamp": "2026-04-15T18:44:34.672Z",
+    "scope": "sources",
+    "step": "mr_cooper_reo",
+    "status": "success",
+    "message": "Mr Cooper Reo collected 1 items.",
+    "context": {
+      "source": "mr_cooper_reo",
+      "requested_source": "mr_cooper_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 3169
+    }
+  },
+  {
+    "id": "1776278674233-5773d218",
+    "timestamp": "2026-04-15T18:44:34.233Z",
+    "scope": "sources",
+    "step": "chase_reo",
+    "status": "success",
+    "message": "Chase Reo collected 1 items.",
+    "context": {
+      "source": "chase_reo",
+      "requested_source": "chase_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 2730
+    }
+  },
+  {
+    "id": "1776278674057-97ed8f7b",
+    "timestamp": "2026-04-15T18:44:34.057Z",
+    "scope": "sources",
+    "step": "newrez_shellpoint_reo",
+    "status": "success",
+    "message": "Newrez Shellpoint Reo collected 1 items.",
+    "context": {
+      "source": "newrez_shellpoint_reo",
+      "requested_source": "newrez_shellpoint_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 2554
+    }
+  },
+  {
+    "id": "1776278673981-ccd81cfd",
+    "timestamp": "2026-04-15T18:44:33.981Z",
+    "scope": "sources",
+    "step": "realtor_foreclosure",
+    "status": "success",
+    "message": "Realtor Foreclosure collected 1 items.",
+    "context": {
+      "source": "realtor_foreclosure",
+      "requested_source": "realtor_foreclosure",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 2478
+    }
+  },
+  {
+    "id": "1776278673857-e6cc34e5",
+    "timestamp": "2026-04-15T18:44:33.857Z",
+    "scope": "sources",
+    "step": "usajobs_jobs",
+    "status": "success",
+    "message": "Usajobs Jobs collected 15 items.",
+    "context": {
+      "source": "usajobs_jobs",
+      "requested_source": "usajobs_jobs",
+      "item_count": 15,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 2353
+    }
+  },
+  {
+    "id": "1776278673707-54d450ec",
+    "timestamp": "2026-04-15T18:44:33.707Z",
+    "scope": "sources",
+    "step": "reddit",
+    "status": "success",
+    "message": "Reddit collected 6 items.",
+    "context": {
+      "source": "reddit",
+      "requested_source": "reddit",
+      "item_count": 6,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 8191
+    }
+  },
+  {
+    "id": "1776278673538-c0a2b654",
+    "timestamp": "2026-04-15T18:44:33.538Z",
+    "scope": "sources",
+    "step": "company_career_jobs",
+    "status": "success",
+    "message": "Company Career Jobs collected 0 items.",
+    "context": {
+      "source": "company_career_jobs",
+      "requested_source": "company_career_jobs",
+      "item_count": 0,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": "No matching REO/default-servicing roles were found on tracked company career sites.",
+      "errors": [],
+      "duration_ms": 2034
+    }
+  },
+  {
+    "id": "1776278673517-e27407fa",
+    "timestamp": "2026-04-15T18:44:33.517Z",
+    "scope": "sources",
+    "step": "chase_reo",
+    "status": "success",
+    "message": "Chase Reo collected 1 items.",
+    "context": {
+      "source": "chase_reo",
+      "requested_source": "chase_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 8002
+    }
+  },
+  {
+    "id": "1776278673506-08824329",
+    "timestamp": "2026-04-15T18:44:33.506Z",
+    "scope": "sources",
+    "step": "greenhouse_jobs",
+    "status": "success",
+    "message": "Greenhouse Jobs collected 1 items.",
+    "context": {
+      "source": "greenhouse_jobs",
+      "requested_source": "greenhouse_jobs",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 2002
+    }
+  },
+  {
+    "id": "1776278673460-17909708",
+    "timestamp": "2026-04-15T18:44:33.460Z",
+    "scope": "sources",
+    "step": "hubzu",
+    "status": "success",
+    "message": "Hubzu collected 1 items.",
+    "context": {
+      "source": "hubzu",
+      "requested_source": "hubzu",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 7945
+    }
+  },
+  {
+    "id": "1776278673436-8b85e55c",
+    "timestamp": "2026-04-15T18:44:33.436Z",
+    "scope": "sources",
+    "step": "homesteps",
+    "status": "success",
+    "message": "Homesteps collected 28 items.",
+    "context": {
+      "source": "homesteps",
+      "requested_source": "homesteps",
+      "item_count": 28,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1933
+    }
+  },
+  {
+    "id": "1776278673315-ce9579e9",
+    "timestamp": "2026-04-15T18:44:33.315Z",
+    "scope": "sources",
+    "step": "news_api",
+    "status": "success",
+    "message": "News Api collected 1 items.",
+    "context": {
+      "source": "news_api",
+      "requested_source": "news_api",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1811
+    }
+  },
+  {
+    "id": "1776278673310-afd2b0a9",
+    "timestamp": "2026-04-15T18:44:33.310Z",
+    "scope": "sources",
+    "step": "lever_jobs",
+    "status": "success",
+    "message": "Lever Jobs collected 1 items.",
+    "context": {
+      "source": "lever_jobs",
+      "requested_source": "lever_jobs",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1806
+    }
+  },
+  {
+    "id": "1776278673244-95c449cf",
+    "timestamp": "2026-04-15T18:44:33.244Z",
+    "scope": "sources",
+    "step": "bank_of_america_reo",
+    "status": "success",
+    "message": "Bank Of America Reo collected 4 items.",
+    "context": {
+      "source": "bank_of_america_reo",
+      "requested_source": "bank_of_america_reo",
+      "item_count": 4,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 7728
+    }
+  },
+  {
+    "id": "1776278673158-6e9f4113",
+    "timestamp": "2026-04-15T18:44:33.158Z",
+    "scope": "sources",
+    "step": "us_bank_reo",
+    "status": "success",
+    "message": "Us Bank Reo collected 1 items.",
+    "context": {
+      "source": "us_bank_reo",
+      "requested_source": "us_bank_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1655
+    }
+  },
+  {
+    "id": "1776278673092-1c96ee07",
+    "timestamp": "2026-04-15T18:44:33.092Z",
+    "scope": "sources",
+    "step": "selene_finance_reo",
+    "status": "success",
+    "message": "Selene Finance Reo collected 1 items.",
+    "context": {
+      "source": "selene_finance_reo",
+      "requested_source": "selene_finance_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1589
+    }
+  },
+  {
+    "id": "1776278673089-fb9ada88",
+    "timestamp": "2026-04-15T18:44:33.089Z",
+    "scope": "sources",
+    "step": "wells_fargo_reo",
+    "status": "success",
+    "message": "Wells Fargo Reo collected 1 items.",
+    "context": {
+      "source": "wells_fargo_reo",
+      "requested_source": "wells_fargo_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1586
+    }
+  },
+  {
+    "id": "1776278673036-e494c813",
+    "timestamp": "2026-04-15T18:44:33.036Z",
+    "scope": "sources",
+    "step": "mr_cooper_reo",
+    "status": "success",
+    "message": "Mr Cooper Reo collected 1 items.",
+    "context": {
+      "source": "mr_cooper_reo",
+      "requested_source": "mr_cooper_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 7521
+    }
+  },
+  {
+    "id": "1776278673012-5b7ce61a",
+    "timestamp": "2026-04-15T18:44:33.012Z",
+    "scope": "sources",
+    "step": "homesteps",
+    "status": "success",
+    "message": "Homesteps collected 28 items.",
+    "context": {
+      "source": "homesteps",
+      "requested_source": "homesteps",
+      "item_count": 28,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 7497
+    }
+  },
+  {
+    "id": "1776278673001-b629932e",
+    "timestamp": "2026-04-15T18:44:33.001Z",
+    "scope": "sources",
+    "step": "carrington_reo",
+    "status": "success",
+    "message": "Carrington Reo collected 1 items.",
+    "context": {
+      "source": "carrington_reo",
+      "requested_source": "carrington_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1498
+    }
+  },
+  {
+    "id": "1776278672770-e06f96d5",
+    "timestamp": "2026-04-15T18:44:32.770Z",
+    "scope": "sources",
+    "step": "attom_data",
+    "status": "success",
+    "message": "Attom Data collected 1 items.",
+    "context": {
+      "source": "attom_data",
+      "requested_source": "attom_data",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1266
+    }
+  },
+  {
+    "id": "1776278672750-c11828ea",
+    "timestamp": "2026-04-15T18:44:32.750Z",
+    "scope": "sources",
+    "step": "ziprecruiter_jobs",
+    "status": "success",
+    "message": "Ziprecruiter Jobs collected 0 items.",
+    "context": {
+      "source": "ziprecruiter_jobs",
+      "requested_source": "ziprecruiter_jobs",
+      "item_count": 0,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": "No matching ZipRecruiter REO/default-servicing job cards were found this run.",
+      "errors": [],
+      "duration_ms": 1246
+    }
+  },
+  {
+    "id": "1776278672748-4b924128",
+    "timestamp": "2026-04-15T18:44:32.748Z",
+    "scope": "sources",
+    "step": "google_jobs",
+    "status": "success",
+    "message": "Google Jobs collected 0 items.",
+    "context": {
+      "source": "google_jobs",
+      "requested_source": "google_jobs",
+      "item_count": 0,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": "No matching Google-indexed REO/default-servicing job cards were found this run.",
+      "errors": [],
+      "duration_ms": 1244
+    }
+  },
+  {
+    "id": "1776278672679-ffd7e9f7",
+    "timestamp": "2026-04-15T18:44:32.679Z",
+    "scope": "sources",
+    "step": "us_bank_reo",
+    "status": "success",
+    "message": "Us Bank Reo collected 1 items.",
+    "context": {
+      "source": "us_bank_reo",
+      "requested_source": "us_bank_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 7164
+    }
+  },
+  {
+    "id": "1776278672663-20338fa9",
+    "timestamp": "2026-04-15T18:44:32.663Z",
+    "scope": "sources",
+    "step": "zillow_rapidapi",
+    "status": "success",
+    "message": "Zillow Rapidapi collected 1 items.",
+    "context": {
+      "source": "zillow_rapidapi",
+      "requested_source": "zillow_rapidapi",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1160
+    }
+  },
+  {
+    "id": "1776278672609-2474c51a",
+    "timestamp": "2026-04-15T18:44:32.609Z",
+    "scope": "sources",
+    "step": "xome",
+    "status": "success",
+    "message": "Xome collected 1 items.",
+    "context": {
+      "source": "xome",
+      "requested_source": "xome",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1106
+    }
+  },
+  {
+    "id": "1776278672605-d0cf80fd",
+    "timestamp": "2026-04-15T18:44:32.605Z",
+    "scope": "sources",
+    "step": "reox_directory",
+    "status": "success",
+    "message": "Reox Directory collected 1 items.",
+    "context": {
+      "source": "reox_directory",
+      "requested_source": "reox_directory",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1102
+    }
+  },
+  {
+    "id": "1776278672566-79dc17c7",
+    "timestamp": "2026-04-15T18:44:32.566Z",
+    "scope": "sources",
+    "step": "newrez_shellpoint_reo",
+    "status": "success",
+    "message": "Newrez Shellpoint Reo collected 1 items.",
+    "context": {
+      "source": "newrez_shellpoint_reo",
+      "requested_source": "newrez_shellpoint_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 7051
+    }
+  },
+  {
+    "id": "1776278672548-d7d082f4",
+    "timestamp": "2026-04-15T18:44:32.548Z",
+    "scope": "sources",
+    "step": "selene_finance_reo",
+    "status": "success",
+    "message": "Selene Finance Reo collected 1 items.",
+    "context": {
+      "source": "selene_finance_reo",
+      "requested_source": "selene_finance_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 7033
+    }
+  },
+  {
+    "id": "1776278672387-4dee0da9",
+    "timestamp": "2026-04-15T18:44:32.387Z",
+    "scope": "sources",
+    "step": "realtor_foreclosure",
+    "status": "success",
+    "message": "Realtor Foreclosure collected 1 items.",
+    "context": {
+      "source": "realtor_foreclosure",
+      "requested_source": "realtor_foreclosure",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 6872
+    }
+  },
+  {
+    "id": "1776278672333-e03686cc",
+    "timestamp": "2026-04-15T18:44:32.333Z",
+    "scope": "sources",
+    "step": "linkedin_jobs",
+    "status": "success",
+    "message": "Linkedin Jobs collected 43 items.",
+    "context": {
+      "source": "linkedin_jobs",
+      "requested_source": "linkedin_jobs",
+      "item_count": 43,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 6818
+    }
+  },
+  {
+    "id": "1776278672277-790c408b",
+    "timestamp": "2026-04-15T18:44:32.277Z",
+    "scope": "sources",
+    "step": "fhfa_news",
+    "status": "success",
+    "message": "Fhfa News collected 10 items.",
+    "context": {
+      "source": "fhfa_news",
+      "requested_source": "fhfa_news",
+      "item_count": 10,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 774
+    }
+  },
+  {
+    "id": "1776278672213-ff267a7d",
+    "timestamp": "2026-04-15T18:44:32.213Z",
+    "scope": "sources",
+    "step": "ice_mortgage_tech",
+    "status": "success",
+    "message": "Ice Mortgage Tech collected 1 items.",
+    "context": {
+      "source": "ice_mortgage_tech",
+      "requested_source": "ice_mortgage_tech",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 710
+    }
+  },
+  {
+    "id": "1776278672128-c3ac74b0",
+    "timestamp": "2026-04-15T18:44:32.128Z",
+    "scope": "sources",
+    "step": "attom_data",
+    "status": "success",
+    "message": "Attom Data collected 1 items.",
+    "context": {
+      "source": "attom_data",
+      "requested_source": "attom_data",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 6613
+    }
+  },
+  {
+    "id": "1776278672035-0222b66e",
+    "timestamp": "2026-04-15T18:44:32.035Z",
+    "scope": "sources",
+    "step": "zillow_research",
+    "status": "success",
+    "message": "Zillow Research collected 15 items.",
+    "context": {
+      "source": "zillow_research",
+      "requested_source": "zillow_research",
+      "item_count": 15,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 532
+    }
+  },
+  {
+    "id": "1776278671935-99d565cb",
+    "timestamp": "2026-04-15T18:44:31.935Z",
+    "scope": "sources",
+    "step": "hud_user",
+    "status": "success",
+    "message": "Hud User collected 10 items.",
+    "context": {
+      "source": "hud_user",
+      "requested_source": "hud_user",
+      "item_count": 10,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 432
+    }
+  },
+  {
+    "id": "1776278671731-acaeff7d",
+    "timestamp": "2026-04-15T18:44:31.731Z",
+    "scope": "sources",
+    "step": "wells_fargo_reo",
+    "status": "success",
+    "message": "Wells Fargo Reo collected 1 items.",
+    "context": {
+      "source": "wells_fargo_reo",
+      "requested_source": "wells_fargo_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 6216
+    }
+  },
+  {
+    "id": "1776278671638-d099396a",
+    "timestamp": "2026-04-15T18:44:31.638Z",
+    "scope": "sources",
+    "step": "carrington_reo",
+    "status": "success",
+    "message": "Carrington Reo collected 1 items.",
+    "context": {
+      "source": "carrington_reo",
+      "requested_source": "carrington_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 6123
+    }
+  },
+  {
+    "id": "1776278671544-c29f037e",
+    "timestamp": "2026-04-15T18:44:31.544Z",
+    "scope": "sources",
+    "step": "xome",
+    "status": "success",
+    "message": "Xome collected 1 items.",
+    "context": {
+      "source": "xome",
+      "requested_source": "xome",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 6029
+    }
+  },
+  {
+    "id": "1776278671504-a75c4f54",
+    "timestamp": "2026-04-15T18:44:31.504Z",
+    "scope": "sources",
+    "step": "news_api",
+    "status": "info",
+    "message": "Starting News Api collection.",
+    "context": {
+      "source": "news_api"
+    }
+  },
+  {
+    "id": "1776278671504-da9dd6cc",
+    "timestamp": "2026-04-15T18:44:31.504Z",
+    "scope": "sources",
+    "step": "reddit",
+    "status": "info",
+    "message": "Starting Reddit collection.",
+    "context": {
+      "source": "reddit"
+    }
+  },
+  {
+    "id": "1776278671504-d7836238",
+    "timestamp": "2026-04-15T18:44:31.504Z",
+    "scope": "sources",
+    "step": "grok",
+    "status": "info",
+    "message": "Starting Grok collection.",
+    "context": {
+      "source": "grok"
+    }
+  },
+  {
+    "id": "1776278671504-6b112e33",
+    "timestamp": "2026-04-15T18:44:31.504Z",
+    "scope": "sources",
+    "step": "lever_jobs",
+    "status": "info",
+    "message": "Starting Lever Jobs collection.",
+    "context": {
+      "source": "lever_jobs"
+    }
+  },
+  {
+    "id": "1776278671504-a091b9d3",
+    "timestamp": "2026-04-15T18:44:31.504Z",
+    "scope": "sources",
+    "step": "greenhouse_jobs",
+    "status": "info",
+    "message": "Starting Greenhouse Jobs collection.",
+    "context": {
+      "source": "greenhouse_jobs"
+    }
+  },
+  {
+    "id": "1776278671504-d2490b85",
+    "timestamp": "2026-04-15T18:44:31.504Z",
+    "scope": "sources",
+    "step": "usajobs_jobs",
+    "status": "info",
+    "message": "Starting Usajobs Jobs collection.",
+    "context": {
+      "source": "usajobs_jobs"
+    }
+  },
+  {
+    "id": "1776278671504-9b520884",
+    "timestamp": "2026-04-15T18:44:31.504Z",
+    "scope": "sources",
+    "step": "company_career_jobs",
+    "status": "info",
+    "message": "Starting Company Career Jobs collection.",
+    "context": {
+      "source": "company_career_jobs"
+    }
+  },
+  {
+    "id": "1776278671504-8bf683ae",
+    "timestamp": "2026-04-15T18:44:31.504Z",
+    "scope": "sources",
+    "step": "ziprecruiter_jobs",
+    "status": "info",
+    "message": "Starting Ziprecruiter Jobs collection.",
+    "context": {
+      "source": "ziprecruiter_jobs"
+    }
+  },
+  {
+    "id": "1776278671504-529e7e57",
+    "timestamp": "2026-04-15T18:44:31.504Z",
+    "scope": "sources",
+    "step": "google_jobs",
+    "status": "info",
+    "message": "Starting Google Jobs collection.",
+    "context": {
+      "source": "google_jobs"
+    }
+  },
+  {
+    "id": "1776278671504-0e7e540e",
+    "timestamp": "2026-04-15T18:44:31.504Z",
+    "scope": "sources",
+    "step": "linkedin_jobs",
+    "status": "info",
+    "message": "Starting Linkedin Jobs collection.",
+    "context": {
+      "source": "linkedin_jobs"
+    }
+  },
+  {
+    "id": "1776278671503-776ac33e",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "carrington_reo",
+    "status": "info",
+    "message": "Starting Carrington Reo collection.",
+    "context": {
+      "source": "carrington_reo"
+    }
+  },
+  {
+    "id": "1776278671503-7e480149",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "selene_finance_reo",
+    "status": "info",
+    "message": "Starting Selene Finance Reo collection.",
+    "context": {
+      "source": "selene_finance_reo"
+    }
+  },
+  {
+    "id": "1776278671503-962b159b",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "newrez_shellpoint_reo",
+    "status": "info",
+    "message": "Starting Newrez Shellpoint Reo collection.",
+    "context": {
+      "source": "newrez_shellpoint_reo"
+    }
+  },
+  {
+    "id": "1776278671503-4c92ee29",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "phh_mortgage_reo",
+    "status": "info",
+    "message": "Starting Phh Mortgage Reo collection.",
+    "context": {
+      "source": "phh_mortgage_reo"
+    }
+  },
+  {
+    "id": "1776278671503-177c9d2d",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "mr_cooper_reo",
+    "status": "info",
+    "message": "Starting Mr Cooper Reo collection.",
+    "context": {
+      "source": "mr_cooper_reo"
+    }
+  },
+  {
+    "id": "1776278671503-4f7bd3b0",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "us_bank_reo",
+    "status": "info",
+    "message": "Starting Us Bank Reo collection.",
+    "context": {
+      "source": "us_bank_reo"
+    }
+  },
+  {
+    "id": "1776278671503-ce992c74",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "chase_reo",
+    "status": "info",
+    "message": "Starting Chase Reo collection.",
+    "context": {
+      "source": "chase_reo"
+    }
+  },
+  {
+    "id": "1776278671503-59a9ef82",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "wells_fargo_reo",
+    "status": "info",
+    "message": "Starting Wells Fargo Reo collection.",
+    "context": {
+      "source": "wells_fargo_reo"
+    }
+  },
+  {
+    "id": "1776278671503-ad19f3b9",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "redfin_foreclosure",
+    "status": "info",
+    "message": "Starting Redfin Foreclosure collection.",
+    "context": {
+      "source": "redfin_foreclosure"
+    }
+  },
+  {
+    "id": "1776278671503-35a8f34a",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "realtor_foreclosure",
+    "status": "info",
+    "message": "Starting Realtor Foreclosure collection.",
+    "context": {
+      "source": "realtor_foreclosure"
+    }
+  },
+  {
+    "id": "1776278671503-443ab19b",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "reox_directory",
+    "status": "info",
+    "message": "Starting Reox Directory collection.",
+    "context": {
+      "source": "reox_directory"
+    }
+  },
+  {
+    "id": "1776278671503-d49fbe70",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "ice_mortgage_tech",
+    "status": "info",
+    "message": "Starting Ice Mortgage Tech collection.",
+    "context": {
+      "source": "ice_mortgage_tech"
+    }
+  },
+  {
+    "id": "1776278671503-5d312d77",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "attom_data",
+    "status": "info",
+    "message": "Starting Attom Data collection.",
+    "context": {
+      "source": "attom_data"
+    }
+  },
+  {
+    "id": "1776278671503-b1af4bd1",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "xome",
+    "status": "info",
+    "message": "Starting Xome collection.",
+    "context": {
+      "source": "xome"
+    }
+  },
+  {
+    "id": "1776278671503-576913bf",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "hubzu",
+    "status": "info",
+    "message": "Starting Hubzu collection.",
+    "context": {
+      "source": "hubzu"
+    }
+  },
+  {
+    "id": "1776278671503-0e774630",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "auction_com",
+    "status": "info",
+    "message": "Starting Auction Com collection.",
+    "context": {
+      "source": "auction_com"
+    }
+  },
+  {
+    "id": "1776278671503-86efc457",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "homesteps",
+    "status": "info",
+    "message": "Starting Homesteps collection.",
+    "context": {
+      "source": "homesteps"
+    }
+  },
+  {
+    "id": "1776278671503-90b30918",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "bank_of_america_reo",
+    "status": "info",
+    "message": "Starting Bank Of America Reo collection.",
+    "context": {
+      "source": "bank_of_america_reo"
+    }
+  },
+  {
+    "id": "1776278671503-3d8eecd7",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "hud_homestore",
+    "status": "info",
+    "message": "Starting Hud Homestore collection.",
+    "context": {
+      "source": "hud_homestore"
+    }
+  },
+  {
+    "id": "1776278671503-2175b45e",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "fhfa_news",
+    "status": "info",
+    "message": "Starting Fhfa News collection.",
+    "context": {
+      "source": "fhfa_news"
+    }
+  },
+  {
+    "id": "1776278671503-7711673d",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "hud_user",
+    "status": "info",
+    "message": "Starting Hud User collection.",
+    "context": {
+      "source": "hud_user"
+    }
+  },
+  {
+    "id": "1776278671503-791ffc74",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "zillow_rapidapi",
+    "status": "info",
+    "message": "Starting Zillow Rapidapi collection.",
+    "context": {
+      "source": "zillow_rapidapi"
+    }
+  },
+  {
+    "id": "1776278671503-908c33e2",
+    "timestamp": "2026-04-15T18:44:31.503Z",
+    "scope": "sources",
+    "step": "zillow_research",
+    "status": "info",
+    "message": "Starting Zillow Research collection.",
+    "context": {
+      "source": "zillow_research"
+    }
+  },
+  {
+    "id": "1776278670893-d3bbe248",
+    "timestamp": "2026-04-15T18:44:30.893Z",
+    "scope": "sources",
+    "step": "news_api",
+    "status": "success",
+    "message": "News Api collected 1 items.",
+    "context": {
+      "source": "news_api",
+      "requested_source": "news_api",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 5377
+    }
+  },
+  {
+    "id": "1776278670583-b27ddeb9",
+    "timestamp": "2026-04-15T18:44:30.583Z",
+    "scope": "sources",
+    "step": "reox_directory",
+    "status": "success",
+    "message": "Reox Directory collected 1 items.",
+    "context": {
+      "source": "reox_directory",
+      "requested_source": "reox_directory",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 5067
+    }
+  },
+  {
+    "id": "1776278670509-45dab78a",
+    "timestamp": "2026-04-15T18:44:30.509Z",
+    "scope": "sources",
+    "step": "ice_mortgage_tech",
+    "status": "success",
+    "message": "Ice Mortgage Tech collected 1 items.",
+    "context": {
+      "source": "ice_mortgage_tech",
+      "requested_source": "ice_mortgage_tech",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 4994
+    }
+  },
+  {
+    "id": "1776278670311-9bdc9cd8",
+    "timestamp": "2026-04-15T18:44:30.311Z",
+    "scope": "sources",
+    "step": "usajobs_jobs",
+    "status": "success",
+    "message": "Usajobs Jobs collected 15 items.",
+    "context": {
+      "source": "usajobs_jobs",
+      "requested_source": "usajobs_jobs",
+      "item_count": 15,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 4795
+    }
+  },
+  {
+    "id": "1776278669081-59955a28",
+    "timestamp": "2026-04-15T18:44:29.081Z",
+    "scope": "sources",
+    "step": "greenhouse_jobs",
+    "status": "success",
+    "message": "Greenhouse Jobs collected 1 items.",
+    "context": {
+      "source": "greenhouse_jobs",
+      "requested_source": "greenhouse_jobs",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 3565
+    }
+  },
+  {
+    "id": "1776278668895-ae53e470",
+    "timestamp": "2026-04-15T18:44:28.895Z",
+    "scope": "sources",
+    "step": "lever_jobs",
+    "status": "success",
+    "message": "Lever Jobs collected 1 items.",
+    "context": {
+      "source": "lever_jobs",
+      "requested_source": "lever_jobs",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 3379
+    }
+  },
+  {
+    "id": "1776278668818-e3b7a64f",
+    "timestamp": "2026-04-15T18:44:28.818Z",
+    "scope": "sources",
+    "step": "company_career_jobs",
+    "status": "success",
+    "message": "Company Career Jobs collected 0 items.",
+    "context": {
+      "source": "company_career_jobs",
+      "requested_source": "company_career_jobs",
+      "item_count": 0,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": "No matching REO/default-servicing roles were found on tracked company career sites.",
+      "errors": [],
+      "duration_ms": 3303
+    }
+  },
+  {
+    "id": "1776278668665-75f76ea9",
+    "timestamp": "2026-04-15T18:44:28.665Z",
+    "scope": "sources",
+    "step": "ziprecruiter_jobs",
+    "status": "success",
+    "message": "Ziprecruiter Jobs collected 0 items.",
+    "context": {
+      "source": "ziprecruiter_jobs",
+      "requested_source": "ziprecruiter_jobs",
+      "item_count": 0,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": "No matching ZipRecruiter REO/default-servicing job cards were found this run.",
+      "errors": [],
+      "duration_ms": 3150
+    }
+  },
+  {
+    "id": "1776278668620-b1b2b68e",
+    "timestamp": "2026-04-15T18:44:28.620Z",
+    "scope": "sources",
+    "step": "google_jobs",
+    "status": "success",
+    "message": "Google Jobs collected 0 items.",
+    "context": {
+      "source": "google_jobs",
+      "requested_source": "google_jobs",
+      "item_count": 0,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": "No matching Google-indexed REO/default-servicing job cards were found this run.",
+      "errors": [],
+      "duration_ms": 3104
+    }
+  },
+  {
+    "id": "1776278667855-90a23832",
+    "timestamp": "2026-04-15T18:44:27.855Z",
+    "scope": "sources",
+    "step": "fhfa_news",
+    "status": "success",
+    "message": "Fhfa News collected 10 items.",
+    "context": {
+      "source": "fhfa_news",
+      "requested_source": "fhfa_news",
+      "item_count": 10,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 2340
+    }
+  },
+  {
+    "id": "1776278667574-664b32e9",
+    "timestamp": "2026-04-15T18:44:27.574Z",
+    "scope": "sources",
+    "step": "zillow_research",
+    "status": "success",
+    "message": "Zillow Research collected 15 items.",
+    "context": {
+      "source": "zillow_research",
+      "requested_source": "zillow_research",
+      "item_count": 15,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 2060
+    }
+  },
+  {
+    "id": "1776278667208-ef8de953",
+    "timestamp": "2026-04-15T18:44:27.208Z",
+    "scope": "sources",
+    "step": "hud_user",
+    "status": "success",
+    "message": "Hud User collected 10 items.",
+    "context": {
+      "source": "hud_user",
+      "requested_source": "hud_user",
+      "item_count": 10,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1693
+    }
+  },
+  {
+    "id": "1776278666832-fd6d5743",
+    "timestamp": "2026-04-15T18:44:26.832Z",
+    "scope": "sources",
+    "step": "zillow_rapidapi",
+    "status": "success",
+    "message": "Zillow Rapidapi collected 1 items.",
+    "context": {
+      "source": "zillow_rapidapi",
+      "requested_source": "zillow_rapidapi",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1318
+    }
+  },
+  {
+    "id": "1776278665516-bb13c996",
+    "timestamp": "2026-04-15T18:44:25.516Z",
+    "scope": "sources",
+    "step": "news_api",
+    "status": "info",
+    "message": "Starting News Api collection.",
+    "context": {
+      "source": "news_api"
+    }
+  },
+  {
+    "id": "1776278665516-e7994a44",
+    "timestamp": "2026-04-15T18:44:25.516Z",
+    "scope": "sources",
+    "step": "reddit",
+    "status": "info",
+    "message": "Starting Reddit collection.",
+    "context": {
+      "source": "reddit"
+    }
+  },
+  {
+    "id": "1776278665516-97a1ca04",
+    "timestamp": "2026-04-15T18:44:25.516Z",
+    "scope": "sources",
+    "step": "grok",
+    "status": "info",
+    "message": "Starting Grok collection.",
+    "context": {
+      "source": "grok"
+    }
+  },
+  {
+    "id": "1776278665516-526c3ee3",
+    "timestamp": "2026-04-15T18:44:25.516Z",
+    "scope": "sources",
+    "step": "lever_jobs",
+    "status": "info",
+    "message": "Starting Lever Jobs collection.",
+    "context": {
+      "source": "lever_jobs"
+    }
+  },
+  {
+    "id": "1776278665516-c7aaa3bc",
+    "timestamp": "2026-04-15T18:44:25.516Z",
+    "scope": "sources",
+    "step": "greenhouse_jobs",
+    "status": "info",
+    "message": "Starting Greenhouse Jobs collection.",
+    "context": {
+      "source": "greenhouse_jobs"
+    }
+  },
+  {
+    "id": "1776278665516-e43bfd2f",
+    "timestamp": "2026-04-15T18:44:25.516Z",
+    "scope": "sources",
+    "step": "usajobs_jobs",
+    "status": "info",
+    "message": "Starting Usajobs Jobs collection.",
+    "context": {
+      "source": "usajobs_jobs"
+    }
+  },
+  {
+    "id": "1776278665515-fd9f1384",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "company_career_jobs",
+    "status": "info",
+    "message": "Starting Company Career Jobs collection.",
+    "context": {
+      "source": "company_career_jobs"
+    }
+  },
+  {
+    "id": "1776278665515-8e79e9df",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "ziprecruiter_jobs",
+    "status": "info",
+    "message": "Starting Ziprecruiter Jobs collection.",
+    "context": {
+      "source": "ziprecruiter_jobs"
+    }
+  },
+  {
+    "id": "1776278665515-b1867567",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "google_jobs",
+    "status": "info",
+    "message": "Starting Google Jobs collection.",
+    "context": {
+      "source": "google_jobs"
+    }
+  },
+  {
+    "id": "1776278665515-d07805b1",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "linkedin_jobs",
+    "status": "info",
+    "message": "Starting Linkedin Jobs collection.",
+    "context": {
+      "source": "linkedin_jobs"
+    }
+  },
+  {
+    "id": "1776278665515-d2686cf4",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "carrington_reo",
+    "status": "info",
+    "message": "Starting Carrington Reo collection.",
+    "context": {
+      "source": "carrington_reo"
+    }
+  },
+  {
+    "id": "1776278665515-da85563e",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "selene_finance_reo",
+    "status": "info",
+    "message": "Starting Selene Finance Reo collection.",
+    "context": {
+      "source": "selene_finance_reo"
+    }
+  },
+  {
+    "id": "1776278665515-72e51619",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "newrez_shellpoint_reo",
+    "status": "info",
+    "message": "Starting Newrez Shellpoint Reo collection.",
+    "context": {
+      "source": "newrez_shellpoint_reo"
+    }
+  },
+  {
+    "id": "1776278665515-b74d4e8e",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "phh_mortgage_reo",
+    "status": "info",
+    "message": "Starting Phh Mortgage Reo collection.",
+    "context": {
+      "source": "phh_mortgage_reo"
+    }
+  },
+  {
+    "id": "1776278665515-c971d187",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "mr_cooper_reo",
+    "status": "info",
+    "message": "Starting Mr Cooper Reo collection.",
+    "context": {
+      "source": "mr_cooper_reo"
+    }
+  },
+  {
+    "id": "1776278665515-392e4859",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "us_bank_reo",
+    "status": "info",
+    "message": "Starting Us Bank Reo collection.",
+    "context": {
+      "source": "us_bank_reo"
+    }
+  },
+  {
+    "id": "1776278665515-33f3e2be",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "chase_reo",
+    "status": "info",
+    "message": "Starting Chase Reo collection.",
+    "context": {
+      "source": "chase_reo"
+    }
+  },
+  {
+    "id": "1776278665515-2677bbbc",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "wells_fargo_reo",
+    "status": "info",
+    "message": "Starting Wells Fargo Reo collection.",
+    "context": {
+      "source": "wells_fargo_reo"
+    }
+  },
+  {
+    "id": "1776278665515-4a97a21e",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "redfin_foreclosure",
+    "status": "info",
+    "message": "Starting Redfin Foreclosure collection.",
+    "context": {
+      "source": "redfin_foreclosure"
+    }
+  },
+  {
+    "id": "1776278665515-b2d47c10",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "realtor_foreclosure",
+    "status": "info",
+    "message": "Starting Realtor Foreclosure collection.",
+    "context": {
+      "source": "realtor_foreclosure"
+    }
+  },
+  {
+    "id": "1776278665515-f7772982",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "reox_directory",
+    "status": "info",
+    "message": "Starting Reox Directory collection.",
+    "context": {
+      "source": "reox_directory"
+    }
+  },
+  {
+    "id": "1776278665515-4d9c7f31",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "ice_mortgage_tech",
+    "status": "info",
+    "message": "Starting Ice Mortgage Tech collection.",
+    "context": {
+      "source": "ice_mortgage_tech"
+    }
+  },
+  {
+    "id": "1776278665515-7b81bb5f",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "attom_data",
+    "status": "info",
+    "message": "Starting Attom Data collection.",
+    "context": {
+      "source": "attom_data"
+    }
+  },
+  {
+    "id": "1776278665515-ae973437",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "xome",
+    "status": "info",
+    "message": "Starting Xome collection.",
+    "context": {
+      "source": "xome"
+    }
+  },
+  {
+    "id": "1776278665515-7a955a7f",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "hubzu",
+    "status": "info",
+    "message": "Starting Hubzu collection.",
+    "context": {
+      "source": "hubzu"
+    }
+  },
+  {
+    "id": "1776278665515-cfa65922",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "auction_com",
+    "status": "info",
+    "message": "Starting Auction Com collection.",
+    "context": {
+      "source": "auction_com"
+    }
+  },
+  {
+    "id": "1776278665515-8ac84d09",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "homesteps",
+    "status": "info",
+    "message": "Starting Homesteps collection.",
+    "context": {
+      "source": "homesteps"
+    }
+  },
+  {
+    "id": "1776278665515-d4086797",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "bank_of_america_reo",
+    "status": "info",
+    "message": "Starting Bank Of America Reo collection.",
+    "context": {
+      "source": "bank_of_america_reo"
+    }
+  },
+  {
+    "id": "1776278665515-da5dfd4a",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "hud_homestore",
+    "status": "info",
+    "message": "Starting Hud Homestore collection.",
+    "context": {
+      "source": "hud_homestore"
+    }
+  },
+  {
+    "id": "1776278665515-c5b66799",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "fhfa_news",
+    "status": "info",
+    "message": "Starting Fhfa News collection.",
+    "context": {
+      "source": "fhfa_news"
+    }
+  },
+  {
+    "id": "1776278665515-baddbb70",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "hud_user",
+    "status": "info",
+    "message": "Starting Hud User collection.",
+    "context": {
+      "source": "hud_user"
+    }
+  },
+  {
+    "id": "1776278665514-b3fa0f59",
+    "timestamp": "2026-04-15T18:44:25.515Z",
+    "scope": "sources",
+    "step": "zillow_rapidapi",
+    "status": "info",
+    "message": "Starting Zillow Rapidapi collection.",
+    "context": {
+      "source": "zillow_rapidapi"
+    }
+  },
+  {
+    "id": "1776278665514-b112abdd",
+    "timestamp": "2026-04-15T18:44:25.514Z",
+    "scope": "sources",
+    "step": "zillow_research",
+    "status": "info",
+    "message": "Starting Zillow Research collection.",
+    "context": {
+      "source": "zillow_research"
+    }
+  },
+  {
+    "id": "1776278150695-ae27b0db",
+    "timestamp": "2026-04-15T18:35:50.695Z",
+    "scope": "sources",
+    "step": "grok",
+    "status": "success",
+    "message": "Grok collected 16 items.",
+    "context": {
+      "source": "grok",
+      "requested_source": "grok",
+      "item_count": 16,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 29728
+    }
+  },
+  {
+    "id": "1776278147011-f1bc0746",
+    "timestamp": "2026-04-15T18:35:47.011Z",
+    "scope": "sources",
+    "step": "auction_com",
+    "status": "success",
+    "message": "Auction Com collected 0 items.",
+    "context": {
+      "source": "auction_com",
+      "requested_source": "auction_com",
+      "item_count": 0,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": "No indexable listing signals were found for auction.com. The site may have anti-bot controls or no currently indexable REO pages.",
+      "errors": [],
+      "duration_ms": 26046
+    }
+  },
+  {
+    "id": "1776278146227-32208771",
+    "timestamp": "2026-04-15T18:35:46.227Z",
+    "scope": "sources",
+    "step": "redfin_foreclosure",
+    "status": "success",
+    "message": "Redfin Foreclosure collected 1 items.",
+    "context": {
+      "source": "redfin_foreclosure",
+      "requested_source": "redfin_foreclosure",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 25261
+    }
+  },
+  {
+    "id": "1776278141910-60ad630a",
+    "timestamp": "2026-04-15T18:35:41.910Z",
+    "scope": "sources",
+    "step": "auction_com",
+    "status": "success",
+    "message": "Auction Com collected 0 items.",
+    "context": {
+      "source": "auction_com",
+      "requested_source": "auction_com",
+      "item_count": 0,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": "No indexable listing signals were found for auction.com. The site may have anti-bot controls or no currently indexable REO pages.",
+      "errors": [],
+      "duration_ms": 30678
+    }
+  },
+  {
+    "id": "1776278139933-ea244bed",
+    "timestamp": "2026-04-15T18:35:39.933Z",
+    "scope": "sources",
+    "step": "redfin_foreclosure",
+    "status": "success",
+    "message": "Redfin Foreclosure collected 0 items.",
+    "context": {
+      "source": "redfin_foreclosure",
+      "requested_source": "redfin_foreclosure",
+      "item_count": 0,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": "No indexable listing signals were found for redfin.com. The site may have anti-bot controls or no currently indexable REO pages.",
+      "errors": [],
+      "duration_ms": 28702
+    }
+  },
+  {
+    "id": "1776278136327-0f806617",
+    "timestamp": "2026-04-15T18:35:36.327Z",
+    "scope": "sources",
+    "step": "grok",
+    "status": "success",
+    "message": "Grok collected 15 items.",
+    "context": {
+      "source": "grok",
+      "requested_source": "grok",
+      "item_count": 15,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 25095
+    }
+  },
+  {
+    "id": "1776278131319-1352b7fb",
+    "timestamp": "2026-04-15T18:35:31.319Z",
+    "scope": "sources",
+    "step": "hud_homestore",
+    "status": "success",
+    "message": "Hud Homestore collected 12 items.",
+    "context": {
+      "source": "hud_homestore",
+      "requested_source": "hud_homestore",
+      "item_count": 12,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 10354
+    }
+  },
+  {
+    "id": "1776278129292-17377674",
+    "timestamp": "2026-04-15T18:35:29.292Z",
+    "scope": "sources",
+    "step": "hud_homestore",
+    "status": "success",
+    "message": "Hud Homestore collected 12 items.",
+    "context": {
+      "source": "hud_homestore",
+      "requested_source": "hud_homestore",
+      "item_count": 12,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 18061
+    }
+  },
+  {
+    "id": "1776278128417-f99b2a75",
+    "timestamp": "2026-04-15T18:35:28.417Z",
+    "scope": "sources",
+    "step": "reddit",
+    "status": "success",
+    "message": "Reddit collected 6 items.",
+    "context": {
+      "source": "reddit",
+      "requested_source": "reddit",
+      "item_count": 6,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 7449
+    }
+  },
+  {
+    "id": "1776278128383-d48f0b2e",
+    "timestamp": "2026-04-15T18:35:28.383Z",
+    "scope": "sources",
+    "step": "linkedin_jobs",
+    "status": "success",
+    "message": "Linkedin Jobs collected 44 items.",
+    "context": {
+      "source": "linkedin_jobs",
+      "requested_source": "linkedin_jobs",
+      "item_count": 44,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 7417
+    }
+  },
+  {
+    "id": "1776278126828-17e4a7b8",
+    "timestamp": "2026-04-15T18:35:26.828Z",
+    "scope": "sources",
+    "step": "phh_mortgage_reo",
+    "status": "success",
+    "message": "Phh Mortgage Reo collected 1 items.",
+    "context": {
+      "source": "phh_mortgage_reo",
+      "requested_source": "phh_mortgage_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 15596
+    }
+  },
+  {
+    "id": "1776278126662-5403f505",
+    "timestamp": "2026-04-15T18:35:26.662Z",
+    "scope": "sources",
+    "step": "phh_mortgage_reo",
+    "status": "success",
+    "message": "Phh Mortgage Reo collected 1 items.",
+    "context": {
+      "source": "phh_mortgage_reo",
+      "requested_source": "phh_mortgage_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 5695
+    }
+  },
+  {
+    "id": "1776278126265-9ffa0cbc",
+    "timestamp": "2026-04-15T18:35:26.265Z",
+    "scope": "sources",
+    "step": "us_bank_reo",
+    "status": "success",
+    "message": "Us Bank Reo collected 1 items.",
+    "context": {
+      "source": "us_bank_reo",
+      "requested_source": "us_bank_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 5299
+    }
+  },
+  {
+    "id": "1776278126231-4910977b",
+    "timestamp": "2026-04-15T18:35:26.231Z",
+    "scope": "sources",
+    "step": "bank_of_america_reo",
+    "status": "success",
+    "message": "Bank Of America Reo collected 4 items.",
+    "context": {
+      "source": "bank_of_america_reo",
+      "requested_source": "bank_of_america_reo",
+      "item_count": 4,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 5266
+    }
+  },
+  {
+    "id": "1776278126202-88b66ff7",
+    "timestamp": "2026-04-15T18:35:26.202Z",
+    "scope": "sources",
+    "step": "chase_reo",
+    "status": "success",
+    "message": "Chase Reo collected 1 items.",
+    "context": {
+      "source": "chase_reo",
+      "requested_source": "chase_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 5236
+    }
+  },
+  {
+    "id": "1776278126045-7c3e375f",
+    "timestamp": "2026-04-15T18:35:26.045Z",
+    "scope": "sources",
+    "step": "homesteps",
+    "status": "success",
+    "message": "Homesteps collected 28 items.",
+    "context": {
+      "source": "homesteps",
+      "requested_source": "homesteps",
+      "item_count": 28,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 5080
+    }
+  },
+  {
+    "id": "1776278126037-0f0a01c9",
+    "timestamp": "2026-04-15T18:35:26.037Z",
+    "scope": "sources",
+    "step": "homesteps",
+    "status": "success",
+    "message": "Homesteps collected 28 items.",
+    "context": {
+      "source": "homesteps",
+      "requested_source": "homesteps",
+      "item_count": 28,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 14806
+    }
+  },
+  {
+    "id": "1776278126004-dc86346b",
+    "timestamp": "2026-04-15T18:35:26.004Z",
+    "scope": "sources",
+    "step": "lever_jobs",
+    "status": "success",
+    "message": "Lever Jobs collected 1 items.",
+    "context": {
+      "source": "lever_jobs",
+      "requested_source": "lever_jobs",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 5037
+    }
+  },
+  {
+    "id": "1776278125995-374ac9bc",
+    "timestamp": "2026-04-15T18:35:25.995Z",
+    "scope": "sources",
+    "step": "mr_cooper_reo",
+    "status": "success",
+    "message": "Mr Cooper Reo collected 1 items.",
+    "context": {
+      "source": "mr_cooper_reo",
+      "requested_source": "mr_cooper_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 5029
+    }
+  },
+  {
+    "id": "1776278125958-de67724f",
+    "timestamp": "2026-04-15T18:35:25.958Z",
+    "scope": "sources",
+    "step": "hubzu",
+    "status": "success",
+    "message": "Hubzu collected 1 items.",
+    "context": {
+      "source": "hubzu",
+      "requested_source": "hubzu",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 4993
+    }
+  },
+  {
+    "id": "1776278125295-3767faac",
+    "timestamp": "2026-04-15T18:35:25.295Z",
+    "scope": "sources",
+    "step": "news_api",
+    "status": "success",
+    "message": "News Api collected 1 items.",
+    "context": {
+      "source": "news_api",
+      "requested_source": "news_api",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 4328
+    }
+  },
+  {
+    "id": "1776278125227-0c3ed56e",
+    "timestamp": "2026-04-15T18:35:25.227Z",
+    "scope": "sources",
+    "step": "selene_finance_reo",
+    "status": "success",
+    "message": "Selene Finance Reo collected 1 items.",
+    "context": {
+      "source": "selene_finance_reo",
+      "requested_source": "selene_finance_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 4261
+    }
+  },
+  {
+    "id": "1776278125094-38bb1f2c",
+    "timestamp": "2026-04-15T18:35:25.094Z",
+    "scope": "sources",
+    "step": "greenhouse_jobs",
+    "status": "success",
+    "message": "Greenhouse Jobs collected 1 items.",
+    "context": {
+      "source": "greenhouse_jobs",
+      "requested_source": "greenhouse_jobs",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 4128
+    }
+  },
+  {
+    "id": "1776278125073-83a187ba",
+    "timestamp": "2026-04-15T18:35:25.073Z",
+    "scope": "sources",
+    "step": "carrington_reo",
+    "status": "success",
+    "message": "Carrington Reo collected 1 items.",
+    "context": {
+      "source": "carrington_reo",
+      "requested_source": "carrington_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 4107
+    }
+  },
+  {
+    "id": "1776278125070-2d69d1b2",
+    "timestamp": "2026-04-15T18:35:25.070Z",
+    "scope": "sources",
+    "step": "attom_data",
+    "status": "success",
+    "message": "Attom Data collected 1 items.",
+    "context": {
+      "source": "attom_data",
+      "requested_source": "attom_data",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 4105
+    }
+  },
+  {
+    "id": "1776278125030-739491c7",
+    "timestamp": "2026-04-15T18:35:25.030Z",
+    "scope": "sources",
+    "step": "wells_fargo_reo",
+    "status": "success",
+    "message": "Wells Fargo Reo collected 1 items.",
+    "context": {
+      "source": "wells_fargo_reo",
+      "requested_source": "wells_fargo_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 4063
+    }
+  },
+  {
+    "id": "1776278125013-87b3ef64",
+    "timestamp": "2026-04-15T18:35:25.013Z",
+    "scope": "sources",
+    "step": "usajobs_jobs",
+    "status": "success",
+    "message": "Usajobs Jobs collected 15 items.",
+    "context": {
+      "source": "usajobs_jobs",
+      "requested_source": "usajobs_jobs",
+      "item_count": 15,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 4047
+    }
+  },
+  {
+    "id": "1776278124938-17c13106",
+    "timestamp": "2026-04-15T18:35:24.938Z",
+    "scope": "sources",
+    "step": "company_career_jobs",
+    "status": "success",
+    "message": "Company Career Jobs collected 0 items.",
+    "context": {
+      "source": "company_career_jobs",
+      "requested_source": "company_career_jobs",
+      "item_count": 0,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": "No matching REO/default-servicing roles were found on tracked company career sites.",
+      "errors": [],
+      "duration_ms": 3972
+    }
+  },
+  {
+    "id": "1776278124208-22422f0f",
+    "timestamp": "2026-04-15T18:35:24.208Z",
+    "scope": "sources",
+    "step": "reox_directory",
+    "status": "success",
+    "message": "Reox Directory collected 1 items.",
+    "context": {
+      "source": "reox_directory",
+      "requested_source": "reox_directory",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 3242
+    }
+  },
+  {
+    "id": "1776278124134-b68cdb28",
+    "timestamp": "2026-04-15T18:35:24.134Z",
+    "scope": "sources",
+    "step": "realtor_foreclosure",
+    "status": "success",
+    "message": "Realtor Foreclosure collected 1 items.",
+    "context": {
+      "source": "realtor_foreclosure",
+      "requested_source": "realtor_foreclosure",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 3168
+    }
+  },
+  {
+    "id": "1776278124049-13405777",
+    "timestamp": "2026-04-15T18:35:24.049Z",
+    "scope": "sources",
+    "step": "xome",
+    "status": "success",
+    "message": "Xome collected 1 items.",
+    "context": {
+      "source": "xome",
+      "requested_source": "xome",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 3084
+    }
+  },
+  {
+    "id": "1776278123973-31cff41d",
+    "timestamp": "2026-04-15T18:35:23.973Z",
+    "scope": "sources",
+    "step": "newrez_shellpoint_reo",
+    "status": "success",
+    "message": "Newrez Shellpoint Reo collected 1 items.",
+    "context": {
+      "source": "newrez_shellpoint_reo",
+      "requested_source": "newrez_shellpoint_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 3007
+    }
+  },
+  {
+    "id": "1776278123660-997211cb",
+    "timestamp": "2026-04-15T18:35:23.660Z",
+    "scope": "sources",
+    "step": "ziprecruiter_jobs",
+    "status": "success",
+    "message": "Ziprecruiter Jobs collected 0 items.",
+    "context": {
+      "source": "ziprecruiter_jobs",
+      "requested_source": "ziprecruiter_jobs",
+      "item_count": 0,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": "No matching ZipRecruiter REO/default-servicing job cards were found this run.",
+      "errors": [],
+      "duration_ms": 2694
+    }
+  },
+  {
+    "id": "1776278123648-a6567537",
+    "timestamp": "2026-04-15T18:35:23.648Z",
+    "scope": "sources",
+    "step": "google_jobs",
+    "status": "success",
+    "message": "Google Jobs collected 0 items.",
+    "context": {
+      "source": "google_jobs",
+      "requested_source": "google_jobs",
+      "item_count": 0,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": "No matching Google-indexed REO/default-servicing job cards were found this run.",
+      "errors": [],
+      "duration_ms": 2682
+    }
+  },
+  {
+    "id": "1776278123373-dacc6c96",
+    "timestamp": "2026-04-15T18:35:23.373Z",
+    "scope": "sources",
+    "step": "ice_mortgage_tech",
+    "status": "success",
+    "message": "Ice Mortgage Tech collected 1 items.",
+    "context": {
+      "source": "ice_mortgage_tech",
+      "requested_source": "ice_mortgage_tech",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 2408
+    }
+  },
+  {
+    "id": "1776278123289-e756ae32",
+    "timestamp": "2026-04-15T18:35:23.289Z",
+    "scope": "sources",
+    "step": "fhfa_news",
+    "status": "success",
+    "message": "Fhfa News collected 10 items.",
+    "context": {
+      "source": "fhfa_news",
+      "requested_source": "fhfa_news",
+      "item_count": 10,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 2324
+    }
+  },
+  {
+    "id": "1776278122769-76fdaafc",
+    "timestamp": "2026-04-15T18:35:22.769Z",
+    "scope": "sources",
+    "step": "hud_user",
+    "status": "success",
+    "message": "Hud User collected 10 items.",
+    "context": {
+      "source": "hud_user",
+      "requested_source": "hud_user",
+      "item_count": 10,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1804
+    }
+  },
+  {
+    "id": "1776278122144-31dbfe20",
+    "timestamp": "2026-04-15T18:35:22.144Z",
+    "scope": "sources",
+    "step": "zillow_rapidapi",
+    "status": "success",
+    "message": "Zillow Rapidapi collected 1 items.",
+    "context": {
+      "source": "zillow_rapidapi",
+      "requested_source": "zillow_rapidapi",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1179
+    }
+  },
+  {
+    "id": "1776278122013-ea8be998",
+    "timestamp": "2026-04-15T18:35:22.013Z",
+    "scope": "sources",
+    "step": "zillow_research",
+    "status": "success",
+    "message": "Zillow Research collected 15 items.",
+    "context": {
+      "source": "zillow_research",
+      "requested_source": "zillow_research",
+      "item_count": 15,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 1049
+    }
+  },
+  {
+    "id": "1776278120967-e38bf5ec",
+    "timestamp": "2026-04-15T18:35:20.967Z",
+    "scope": "sources",
+    "step": "news_api",
+    "status": "info",
+    "message": "Starting News Api collection.",
+    "context": {
+      "source": "news_api"
+    }
+  },
+  {
+    "id": "1776278120967-f03cf454",
+    "timestamp": "2026-04-15T18:35:20.967Z",
+    "scope": "sources",
+    "step": "reddit",
+    "status": "info",
+    "message": "Starting Reddit collection.",
+    "context": {
+      "source": "reddit"
+    }
+  },
+  {
+    "id": "1776278120967-e5b36650",
+    "timestamp": "2026-04-15T18:35:20.967Z",
+    "scope": "sources",
+    "step": "grok",
+    "status": "info",
+    "message": "Starting Grok collection.",
+    "context": {
+      "source": "grok"
+    }
+  },
+  {
+    "id": "1776278120967-3ff6a5f1",
+    "timestamp": "2026-04-15T18:35:20.967Z",
+    "scope": "sources",
+    "step": "lever_jobs",
+    "status": "info",
+    "message": "Starting Lever Jobs collection.",
+    "context": {
+      "source": "lever_jobs"
+    }
+  },
+  {
+    "id": "1776278120966-f272f3cc",
+    "timestamp": "2026-04-15T18:35:20.966Z",
+    "scope": "sources",
+    "step": "greenhouse_jobs",
+    "status": "info",
+    "message": "Starting Greenhouse Jobs collection.",
+    "context": {
+      "source": "greenhouse_jobs"
+    }
+  },
+  {
+    "id": "1776278120966-3538bb8b",
+    "timestamp": "2026-04-15T18:35:20.966Z",
+    "scope": "sources",
+    "step": "usajobs_jobs",
+    "status": "info",
+    "message": "Starting Usajobs Jobs collection.",
+    "context": {
+      "source": "usajobs_jobs"
+    }
+  },
+  {
+    "id": "1776278120966-2113b265",
+    "timestamp": "2026-04-15T18:35:20.966Z",
+    "scope": "sources",
+    "step": "company_career_jobs",
+    "status": "info",
+    "message": "Starting Company Career Jobs collection.",
+    "context": {
+      "source": "company_career_jobs"
+    }
+  },
+  {
+    "id": "1776278122473-88afa872",
+    "timestamp": "2026-04-15T18:35:22.473Z",
+    "scope": "sources",
+    "step": "newrez_shellpoint_reo",
+    "status": "success",
+    "message": "Newrez Shellpoint Reo collected 1 items.",
+    "context": {
+      "source": "newrez_shellpoint_reo",
+      "requested_source": "newrez_shellpoint_reo",
+      "item_count": 1,
+      "error_count": 0,
+      "optional": false,
+      "no_signal_reason": null,
+      "errors": [],
+      "duration_ms": 11241
+    }
+  }
+]

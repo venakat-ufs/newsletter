@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>United Field Services — Brand Guidelines</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ufs-black: #1A1A1A;
+    --ufs-red: #72262a;
+    --ufs-red-dark: #5a1e1f;
+    --ufs-red-light: #9e3337;
+    --ufs-white: #FFFFFF;
+    --ufs-off-white: #F7F5F2;
+    --ufs-warm-gray: #E8E4DF;
+    --ufs-mid-gray: #9E9A96;
+    --ufs-dark-gray: #3A3A3A;
+    --ufs-charcoal: #2C2C2C;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--ufs-off-white);
+    color: var(--ufs-black);
+    line-height: 1.6;
+  }
+
+  /* ── Cover ── */
+  .cover {
+    background: var(--ufs-black);
+    color: var(--ufs-white);
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 45%;
+    height: 100%;
+    background: var(--ufs-red);
+    clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);
+    opacity: 0.12;
+  }
+  .cover-logo {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .cover-logo-mark {
+    width: 56px;
+    height: 56px;
+    background: var(--ufs-red);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cover-wordmark {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1.3;
+    font-weight: 700;
+  }
+  .cover-body {
+    padding: 80px 0 40px;
+  }
+  .cover-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ufs-red-light);
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+  .cover-title {
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    font-weight: 900;
+    line-height: 1.0;
+    margin-bottom: 32px;
+    max-width: 640px;
+  }
+  .cover-sub {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.6);
+    max-width: 460px;
+    font-weight: 300;
+  }
+  .cover-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.4);
+    font-size: 0.8rem;
+  }
+
+  /* ── Layout ── */
+  .page { max-width: 1160px; margin: 0 auto; padding: 80px 40px; }
+  .section { margin-bottom: 100px; }
+  .section-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ufs-red);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    color: var(--ufs-black);
+  }
+  .section-intro {
+    font-size: 1.05rem;
+    color: var(--ufs-dark-gray);
+    max-width: 600px;
+    margin-bottom: 56px;
+    font-weight: 300;
+  }
+  .divider {
+    height: 1px;
+    background: var(--ufs-warm-gray);
+    margin-bottom: 100px;
+  }
+
+  /* ── Logo Section ── */
+  .logo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2px;
+    margin-bottom: 48px;
+  }
+  .logo-cell {
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  .logo-cell.bg-black { background: var(--ufs-black); }
+  .logo-cell.bg-red   { background: var(--ufs-red); }
+  .logo-cell.bg-white { background: var(--ufs-white); border: 1px solid var(--ufs-warm-gray); }
+  .logo-cell.bg-gray  { background: var(--ufs-warm-gray); }
+  .logo-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .logo-lockup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-hex {
+    width: 52px;
+    height: 52px;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+  .logo-text {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-align: center;
+  }
+  .logo-sub-text {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 500;
+    opacity: 0.7;
+  }
+
+  .logo-rules {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .rule-card {
+    border: 1px solid var(--ufs-warm-gray);
+    background: var(--ufs-white);
+    padding: 28px;
+    border-radius: 2px;
+  }
+  .rule-card h4 {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    color: var(--ufs-black);
+  }
+  .rule-card p {
+    font-size: 0.88rem;
+    color: var(--ufs-dark-gray);
+    line-height: 1.5;
+  }
+  .rule-card.dont { border-color: #F5C6C2; }
+  .rule-card.dont h4 { color: var(--ufs-red); }
+  .rule-card.do h4 { color: #2E7D32; }
+  .rule-card.do { border-color: #C8E6C9; }
+
+  /* ── Color Palette ── */
+  .palette-primary {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    height: 220px;
+    margin-bottom: 48px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .color-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+    position: relative;
+  }
+  .color-name {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .color-hex {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    opacity: 0.7;
+  }
+  .color-role {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  .palette-secondary {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    height: 120px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+
+  .color-usage-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  .color-usage-table th {
+    text-align: left;
+    padding: 12px 16px;
+    background: var(--ufs-black);
+    color: var(--ufs-white);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .color-usage-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--ufs-warm-gray);
+    color: var(--ufs-dark-gray);
+    vertical-align: middle;
+  }
+  .color-swatch-inline {
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+
+  /* ── Typography ── */
+  .type-showcase {
+    background: var(--ufs-white);
+    border: 1px solid var(--ufs-warm-gray);
+    padding: 48px;
+    margin-bottom: 24px;
+  }
+  .type-spec {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 48px;
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--ufs-warm-gray);
+    align-items: start;
+  }
+  .type-spec:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .type-meta { font-size: 0.78rem; color: var(--ufs-mid-gray); }
+  .type-meta strong { display: block; color: var(--ufs-black); font-size: 0.82rem; font-weight: 600; margin-bottom: 8px; }
+  .type-meta span { display: block; margin-bottom: 4px; }
+
+  .type-scale {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0;
+    margin-bottom: 32px;
+  }
+  .type-scale-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--ufs-mid-gray);
+    padding-top: 4px;
+    align-self: start;
+  }
+  .type-scale-sample { border-bottom: 1px solid var(--ufs-warm-gray); padding-bottom: 20px; margin-bottom: 20px; }
+
+  /* ── Voice & Tone ── */
+  .voice-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-bottom: 48px;
+  }
+  .voice-card {
+    background: var(--ufs-white);
+    padding: 36px 28px;
+    border-left: 3px solid transparent;
+  }
+  .voice-card:nth-child(1) { border-color: var(--ufs-red); }
+  .voice-card:nth-child(2) { border-color: var(--ufs-black); }
+  .voice-card:nth-child(3) { border-color: var(--ufs-mid-gray); }
+  .voice-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .voice-card p { font-size: 0.88rem; color: var(--ufs-dark-gray); margin-bottom: 16px; }
+  .voice-ex {
+    background: var(--ufs-off-white);
+    padding: 14px 16px;
+    font-size: 0.82rem;
+    font-style: italic;
+    color: var(--ufs-dark-gray);
+    border-radius: 2px;
+  }
+
+  .copy-pairs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 48px;
+  }
+  .copy-pair-col { background: var(--ufs-white); padding: 32px; }
+  .copy-pair-col h4 {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .copy-pair-col.good h4 { color: #2E7D32; }
+  .copy-pair-col.bad h4 { color: var(--ufs-red); }
+  .copy-item {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--ufs-warm-gray);
+    font-size: 0.88rem;
+    color: var(--ufs-dark-gray);
+  }
+
+  /* ── Spacing & Grid ── */
+  .spacing-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .spacing-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .spacing-visual {
+    background: var(--ufs-red);
+    opacity: 0.7;
+  }
+  .spacing-val {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--ufs-mid-gray);
+  }
+
+  /* ── Iconography ── */
+  .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 2px;
+    margin-bottom: 32px;
+  }
+  .icon-cell {
+    background: var(--ufs-white);
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.72rem;
+    color: var(--ufs-mid-gray);
+    text-align: center;
+  }
+  .icon-cell svg { color: var(--ufs-black); }
+
+  /* ── Imagery ── */
+  .image-rules-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+  .image-rule {
+    background: var(--ufs-white);
+    border: 1px solid var(--ufs-warm-gray);
+    overflow: hidden;
+  }
+  .image-rule-visual {
+    height: 180px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .image-rule-label {
+    padding: 16px 20px;
+    font-size: 0.82rem;
+    color: var(--ufs-dark-gray);
+  }
+  .image-rule-label strong { display: block; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+
+  /* ── Motion ── */
+  .motion-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-bottom: 32px;
+  }
+  .motion-cell {
+    background: var(--ufs-white);
+    padding: 28px;
+  }
+  .motion-cell h4 {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .motion-cell p { font-size: 0.82rem; color: var(--ufs-mid-gray); }
+  .motion-demo {
+    width: 40px;
+    height: 8px;
+    background: var(--ufs-red);
+    margin: 16px 0;
+    border-radius: 1px;
+  }
+
+  /* ── Contact / Back cover ── */
+  .back-cover {
+    background: var(--ufs-black);
+    color: var(--ufs-white);
+    padding: 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: end;
+  }
+  .back-cover h2 {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    line-height: 1.2;
+  }
+  .back-cover p { color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-bottom: 8px; }
+  .back-cover a { color: var(--ufs-red-light); text-decoration: none; }
+  .version-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.12em;
+  }
+
+  /* Utility */
+  .tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .tag-red { background: var(--ufs-red); color: #fff; }
+  .tag-black { background: var(--ufs-black); color: #fff; }
+  .tag-gray { background: var(--ufs-warm-gray); color: var(--ufs-dark-gray); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+  .note {
+    background: #FFF8E1;
+    border-left: 3px solid #F9A825;
+    padding: 14px 18px;
+    font-size: 0.84rem;
+    color: var(--ufs-dark-gray);
+    margin-top: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .cover { padding: 40px; }
+    .page { padding: 48px 24px; }
+    .palette-primary { grid-template-columns: 1fr 1fr; height: auto; }
+    .palette-secondary { grid-template-columns: repeat(5, 1fr); }
+    .two-col, .three-col, .logo-rules, .voice-grid, .copy-pairs { grid-template-columns: 1fr; }
+    .type-spec { grid-template-columns: 1fr; }
+    .icon-grid { grid-template-columns: repeat(3, 1fr); }
+    .motion-row { grid-template-columns: 1fr; }
+    .back-cover { grid-template-columns: 1fr; padding: 48px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-logo">
+    <div style="max-width:220px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 924.81 567.05" style="display:block;width:200px;height:auto;" aria-label="United Field Services"><defs><style>.la{fill:#72262a}.lb{fill:#f0d8aa}.lc{fill:#ffffff}</style></defs><path class="lb" d="M346.96,307.92v117.6h-21.22v-163.97l21.22,46.37Z"/><path class="lb" d="M316.75,241.76v183.76h-21.22V195.47l21.22,46.3Z"/><path class="lb" d="M286.46,175.68v249.84h-21.15V129.31l21.15,46.37Z"/><path class="la" d="M174,178.55v249.16h21.22V132.25l-21.22,46.3Z"/><path class="la" d="M204.29,112.46V427.71h21.15V66.09l-21.15,46.38Z"/><path class="la" d="M234.5,46.38V427.7h21.22V0l-21.22,46.38Z"/><path class="lc" d="M128.91,438.88v84.67c0,29-21.53,43.5-64.58,43.5S0,552.53,0,523.49v-84.61H49.08v85.73c0,11.1,2.12,18.66,6.42,22.73,6.87,4.84,15.28,7.02,23.64,6.12,22.2,0,33.38-9.97,33.38-29.91v-84.67h16.4Z"/><path class="lc" d="M304.66,438.88v126.13h-37.53l-70.7-79.82v79.82h-16.47v-126.13h31.12l77.11,86.26v-86.26h16.47Z"/><path class="lc" d="M407.53,438.88v126.13h-49.09v-126.13h49.09Z"/><path class="lc" d="M581.09,438.88v12.69h-41.55v113.52h-52.03v-113.59h-41.76v-12.69h135.37l-.03,.07Z"/><path class="lc" d="M728.82,438.88v12.69h-60.68v38.14h50.98v12.69h-50.98v50h70.92v12.69h-119.98v-126.13h109.74v-.07Z"/><path class="lc" d="M779.88,565.02v-126.13h70.17c49.85,0,74.77,21.07,74.77,63.22s-25.83,62.89-77.49,62.92h-67.45Zm49.09-10.42h12.91c9.66,1.06,19.12-3.33,24.55-11.39,4.52-7.64,6.78-21.38,6.78-41.25s-2.23-33.61-6.7-41.24c-4.53-7.55-12.69-11.33-24.62-11.33h-12.91v105.2Z"/><path class="lc" d="M386.38,379.37v3.85h-13.6v9.49h11.55v3.85h-11.55v12.31h-4.83v-29.51h18.43Z"/><path class="lc" d="M395.75,381.71c0,.39-.08,.77-.23,1.13-.14,.36-.37,.67-.67,.9-.28,.27-.62,.48-.99,.6-.72,.3-1.54,.3-2.27,0-.34-.14-.65-.34-.9-.6-.23-.28-.43-.59-.6-.9-.3-.72-.3-1.54,0-2.27,.16-.33,.36-.63,.6-.9,.24-.28,.55-.49,.9-.6,.36-.15,.74-.23,1.13-.23s.78,.07,1.13,.23c.35,.16,.69,.36,.99,.6,.25,.28,.47,.59,.67,.9,.13,.37,.2,.75,.23,1.13Zm-.76,6.27v20.92h-4.38v-20.92h4.38Z"/><path class="lc" d="M409.27,387.68c1.21,0,2.41,.2,3.55,.6,1.05,.44,2.02,1.05,2.87,1.81,.8,.86,1.44,1.86,1.89,2.95,.48,1.29,.7,2.65,.67,4.02,.04,.46-.04,.92-.23,1.34-.2,.26-.51,.4-.83,.38h-13.44c.04,1.05,.22,2.09,.53,3.1,.27,.81,.71,1.56,1.29,2.19,.51,.58,1.16,1.02,1.89,1.29,.79,.31,1.64,.46,2.49,.46,.77,.02,1.53-.08,2.27-.3,.6-.23,1.21-.46,1.66-.67s.83-.46,1.21-.67c.26-.19,.58-.29,.9-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.52,.59-1.1,1.12-1.74,1.59-.67,.43-1.38,.78-2.12,1.06-.73,.27-1.49,.47-2.27,.6-.75,.13-1.51,.18-2.27,.15-1.38,.03-2.75-.23-4.02-.76-1.22-.47-2.33-1.19-3.25-2.12-.94-1-1.66-2.18-2.12-3.47-.54-1.55-.8-3.19-.76-4.83-.01-1.39,.22-2.77,.67-4.08,.43-1.21,1.09-2.31,1.96-3.25,.87-.94,1.92-1.68,3.1-2.19,1.24-.59,2.59-.88,3.96-.85Zm.15,3.17c-1.39-.08-2.75,.4-3.77,1.34-.99,1.06-1.6,2.41-1.74,3.85h10.42c.02-.68-.08-1.36-.3-2.01-.21-.6-.52-1.16-.9-1.66-.42-.48-.93-.86-1.51-1.13-.7-.29-1.45-.42-2.2-.38h0Z"/><path class="lc" d="M426.88,378.54v30.37h-4.38v-30.37h4.38Z"/><path class="lc" d="M447.41,408.98c-.53,.04-1.01-.31-1.13-.83l-.38-2.27c-.41,.48-.86,.93-1.34,1.34-.53,.38-1.06,.76-1.59,1.06-.57,.3-1.18,.53-1.81,.67-.66,.15-1.33,.22-2.01,.23-1.09,.03-2.18-.2-3.17-.67-.97-.47-1.83-1.16-2.49-2.01-.73-1.01-1.26-2.15-1.59-3.35-.39-1.5-.57-3.05-.53-4.6,0-1.46,.2-2.9,.6-4.3,.37-1.26,.99-2.44,1.81-3.47,.76-.98,1.74-1.75,2.87-2.27,1.18-.56,2.47-.84,3.77-.83,1.09-.01,2.16,.19,3.17,.6,.89,.39,1.68,.95,2.34,1.66v-11.25h4.38v30.37h-2.87l-.04-.07Zm-6.95-3.25c1,.04,1.99-.19,2.87-.67,.86-.54,1.62-1.22,2.27-2.01v-9.78c-.52-.71-1.21-1.29-2.01-1.66-.77-.31-1.59-.47-2.42-.46-1.59-.08-3.12,.62-4.08,1.89-1.07,1.66-1.57,3.62-1.43,5.59-.03,1.12,.07,2.25,.3,3.35,.17,.78,.47,1.52,.9,2.19,.39,.54,.91,.99,1.51,1.29,.69,.16,1.39,.25,2.1,.27Z"/><path class="lc" d="M481.92,384.43c-.11,.21-.27,.39-.46,.53-.19,.1-.39,.15-.6,.15-.32-.02-.64-.12-.9-.3-.3-.23-.76-.46-1.21-.76-.53-.31-1.08-.57-1.66-.76-.73-.23-1.5-.33-2.27-.3-.74-.02-1.48,.08-2.19,.3-.57,.18-1.11,.47-1.59,.83-.42,.36-.75,.79-.99,1.29-.22,.53-.32,1.09-.3,1.66,0,.68,.2,1.34,.6,1.89,.43,.54,.97,.98,1.59,1.29,.69,.39,1.43,.7,2.19,.9,.83,.3,1.66,.53,2.57,.83,.88,.29,1.74,.64,2.57,1.06,.8,.37,1.53,.85,2.19,1.43,.69,.6,1.23,1.35,1.59,2.19,.42,.98,.62,2.03,.6,3.1,.01,1.26-.22,2.52-.67,3.7-.45,1.13-1.11,2.16-1.96,3.02-.91,.87-1.99,1.56-3.17,2.01-1.37,.54-2.83,.8-4.3,.76-.94,.01-1.88-.09-2.79-.3-.87-.21-1.73-.46-2.57-.76-.8-.31-1.56-.72-2.27-1.21-.7-.45-1.33-.98-1.89-1.59l1.43-2.27c.11-.19,.27-.35,.46-.46,.19-.09,.39-.14,.6-.15,.39,.03,.77,.19,1.06,.46,.38,.3,.83,.6,1.34,.99,.61,.4,1.27,.73,1.96,.99,.87,.32,1.79,.48,2.72,.46,1.45,.09,2.89-.37,4.02-1.29,.95-.9,1.47-2.16,1.43-3.47,.01-.72-.2-1.42-.6-2.01-.4-.56-.95-1.01-1.59-1.29-.69-.39-1.43-.7-2.19-.9-.83-.23-1.66-.53-2.57-.76s-1.74-.6-2.57-.99c-.83-.34-1.58-.86-2.19-1.51-.69-.62-1.24-1.4-1.59-2.27-.81-2.06-.81-4.36,0-6.42,.44-.98,1.06-1.87,1.81-2.64,.87-.79,1.87-1.43,2.95-1.89,1.29-.47,2.65-.7,4.02-.67,1.6,0,3.19,.28,4.69,.83,1.37,.5,2.63,1.27,3.7,2.27l-1.02,2.02Z"/><path class="lc" d="M496.8,387.68c1.21,0,2.41,.2,3.55,.6,1.05,.4,2,1.02,2.79,1.81,.83,.84,1.47,1.85,1.89,2.95,.48,1.29,.7,2.65,.67,4.02,.04,.46-.04,.92-.23,1.34-.19,.27-.51,.41-.83,.38h-13.43c.04,1.05,.22,2.09,.53,3.1,.27,.81,.71,1.56,1.29,2.19,.51,.58,1.16,1.02,1.89,1.29,.79,.31,1.64,.46,2.49,.46,.74,.03,1.48-.07,2.19-.3,.6-.23,1.21-.46,1.66-.67s.83-.46,1.21-.67c.26-.2,.58-.31,.9-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.52,.59-1.1,1.12-1.74,1.59-.67,.43-1.38,.78-2.12,1.06-.73,.27-1.49,.47-2.27,.6-.75,.13-1.51,.18-2.27,.15-1.38,.03-2.75-.23-4.02-.76-1.22-.47-2.33-1.19-3.25-2.12-.94-1-1.66-2.18-2.12-3.47-.54-1.55-.8-3.19-.76-4.83-.01-1.39,.22-2.77,.67-4.08,.43-1.21,1.09-2.31,1.96-3.25,.87-.94,1.92-1.68,3.1-2.19,1.29-.57,2.69-.86,4.1-.85Zm.07,3.17c-1.39-.08-2.75,.4-3.77,1.34-.99,1.06-1.6,2.41-1.74,3.85h10.42c.02-.68-.08-1.36-.3-2.01-.21-.6-.52-1.16-.9-1.66-.42-.48-.93-.86-1.51-1.13-.69-.29-1.44-.42-2.19-.38h0Z"/><path class="lc" d="M509.87,408.98v-20.96h2.57c.34-.02,.69,.05,.99,.23,.23,.15,.3,.46,.38,.9l.23,2.72c.55-1.21,1.38-2.27,2.42-3.1,.94-.77,2.13-1.17,3.35-1.13,.43,0,.86,.06,1.29,.15,.38,.07,.74,.23,1.06,.46l-.3,3.35c-.04,.17-.12,.32-.23,.46-.13,.1-.29,.15-.46,.15-.3,0-.61-.02-.9-.07-.4-.09-.8-.14-1.21-.15-.57-.02-1.14,.09-1.66,.3-.46,.19-.9,.44-1.29,.76-.39,.38-.71,.81-.98,1.29-.3,.53-.53,1.06-.83,1.66v12.99h-4.42Z"/><path class="lc" d="M522.64,387.99h3.63c.29-.02,.59,.06,.83,.23,.21,.15,.37,.36,.46,.6l4.6,12.16c.21,.57,.39,1.15,.53,1.74,.16,.55,.29,1.1,.38,1.66,.09-.56,.21-1.12,.38-1.66,.15-.53,.3-1.13,.53-1.74l4.76-12.16c.08-.25,.24-.46,.46-.6,.24-.17,.54-.25,.83-.23h3.48l-8.38,20.92h-4.02l-8.45-20.92Z"/><path class="lc" d="M551.79,381.71c0,.39-.08,.77-.23,1.13-.14,.34-.34,.65-.6,.9-.28,.27-.62,.48-.99,.6-.72,.3-1.54,.3-2.27,0-.34-.14-.65-.34-.9-.6-.23-.28-.43-.59-.6-.9-.15-.36-.23-.74-.23-1.13,0-.39,.07-.78,.23-1.13,.14-.34,.34-.65,.6-.9,.26-.25,.57-.46,.9-.6,.36-.15,.74-.23,1.13-.23s.78,.07,1.13,.23c.34,.17,.67,.37,.99,.6,.25,.26,.46,.57,.6,.9,.16,.35,.24,.74,.23,1.13Zm-.76,6.27v20.92h-4.38v-20.92h4.38Z"/><path class="lc" d="M571.42,392.13l-.38,.38c-.16,.1-.34,.15-.53,.15-.27-.01-.53-.09-.76-.23-.28-.21-.58-.39-.9-.53-.4-.23-.84-.41-1.29-.53-.62-.16-1.25-.24-1.89-.23-.86-.04-1.72,.14-2.49,.53-.68,.37-1.3,.85-1.81,1.43-.53,.69-.89,1.49-1.06,2.34-.25,1.01-.38,2.05-.38,3.1,0,1.07,.13,2.13,.38,3.17,.21,.85,.59,1.65,1.13,2.34,.45,.62,1.05,1.11,1.74,1.43,.73,.34,1.53,.52,2.34,.53,.68,.03,1.37-.07,2.01-.3,.46-.19,.91-.42,1.34-.67,.33-.19,.63-.41,.9-.67,.23-.21,.52-.32,.83-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.5,.59-1.05,1.12-1.66,1.59-.61,.43-1.27,.78-1.96,1.06-.68,.28-1.39,.48-2.12,.6-.75,.13-1.51,.18-2.27,.15-1.25,.02-2.49-.24-3.63-.76-1.11-.5-2.12-1.22-2.95-2.12-.87-.99-1.53-2.15-1.92-3.4-.5-1.46-.75-2.99-.76-4.53-.02-1.46,.21-2.92,.67-4.3,.4-1.25,1.04-2.4,1.89-3.4,.87-.96,1.92-1.73,3.1-2.27,1.37-.56,2.83-.84,4.3-.83,1.38-.04,2.75,.21,4.02,.76,1.15,.52,2.2,1.24,3.1,2.12l-1.12,1.42Z"/><path class="lc" d="M584.72,387.68c1.21,0,2.41,.2,3.55,.6,1.06,.42,2.03,1.04,2.87,1.81,.83,.84,1.47,1.85,1.89,2.95,.48,1.29,.7,2.65,.67,4.02,.04,.46-.04,.92-.23,1.34-.2,.26-.51,.4-.83,.38h-13.44c.04,1.05,.22,2.09,.53,3.1,.27,.81,.71,1.56,1.29,2.19,.51,.58,1.16,1.02,1.89,1.29,.79,.31,1.64,.46,2.49,.46,.77,.02,1.53-.08,2.27-.3,.57-.18,1.12-.41,1.66-.67,.46-.23,.83-.46,1.21-.67,.26-.2,.58-.31,.9-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.52,.59-1.1,1.12-1.74,1.59-.67,.43-1.38,.78-2.12,1.06-.73,.27-1.49,.47-2.27,.6-.75,.13-1.51,.18-2.27,.15-1.38,.03-2.75-.23-4.02-.76-1.21-.5-2.31-1.22-3.25-2.12-.94-1-1.66-2.18-2.12-3.47-.54-1.55-.8-3.19-.76-4.83-.01-1.39,.22-2.77,.67-4.08,.43-1.21,1.1-2.32,1.97-3.26,.87-.94,1.92-1.68,3.1-2.19,1.23-.59,2.59-.88,3.95-.84Zm.07,3.17c-1.39-.08-2.75,.4-3.77,1.34-.99,1.06-1.6,2.41-1.74,3.85h10.45c.02-.68-.08-1.36-.3-2.01-.21-.6-.52-1.16-.9-1.66-.42-.48-.93-.86-1.51-1.13-.71-.25-1.47-.38-2.22-.38h0Z"/><path class="lc" d="M610.25,391.83c-.06,.17-.2,.31-.38,.38-.16,.1-.34,.15-.53,.15-.27-.01-.53-.09-.76-.23-.3-.15-.6-.3-.99-.46s-.83-.3-1.29-.46c-.56-.16-1.15-.24-1.74-.23-.51,0-1.02,.07-1.51,.23-.4,.12-.79,.29-1.13,.53-.28,.22-.51,.51-.67,.83-.16,.33-.23,.69-.23,1.06-.02,.45,.14,.89,.46,1.21,.34,.35,.75,.64,1.21,.83,.53,.23,1.06,.46,1.66,.67s1.29,.38,1.96,.6c.65,.21,1.28,.46,1.89,.76,.61,.26,1.17,.62,1.66,1.06,.5,.41,.91,.93,1.21,1.51,.33,.68,.48,1.43,.46,2.19,.06,2.93-1.87,5.54-4.69,6.35-1.13,.34-2.3,.52-3.47,.53-.71,0-1.42-.07-2.12-.23-.66-.14-1.32-.32-1.96-.53-.6-.23-1.18-.51-1.74-.83-.51-.31-.99-.66-1.43-1.06l1.06-1.66c.11-.19,.27-.35,.46-.46,.21-.09,.44-.15,.67-.15,.31-.02,.61,.09,.83,.3,.3,.23,.63,.44,.98,.6,.42,.26,.87,.46,1.34,.6,.64,.19,1.3,.29,1.96,.3,.59,0,1.17-.07,1.74-.23,.45-.13,.86-.36,1.21-.67,.27-.26,.5-.57,.67-.9,.15-.36,.23-.74,.23-1.13,.03-.47-.14-.94-.46-1.29-.34-.38-.75-.68-1.21-.9-.53-.23-1.06-.46-1.74-.67-.68-.21-1.29-.38-1.96-.6-.67-.22-1.32-.47-1.96-.76-.62-.31-1.21-.69-1.74-1.13-.51-.44-.92-.98-1.21-1.59-.63-1.53-.6-3.25,.07-4.76,.32-.78,.84-1.45,1.51-1.96,.72-.59,1.54-1.05,2.42-1.34,1.08-.35,2.21-.53,3.35-.53,1.32-.02,2.62,.2,3.85,.67,1.09,.4,2.07,1.05,2.87,1.89l-.82,1.51Z"/></svg></div>
+  </div>
+  <div class="cover-body">
+    <p class="cover-label">Brand Identity System</p>
+    <h1 class="cover-title">Brand Guidelines</h1>
+    <p class="cover-sub">The definitive reference for how United Field Services presents itself across every channel, surface, and touchpoint.</p>
+  </div>
+  <div class="cover-footer">
+    <span>Version 1.0 — March 2026</span>
+    <span>Confidential — Internal Use Only</span>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ─── 01. BRAND FOUNDATION ─── -->
+  <div class="section">
+    <p class="section-label">01 — Brand Foundation</p>
+    <h2 class="section-title">Who We Are</h2>
+    <p class="section-intro">United Field Services is a trusted, experienced provider of residential real estate maintenance and vacant property management — a reliable partner across the entire property lifecycle.</p>
+
+    <div class="three-col" style="margin-bottom:40px;">
+      <div class="rule-card do">
+        <h4>✦ Mission</h4>
+        <p>To be the most reliable, efficient field services partner for REO agents, banks, and asset managers — handling the hard work so they can focus on their portfolio.</p>
+      </div>
+      <div class="rule-card do">
+        <h4>✦ Vision</h4>
+        <p>The go-to national field services platform — where every order is tracked, every property is protected, and every client trusts the outcome.</p>
+      </div>
+      <div class="rule-card do">
+        <h4>✦ Promise</h4>
+        <p>Professional. Reliable. Accountable. Every field service delivered on time, on spec, and fully documented.</p>
+      </div>
+    </div>
+
+    <div class="three-col">
+      <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:28px;">
+        <p class="section-label" style="margin-bottom:8px;">Brand Personality</p>
+        <p style="font-size:0.9rem;color:var(--ufs-dark-gray);">
+          <strong style="display:block;margin-bottom:6px;">Dependable Operator</strong>
+          We don't over-promise. We deliver. Our tone is direct, confident, and grounded — like a 15-year veteran who's seen everything and has a system for all of it.
+        </p>
+      </div>
+      <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:28px;">
+        <p class="section-label" style="margin-bottom:8px;">Brand Values</p>
+        <ul style="font-size:0.88rem;color:var(--ufs-dark-gray);list-style:none;line-height:2;">
+          <li>→ Reliability over speed</li>
+          <li>→ Transparency in process</li>
+          <li>→ Professionalism in every interaction</li>
+          <li>→ Industry expertise, not just service</li>
+        </ul>
+      </div>
+      <div style="background:var(--ufs-red);color:white;padding:28px;">
+        <p class="section-label" style="color:rgba(255,255,255,0.6);margin-bottom:8px;">Positioning</p>
+        <p style="font-size:0.9rem;font-weight:300;line-height:1.6;">
+          For REO professionals who need a field services partner they can trust at scale — UFS is the one call that handles everything.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── 02. LOGO ─── -->
+  <div class="section">
+    <p class="section-label">02 — Logo System</p>
+    <h2 class="section-title">Logo & Mark</h2>
+    <p class="section-intro">The UFS identity is built on a hexagonal mark — a symbol of structure, reliability, and precision — paired with our wordmark in Playfair Display.</p>
+
+    <div class="logo-grid">
+      <div class="logo-cell bg-black">
+        <div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 924.81 567.05" style="display:block;width:200px;height:auto;" aria-label="United Field Services"><defs><style>.la{fill:#72262a}.lb{fill:#f0d8aa}.lc{fill:#ffffff}</style></defs><path class="lb" d="M346.96,307.92v117.6h-21.22v-163.97l21.22,46.37Z"/><path class="lb" d="M316.75,241.76v183.76h-21.22V195.47l21.22,46.3Z"/><path class="lb" d="M286.46,175.68v249.84h-21.15V129.31l21.15,46.37Z"/><path class="la" d="M174,178.55v249.16h21.22V132.25l-21.22,46.3Z"/><path class="la" d="M204.29,112.46V427.71h21.15V66.09l-21.15,46.38Z"/><path class="la" d="M234.5,46.38V427.7h21.22V0l-21.22,46.38Z"/><path class="lc" d="M128.91,438.88v84.67c0,29-21.53,43.5-64.58,43.5S0,552.53,0,523.49v-84.61H49.08v85.73c0,11.1,2.12,18.66,6.42,22.73,6.87,4.84,15.28,7.02,23.64,6.12,22.2,0,33.38-9.97,33.38-29.91v-84.67h16.4Z"/><path class="lc" d="M304.66,438.88v126.13h-37.53l-70.7-79.82v79.82h-16.47v-126.13h31.12l77.11,86.26v-86.26h16.47Z"/><path class="lc" d="M407.53,438.88v126.13h-49.09v-126.13h49.09Z"/><path class="lc" d="M581.09,438.88v12.69h-41.55v113.52h-52.03v-113.59h-41.76v-12.69h135.37l-.03,.07Z"/><path class="lc" d="M728.82,438.88v12.69h-60.68v38.14h50.98v12.69h-50.98v50h70.92v12.69h-119.98v-126.13h109.74v-.07Z"/><path class="lc" d="M779.88,565.02v-126.13h70.17c49.85,0,74.77,21.07,74.77,63.22s-25.83,62.89-77.49,62.92h-67.45Zm49.09-10.42h12.91c9.66,1.06,19.12-3.33,24.55-11.39,4.52-7.64,6.78-21.38,6.78-41.25s-2.23-33.61-6.7-41.24c-4.53-7.55-12.69-11.33-24.62-11.33h-12.91v105.2Z"/><path class="lc" d="M386.38,379.37v3.85h-13.6v9.49h11.55v3.85h-11.55v12.31h-4.83v-29.51h18.43Z"/><path class="lc" d="M395.75,381.71c0,.39-.08,.77-.23,1.13-.14,.36-.37,.67-.67,.9-.28,.27-.62,.48-.99,.6-.72,.3-1.54,.3-2.27,0-.34-.14-.65-.34-.9-.6-.23-.28-.43-.59-.6-.9-.3-.72-.3-1.54,0-2.27,.16-.33,.36-.63,.6-.9,.24-.28,.55-.49,.9-.6,.36-.15,.74-.23,1.13-.23s.78,.07,1.13,.23c.35,.16,.69,.36,.99,.6,.25,.28,.47,.59,.67,.9,.13,.37,.2,.75,.23,1.13Zm-.76,6.27v20.92h-4.38v-20.92h4.38Z"/><path class="lc" d="M409.27,387.68c1.21,0,2.41,.2,3.55,.6,1.05,.44,2.02,1.05,2.87,1.81,.8,.86,1.44,1.86,1.89,2.95,.48,1.29,.7,2.65,.67,4.02,.04,.46-.04,.92-.23,1.34-.2,.26-.51,.4-.83,.38h-13.44c.04,1.05,.22,2.09,.53,3.1,.27,.81,.71,1.56,1.29,2.19,.51,.58,1.16,1.02,1.89,1.29,.79,.31,1.64,.46,2.49,.46,.77,.02,1.53-.08,2.27-.3,.6-.23,1.21-.46,1.66-.67s.83-.46,1.21-.67c.26-.19,.58-.29,.9-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.52,.59-1.1,1.12-1.74,1.59-.67,.43-1.38,.78-2.12,1.06-.73,.27-1.49,.47-2.27,.6-.75,.13-1.51,.18-2.27,.15-1.38,.03-2.75-.23-4.02-.76-1.22-.47-2.33-1.19-3.25-2.12-.94-1-1.66-2.18-2.12-3.47-.54-1.55-.8-3.19-.76-4.83-.01-1.39,.22-2.77,.67-4.08,.43-1.21,1.09-2.31,1.96-3.25,.87-.94,1.92-1.68,3.1-2.19,1.24-.59,2.59-.88,3.96-.85Zm.15,3.17c-1.39-.08-2.75,.4-3.77,1.34-.99,1.06-1.6,2.41-1.74,3.85h10.42c.02-.68-.08-1.36-.3-2.01-.21-.6-.52-1.16-.9-1.66-.42-.48-.93-.86-1.51-1.13-.7-.29-1.45-.42-2.2-.38h0Z"/><path class="lc" d="M426.88,378.54v30.37h-4.38v-30.37h4.38Z"/><path class="lc" d="M447.41,408.98c-.53,.04-1.01-.31-1.13-.83l-.38-2.27c-.41,.48-.86,.93-1.34,1.34-.53,.38-1.06,.76-1.59,1.06-.57,.3-1.18,.53-1.81,.67-.66,.15-1.33,.22-2.01,.23-1.09,.03-2.18-.2-3.17-.67-.97-.47-1.83-1.16-2.49-2.01-.73-1.01-1.26-2.15-1.59-3.35-.39-1.5-.57-3.05-.53-4.6,0-1.46,.2-2.9,.6-4.3,.37-1.26,.99-2.44,1.81-3.47,.76-.98,1.74-1.75,2.87-2.27,1.18-.56,2.47-.84,3.77-.83,1.09-.01,2.16,.19,3.17,.6,.89,.39,1.68,.95,2.34,1.66v-11.25h4.38v30.37h-2.87l-.04-.07Zm-6.95-3.25c1,.04,1.99-.19,2.87-.67,.86-.54,1.62-1.22,2.27-2.01v-9.78c-.52-.71-1.21-1.29-2.01-1.66-.77-.31-1.59-.47-2.42-.46-1.59-.08-3.12,.62-4.08,1.89-1.07,1.66-1.57,3.62-1.43,5.59-.03,1.12,.07,2.25,.3,3.35,.17,.78,.47,1.52,.9,2.19,.39,.54,.91,.99,1.51,1.29,.69,.16,1.39,.25,2.1,.27Z"/><path class="lc" d="M481.92,384.43c-.11,.21-.27,.39-.46,.53-.19,.1-.39,.15-.6,.15-.32-.02-.64-.12-.9-.3-.3-.23-.76-.46-1.21-.76-.53-.31-1.08-.57-1.66-.76-.73-.23-1.5-.33-2.27-.3-.74-.02-1.48,.08-2.19,.3-.57,.18-1.11,.47-1.59,.83-.42,.36-.75,.79-.99,1.29-.22,.53-.32,1.09-.3,1.66,0,.68,.2,1.34,.6,1.89,.43,.54,.97,.98,1.59,1.29,.69,.39,1.43,.7,2.19,.9,.83,.3,1.66,.53,2.57,.83,.88,.29,1.74,.64,2.57,1.06,.8,.37,1.53,.85,2.19,1.43,.69,.6,1.23,1.35,1.59,2.19,.42,.98,.62,2.03,.6,3.1,.01,1.26-.22,2.52-.67,3.7-.45,1.13-1.11,2.16-1.96,3.02-.91,.87-1.99,1.56-3.17,2.01-1.37,.54-2.83,.8-4.3,.76-.94,.01-1.88-.09-2.79-.3-.87-.21-1.73-.46-2.57-.76-.8-.31-1.56-.72-2.27-1.21-.7-.45-1.33-.98-1.89-1.59l1.43-2.27c.11-.19,.27-.35,.46-.46,.19-.09,.39-.14,.6-.15,.39,.03,.77,.19,1.06,.46,.38,.3,.83,.6,1.34,.99,.61,.4,1.27,.73,1.96,.99,.87,.32,1.79,.48,2.72,.46,1.45,.09,2.89-.37,4.02-1.29,.95-.9,1.47-2.16,1.43-3.47,.01-.72-.2-1.42-.6-2.01-.4-.56-.95-1.01-1.59-1.29-.69-.39-1.43-.7-2.19-.9-.83-.23-1.66-.53-2.57-.76s-1.74-.6-2.57-.99c-.83-.34-1.58-.86-2.19-1.51-.69-.62-1.24-1.4-1.59-2.27-.81-2.06-.81-4.36,0-6.42,.44-.98,1.06-1.87,1.81-2.64,.87-.79,1.87-1.43,2.95-1.89,1.29-.47,2.65-.7,4.02-.67,1.6,0,3.19,.28,4.69,.83,1.37,.5,2.63,1.27,3.7,2.27l-1.02,2.02Z"/><path class="lc" d="M496.8,387.68c1.21,0,2.41,.2,3.55,.6,1.05,.4,2,1.02,2.79,1.81,.83,.84,1.47,1.85,1.89,2.95,.48,1.29,.7,2.65,.67,4.02,.04,.46-.04,.92-.23,1.34-.19,.27-.51,.41-.83,.38h-13.43c.04,1.05,.22,2.09,.53,3.1,.27,.81,.71,1.56,1.29,2.19,.51,.58,1.16,1.02,1.89,1.29,.79,.31,1.64,.46,2.49,.46,.74,.03,1.48-.07,2.19-.3,.6-.23,1.21-.46,1.66-.67s.83-.46,1.21-.67c.26-.2,.58-.31,.9-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.52,.59-1.1,1.12-1.74,1.59-.67,.43-1.38,.78-2.12,1.06-.73,.27-1.49,.47-2.27,.6-.75,.13-1.51,.18-2.27,.15-1.38,.03-2.75-.23-4.02-.76-1.22-.47-2.33-1.19-3.25-2.12-.94-1-1.66-2.18-2.12-3.47-.54-1.55-.8-3.19-.76-4.83-.01-1.39,.22-2.77,.67-4.08,.43-1.21,1.09-2.31,1.96-3.25,.87-.94,1.92-1.68,3.1-2.19,1.29-.57,2.69-.86,4.1-.85Zm.07,3.17c-1.39-.08-2.75,.4-3.77,1.34-.99,1.06-1.6,2.41-1.74,3.85h10.42c.02-.68-.08-1.36-.3-2.01-.21-.6-.52-1.16-.9-1.66-.42-.48-.93-.86-1.51-1.13-.69-.29-1.44-.42-2.19-.38h0Z"/><path class="lc" d="M509.87,408.98v-20.96h2.57c.34-.02,.69,.05,.99,.23,.23,.15,.3,.46,.38,.9l.23,2.72c.55-1.21,1.38-2.27,2.42-3.1,.94-.77,2.13-1.17,3.35-1.13,.43,0,.86,.06,1.29,.15,.38,.07,.74,.23,1.06,.46l-.3,3.35c-.04,.17-.12,.32-.23,.46-.13,.1-.29,.15-.46,.15-.3,0-.61-.02-.9-.07-.4-.09-.8-.14-1.21-.15-.57-.02-1.14,.09-1.66,.3-.46,.19-.9,.44-1.29,.76-.39,.38-.71,.81-.98,1.29-.3,.53-.53,1.06-.83,1.66v12.99h-4.42Z"/><path class="lc" d="M522.64,387.99h3.63c.29-.02,.59,.06,.83,.23,.21,.15,.37,.36,.46,.6l4.6,12.16c.21,.57,.39,1.15,.53,1.74,.16,.55,.29,1.1,.38,1.66,.09-.56,.21-1.12,.38-1.66,.15-.53,.3-1.13,.53-1.74l4.76-12.16c.08-.25,.24-.46,.46-.6,.24-.17,.54-.25,.83-.23h3.48l-8.38,20.92h-4.02l-8.45-20.92Z"/><path class="lc" d="M551.79,381.71c0,.39-.08,.77-.23,1.13-.14,.34-.34,.65-.6,.9-.28,.27-.62,.48-.99,.6-.72,.3-1.54,.3-2.27,0-.34-.14-.65-.34-.9-.6-.23-.28-.43-.59-.6-.9-.15-.36-.23-.74-.23-1.13,0-.39,.07-.78,.23-1.13,.14-.34,.34-.65,.6-.9,.26-.25,.57-.46,.9-.6,.36-.15,.74-.23,1.13-.23s.78,.07,1.13,.23c.34,.17,.67,.37,.99,.6,.25,.26,.46,.57,.6,.9,.16,.35,.24,.74,.23,1.13Zm-.76,6.27v20.92h-4.38v-20.92h4.38Z"/><path class="lc" d="M571.42,392.13l-.38,.38c-.16,.1-.34,.15-.53,.15-.27-.01-.53-.09-.76-.23-.28-.21-.58-.39-.9-.53-.4-.23-.84-.41-1.29-.53-.62-.16-1.25-.24-1.89-.23-.86-.04-1.72,.14-2.49,.53-.68,.37-1.3,.85-1.81,1.43-.53,.69-.89,1.49-1.06,2.34-.25,1.01-.38,2.05-.38,3.1,0,1.07,.13,2.13,.38,3.17,.21,.85,.59,1.65,1.13,2.34,.45,.62,1.05,1.11,1.74,1.43,.73,.34,1.53,.52,2.34,.53,.68,.03,1.37-.07,2.01-.3,.46-.19,.91-.42,1.34-.67,.33-.19,.63-.41,.9-.67,.23-.21,.52-.32,.83-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.5,.59-1.05,1.12-1.66,1.59-.61,.43-1.27,.78-1.96,1.06-.68,.28-1.39,.48-2.12,.6-.75,.13-1.51,.18-2.27,.15-1.25,.02-2.49-.24-3.63-.76-1.11-.5-2.12-1.22-2.95-2.12-.87-.99-1.53-2.15-1.92-3.4-.5-1.46-.75-2.99-.76-4.53-.02-1.46,.21-2.92,.67-4.3,.4-1.25,1.04-2.4,1.89-3.4,.87-.96,1.92-1.73,3.1-2.27,1.37-.56,2.83-.84,4.3-.83,1.38-.04,2.75,.21,4.02,.76,1.15,.52,2.2,1.24,3.1,2.12l-1.12,1.42Z"/><path class="lc" d="M584.72,387.68c1.21,0,2.41,.2,3.55,.6,1.06,.42,2.03,1.04,2.87,1.81,.83,.84,1.47,1.85,1.89,2.95,.48,1.29,.7,2.65,.67,4.02,.04,.46-.04,.92-.23,1.34-.2,.26-.51,.4-.83,.38h-13.44c.04,1.05,.22,2.09,.53,3.1,.27,.81,.71,1.56,1.29,2.19,.51,.58,1.16,1.02,1.89,1.29,.79,.31,1.64,.46,2.49,.46,.77,.02,1.53-.08,2.27-.3,.57-.18,1.12-.41,1.66-.67,.46-.23,.83-.46,1.21-.67,.26-.2,.58-.31,.9-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.52,.59-1.1,1.12-1.74,1.59-.67,.43-1.38,.78-2.12,1.06-.73,.27-1.49,.47-2.27,.6-.75,.13-1.51,.18-2.27,.15-1.38,.03-2.75-.23-4.02-.76-1.21-.5-2.31-1.22-3.25-2.12-.94-1-1.66-2.18-2.12-3.47-.54-1.55-.8-3.19-.76-4.83-.01-1.39,.22-2.77,.67-4.08,.43-1.21,1.1-2.32,1.97-3.26,.87-.94,1.92-1.68,3.1-2.19,1.23-.59,2.59-.88,3.95-.84Zm.07,3.17c-1.39-.08-2.75,.4-3.77,1.34-.99,1.06-1.6,2.41-1.74,3.85h10.45c.02-.68-.08-1.36-.3-2.01-.21-.6-.52-1.16-.9-1.66-.42-.48-.93-.86-1.51-1.13-.71-.25-1.47-.38-2.22-.38h0Z"/><path class="lc" d="M610.25,391.83c-.06,.17-.2,.31-.38,.38-.16,.1-.34,.15-.53,.15-.27-.01-.53-.09-.76-.23-.3-.15-.6-.3-.99-.46s-.83-.3-1.29-.46c-.56-.16-1.15-.24-1.74-.23-.51,0-1.02,.07-1.51,.23-.4,.12-.79,.29-1.13,.53-.28,.22-.51,.51-.67,.83-.16,.33-.23,.69-.23,1.06-.02,.45,.14,.89,.46,1.21,.34,.35,.75,.64,1.21,.83,.53,.23,1.06,.46,1.66,.67s1.29,.38,1.96,.6c.65,.21,1.28,.46,1.89,.76,.61,.26,1.17,.62,1.66,1.06,.5,.41,.91,.93,1.21,1.51,.33,.68,.48,1.43,.46,2.19,.06,2.93-1.87,5.54-4.69,6.35-1.13,.34-2.3,.52-3.47,.53-.71,0-1.42-.07-2.12-.23-.66-.14-1.32-.32-1.96-.53-.6-.23-1.18-.51-1.74-.83-.51-.31-.99-.66-1.43-1.06l1.06-1.66c.11-.19,.27-.35,.46-.46,.21-.09,.44-.15,.67-.15,.31-.02,.61,.09,.83,.3,.3,.23,.63,.44,.98,.6,.42,.26,.87,.46,1.34,.6,.64,.19,1.3,.29,1.96,.3,.59,0,1.17-.07,1.74-.23,.45-.13,.86-.36,1.21-.67,.27-.26,.5-.57,.67-.9,.15-.36,.23-.74,.23-1.13,.03-.47-.14-.94-.46-1.29-.34-.38-.75-.68-1.21-.9-.53-.23-1.06-.46-1.74-.67-.68-.21-1.29-.38-1.96-.6-.67-.22-1.32-.47-1.96-.76-.62-.31-1.21-.69-1.74-1.13-.51-.44-.92-.98-1.21-1.59-.63-1.53-.6-3.25,.07-4.76,.32-.78,.84-1.45,1.51-1.96,.72-.59,1.54-1.05,2.42-1.34,1.08-.35,2.21-.53,3.35-.53,1.32-.02,2.62,.2,3.85,.67,1.09,.4,2.07,1.05,2.87,1.89l-.82,1.51Z"/></svg></div>
+        <span class="logo-label" style="color:rgba(255,255,255,0.4);">On Black — Primary</span>
+      </div>
+      <div class="logo-cell bg-white">
+        <div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 924.81 567.05" style="display:block;width:200px;height:auto;" aria-label="United Field Services"><defs><style>.la{fill:#72262a}.lb{fill:#f0d8aa}.lc{fill:#1f1f1f}</style></defs><path class="lb" d="M346.96,307.92v117.6h-21.22v-163.97l21.22,46.37Z"/><path class="lb" d="M316.75,241.76v183.76h-21.22V195.47l21.22,46.3Z"/><path class="lb" d="M286.46,175.68v249.84h-21.15V129.31l21.15,46.37Z"/><path class="la" d="M174,178.55v249.16h21.22V132.25l-21.22,46.3Z"/><path class="la" d="M204.29,112.46V427.71h21.15V66.09l-21.15,46.38Z"/><path class="la" d="M234.5,46.38V427.7h21.22V0l-21.22,46.38Z"/><path class="lc" d="M128.91,438.88v84.67c0,29-21.53,43.5-64.58,43.5S0,552.53,0,523.49v-84.61H49.08v85.73c0,11.1,2.12,18.66,6.42,22.73,6.87,4.84,15.28,7.02,23.64,6.12,22.2,0,33.38-9.97,33.38-29.91v-84.67h16.4Z"/><path class="lc" d="M304.66,438.88v126.13h-37.53l-70.7-79.82v79.82h-16.47v-126.13h31.12l77.11,86.26v-86.26h16.47Z"/><path class="lc" d="M407.53,438.88v126.13h-49.09v-126.13h49.09Z"/><path class="lc" d="M581.09,438.88v12.69h-41.55v113.52h-52.03v-113.59h-41.76v-12.69h135.37l-.03,.07Z"/><path class="lc" d="M728.82,438.88v12.69h-60.68v38.14h50.98v12.69h-50.98v50h70.92v12.69h-119.98v-126.13h109.74v-.07Z"/><path class="lc" d="M779.88,565.02v-126.13h70.17c49.85,0,74.77,21.07,74.77,63.22s-25.83,62.89-77.49,62.92h-67.45Zm49.09-10.42h12.91c9.66,1.06,19.12-3.33,24.55-11.39,4.52-7.64,6.78-21.38,6.78-41.25s-2.23-33.61-6.7-41.24c-4.53-7.55-12.69-11.33-24.62-11.33h-12.91v105.2Z"/><path class="lc" d="M386.38,379.37v3.85h-13.6v9.49h11.55v3.85h-11.55v12.31h-4.83v-29.51h18.43Z"/><path class="lc" d="M395.75,381.71c0,.39-.08,.77-.23,1.13-.14,.36-.37,.67-.67,.9-.28,.27-.62,.48-.99,.6-.72,.3-1.54,.3-2.27,0-.34-.14-.65-.34-.9-.6-.23-.28-.43-.59-.6-.9-.3-.72-.3-1.54,0-2.27,.16-.33,.36-.63,.6-.9,.24-.28,.55-.49,.9-.6,.36-.15,.74-.23,1.13-.23s.78,.07,1.13,.23c.35,.16,.69,.36,.99,.6,.25,.28,.47,.59,.67,.9,.13,.37,.2,.75,.23,1.13Zm-.76,6.27v20.92h-4.38v-20.92h4.38Z"/><path class="lc" d="M409.27,387.68c1.21,0,2.41,.2,3.55,.6,1.05,.44,2.02,1.05,2.87,1.81,.8,.86,1.44,1.86,1.89,2.95,.48,1.29,.7,2.65,.67,4.02,.04,.46-.04,.92-.23,1.34-.2,.26-.51,.4-.83,.38h-13.44c.04,1.05,.22,2.09,.53,3.1,.27,.81,.71,1.56,1.29,2.19,.51,.58,1.16,1.02,1.89,1.29,.79,.31,1.64,.46,2.49,.46,.77,.02,1.53-.08,2.27-.3,.6-.23,1.21-.46,1.66-.67s.83-.46,1.21-.67c.26-.19,.58-.29,.9-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.52,.59-1.1,1.12-1.74,1.59-.67,.43-1.38,.78-2.12,1.06-.73,.27-1.49,.47-2.27,.6-.75,.13-1.51,.18-2.27,.15-1.38,.03-2.75-.23-4.02-.76-1.22-.47-2.33-1.19-3.25-2.12-.94-1-1.66-2.18-2.12-3.47-.54-1.55-.8-3.19-.76-4.83-.01-1.39,.22-2.77,.67-4.08,.43-1.21,1.09-2.31,1.96-3.25,.87-.94,1.92-1.68,3.1-2.19,1.24-.59,2.59-.88,3.96-.85Zm.15,3.17c-1.39-.08-2.75,.4-3.77,1.34-.99,1.06-1.6,2.41-1.74,3.85h10.42c.02-.68-.08-1.36-.3-2.01-.21-.6-.52-1.16-.9-1.66-.42-.48-.93-.86-1.51-1.13-.7-.29-1.45-.42-2.2-.38h0Z"/><path class="lc" d="M426.88,378.54v30.37h-4.38v-30.37h4.38Z"/><path class="lc" d="M447.41,408.98c-.53,.04-1.01-.31-1.13-.83l-.38-2.27c-.41,.48-.86,.93-1.34,1.34-.53,.38-1.06,.76-1.59,1.06-.57,.3-1.18,.53-1.81,.67-.66,.15-1.33,.22-2.01,.23-1.09,.03-2.18-.2-3.17-.67-.97-.47-1.83-1.16-2.49-2.01-.73-1.01-1.26-2.15-1.59-3.35-.39-1.5-.57-3.05-.53-4.6,0-1.46,.2-2.9,.6-4.3,.37-1.26,.99-2.44,1.81-3.47,.76-.98,1.74-1.75,2.87-2.27,1.18-.56,2.47-.84,3.77-.83,1.09-.01,2.16,.19,3.17,.6,.89,.39,1.68,.95,2.34,1.66v-11.25h4.38v30.37h-2.87l-.04-.07Zm-6.95-3.25c1,.04,1.99-.19,2.87-.67,.86-.54,1.62-1.22,2.27-2.01v-9.78c-.52-.71-1.21-1.29-2.01-1.66-.77-.31-1.59-.47-2.42-.46-1.59-.08-3.12,.62-4.08,1.89-1.07,1.66-1.57,3.62-1.43,5.59-.03,1.12,.07,2.25,.3,3.35,.17,.78,.47,1.52,.9,2.19,.39,.54,.91,.99,1.51,1.29,.69,.16,1.39,.25,2.1,.27Z"/><path class="lc" d="M481.92,384.43c-.11,.21-.27,.39-.46,.53-.19,.1-.39,.15-.6,.15-.32-.02-.64-.12-.9-.3-.3-.23-.76-.46-1.21-.76-.53-.31-1.08-.57-1.66-.76-.73-.23-1.5-.33-2.27-.3-.74-.02-1.48,.08-2.19,.3-.57,.18-1.11,.47-1.59,.83-.42,.36-.75,.79-.99,1.29-.22,.53-.32,1.09-.3,1.66,0,.68,.2,1.34,.6,1.89,.43,.54,.97,.98,1.59,1.29,.69,.39,1.43,.7,2.19,.9,.83,.3,1.66,.53,2.57,.83,.88,.29,1.74,.64,2.57,1.06,.8,.37,1.53,.85,2.19,1.43,.69,.6,1.23,1.35,1.59,2.19,.42,.98,.62,2.03,.6,3.1,.01,1.26-.22,2.52-.67,3.7-.45,1.13-1.11,2.16-1.96,3.02-.91,.87-1.99,1.56-3.17,2.01-1.37,.54-2.83,.8-4.3,.76-.94,.01-1.88-.09-2.79-.3-.87-.21-1.73-.46-2.57-.76-.8-.31-1.56-.72-2.27-1.21-.7-.45-1.33-.98-1.89-1.59l1.43-2.27c.11-.19,.27-.35,.46-.46,.19-.09,.39-.14,.6-.15,.39,.03,.77,.19,1.06,.46,.38,.3,.83,.6,1.34,.99,.61,.4,1.27,.73,1.96,.99,.87,.32,1.79,.48,2.72,.46,1.45,.09,2.89-.37,4.02-1.29,.95-.9,1.47-2.16,1.43-3.47,.01-.72-.2-1.42-.6-2.01-.4-.56-.95-1.01-1.59-1.29-.69-.39-1.43-.7-2.19-.9-.83-.23-1.66-.53-2.57-.76s-1.74-.6-2.57-.99c-.83-.34-1.58-.86-2.19-1.51-.69-.62-1.24-1.4-1.59-2.27-.81-2.06-.81-4.36,0-6.42,.44-.98,1.06-1.87,1.81-2.64,.87-.79,1.87-1.43,2.95-1.89,1.29-.47,2.65-.7,4.02-.67,1.6,0,3.19,.28,4.69,.83,1.37,.5,2.63,1.27,3.7,2.27l-1.02,2.02Z"/><path class="lc" d="M496.8,387.68c1.21,0,2.41,.2,3.55,.6,1.05,.4,2,1.02,2.79,1.81,.83,.84,1.47,1.85,1.89,2.95,.48,1.29,.7,2.65,.67,4.02,.04,.46-.04,.92-.23,1.34-.19,.27-.51,.41-.83,.38h-13.43c.04,1.05,.22,2.09,.53,3.1,.27,.81,.71,1.56,1.29,2.19,.51,.58,1.16,1.02,1.89,1.29,.79,.31,1.64,.46,2.49,.46,.74,.03,1.48-.07,2.19-.3,.6-.23,1.21-.46,1.66-.67s.83-.46,1.21-.67c.26-.2,.58-.31,.9-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.52,.59-1.1,1.12-1.74,1.59-.67,.43-1.38,.78-2.12,1.06-.73,.27-1.49,.47-2.27,.6-.75,.13-1.51,.18-2.27,.15-1.38,.03-2.75-.23-4.02-.76-1.22-.47-2.33-1.19-3.25-2.12-.94-1-1.66-2.18-2.12-3.47-.54-1.55-.8-3.19-.76-4.83-.01-1.39,.22-2.77,.67-4.08,.43-1.21,1.09-2.31,1.96-3.25,.87-.94,1.92-1.68,3.1-2.19,1.29-.57,2.69-.86,4.1-.85Zm.07,3.17c-1.39-.08-2.75,.4-3.77,1.34-.99,1.06-1.6,2.41-1.74,3.85h10.42c.02-.68-.08-1.36-.3-2.01-.21-.6-.52-1.16-.9-1.66-.42-.48-.93-.86-1.51-1.13-.69-.29-1.44-.42-2.19-.38h0Z"/><path class="lc" d="M509.87,408.98v-20.96h2.57c.34-.02,.69,.05,.99,.23,.23,.15,.3,.46,.38,.9l.23,2.72c.55-1.21,1.38-2.27,2.42-3.1,.94-.77,2.13-1.17,3.35-1.13,.43,0,.86,.06,1.29,.15,.38,.07,.74,.23,1.06,.46l-.3,3.35c-.04,.17-.12,.32-.23,.46-.13,.1-.29,.15-.46,.15-.3,0-.61-.02-.9-.07-.4-.09-.8-.14-1.21-.15-.57-.02-1.14,.09-1.66,.3-.46,.19-.9,.44-1.29,.76-.39,.38-.71,.81-.98,1.29-.3,.53-.53,1.06-.83,1.66v12.99h-4.42Z"/><path class="lc" d="M522.64,387.99h3.63c.29-.02,.59,.06,.83,.23,.21,.15,.37,.36,.46,.6l4.6,12.16c.21,.57,.39,1.15,.53,1.74,.16,.55,.29,1.1,.38,1.66,.09-.56,.21-1.12,.38-1.66,.15-.53,.3-1.13,.53-1.74l4.76-12.16c.08-.25,.24-.46,.46-.6,.24-.17,.54-.25,.83-.23h3.48l-8.38,20.92h-4.02l-8.45-20.92Z"/><path class="lc" d="M551.79,381.71c0,.39-.08,.77-.23,1.13-.14,.34-.34,.65-.6,.9-.28,.27-.62,.48-.99,.6-.72,.3-1.54,.3-2.27,0-.34-.14-.65-.34-.9-.6-.23-.28-.43-.59-.6-.9-.15-.36-.23-.74-.23-1.13,0-.39,.07-.78,.23-1.13,.14-.34,.34-.65,.6-.9,.26-.25,.57-.46,.9-.6,.36-.15,.74-.23,1.13-.23s.78,.07,1.13,.23c.34,.17,.67,.37,.99,.6,.25,.26,.46,.57,.6,.9,.16,.35,.24,.74,.23,1.13Zm-.76,6.27v20.92h-4.38v-20.92h4.38Z"/><path class="lc" d="M571.42,392.13l-.38,.38c-.16,.1-.34,.15-.53,.15-.27-.01-.53-.09-.76-.23-.28-.21-.58-.39-.9-.53-.4-.23-.84-.41-1.29-.53-.62-.16-1.25-.24-1.89-.23-.86-.04-1.72,.14-2.49,.53-.68,.37-1.3,.85-1.81,1.43-.53,.69-.89,1.49-1.06,2.34-.25,1.01-.38,2.05-.38,3.1,0,1.07,.13,2.13,.38,3.17,.21,.85,.59,1.65,1.13,2.34,.45,.62,1.05,1.11,1.74,1.43,.73,.34,1.53,.52,2.34,.53,.68,.03,1.37-.07,2.01-.3,.46-.19,.91-.42,1.34-.67,.33-.19,.63-.41,.9-.67,.23-.21,.52-.32,.83-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.5,.59-1.05,1.12-1.66,1.59-.61,.43-1.27,.78-1.96,1.06-.68,.28-1.39,.48-2.12,.6-.75,.13-1.51,.18-2.27,.15-1.25,.02-2.49-.24-3.63-.76-1.11-.5-2.12-1.22-2.95-2.12-.87-.99-1.53-2.15-1.92-3.4-.5-1.46-.75-2.99-.76-4.53-.02-1.46,.21-2.92,.67-4.3,.4-1.25,1.04-2.4,1.89-3.4,.87-.96,1.92-1.73,3.1-2.27,1.37-.56,2.83-.84,4.3-.83,1.38-.04,2.75,.21,4.02,.76,1.15,.52,2.2,1.24,3.1,2.12l-1.12,1.42Z"/><path class="lc" d="M584.72,387.68c1.21,0,2.41,.2,3.55,.6,1.06,.42,2.03,1.04,2.87,1.81,.83,.84,1.47,1.85,1.89,2.95,.48,1.29,.7,2.65,.67,4.02,.04,.46-.04,.92-.23,1.34-.2,.26-.51,.4-.83,.38h-13.44c.04,1.05,.22,2.09,.53,3.1,.27,.81,.71,1.56,1.29,2.19,.51,.58,1.16,1.02,1.89,1.29,.79,.31,1.64,.46,2.49,.46,.77,.02,1.53-.08,2.27-.3,.57-.18,1.12-.41,1.66-.67,.46-.23,.83-.46,1.21-.67,.26-.2,.58-.31,.9-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.52,.59-1.1,1.12-1.74,1.59-.67,.43-1.38,.78-2.12,1.06-.73,.27-1.49,.47-2.27,.6-.75,.13-1.51,.18-2.27,.15-1.38,.03-2.75-.23-4.02-.76-1.21-.5-2.31-1.22-3.25-2.12-.94-1-1.66-2.18-2.12-3.47-.54-1.55-.8-3.19-.76-4.83-.01-1.39,.22-2.77,.67-4.08,.43-1.21,1.1-2.32,1.97-3.26,.87-.94,1.92-1.68,3.1-2.19,1.23-.59,2.59-.88,3.95-.84Zm.07,3.17c-1.39-.08-2.75,.4-3.77,1.34-.99,1.06-1.6,2.41-1.74,3.85h10.45c.02-.68-.08-1.36-.3-2.01-.21-.6-.52-1.16-.9-1.66-.42-.48-.93-.86-1.51-1.13-.71-.25-1.47-.38-2.22-.38h0Z"/><path class="lc" d="M610.25,391.83c-.06,.17-.2,.31-.38,.38-.16,.1-.34,.15-.53,.15-.27-.01-.53-.09-.76-.23-.3-.15-.6-.3-.99-.46s-.83-.3-1.29-.46c-.56-.16-1.15-.24-1.74-.23-.51,0-1.02,.07-1.51,.23-.4,.12-.79,.29-1.13,.53-.28,.22-.51,.51-.67,.83-.16,.33-.23,.69-.23,1.06-.02,.45,.14,.89,.46,1.21,.34,.35,.75,.64,1.21,.83,.53,.23,1.06,.46,1.66,.67s1.29,.38,1.96,.6c.65,.21,1.28,.46,1.89,.76,.61,.26,1.17,.62,1.66,1.06,.5,.41,.91,.93,1.21,1.51,.33,.68,.48,1.43,.46,2.19,.06,2.93-1.87,5.54-4.69,6.35-1.13,.34-2.3,.52-3.47,.53-.71,0-1.42-.07-2.12-.23-.66-.14-1.32-.32-1.96-.53-.6-.23-1.18-.51-1.74-.83-.51-.31-.99-.66-1.43-1.06l1.06-1.66c.11-.19,.27-.35,.46-.46,.21-.09,.44-.15,.67-.15,.31-.02,.61,.09,.83,.3,.3,.23,.63,.44,.98,.6,.42,.26,.87,.46,1.34,.6,.64,.19,1.3,.29,1.96,.3,.59,0,1.17-.07,1.74-.23,.45-.13,.86-.36,1.21-.67,.27-.26,.5-.57,.67-.9,.15-.36,.23-.74,.23-1.13,.03-.47-.14-.94-.46-1.29-.34-.38-.75-.68-1.21-.9-.53-.23-1.06-.46-1.74-.67-.68-.21-1.29-.38-1.96-.6-.67-.22-1.32-.47-1.96-.76-.62-.31-1.21-.69-1.74-1.13-.51-.44-.92-.98-1.21-1.59-.63-1.53-.6-3.25,.07-4.76,.32-.78,.84-1.45,1.51-1.96,.72-.59,1.54-1.05,2.42-1.34,1.08-.35,2.21-.53,3.35-.53,1.32-.02,2.62,.2,3.85,.67,1.09,.4,2.07,1.05,2.87,1.89l-.82,1.51Z"/></svg></div>
+        <span class="logo-label" style="color:var(--ufs-mid-gray);">On White — Secondary</span>
+      </div>
+      <div class="logo-cell bg-red">
+        <div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 924.81 567.05" style="display:block;width:160px;height:auto;" aria-label="United Field Services"><defs><style>.la{fill:#72262a}.lb{fill:#f0d8aa}.lc{fill:#ffffff}</style></defs><path class="lb" d="M346.96,307.92v117.6h-21.22v-163.97l21.22,46.37Z"/><path class="lb" d="M316.75,241.76v183.76h-21.22V195.47l21.22,46.3Z"/><path class="lb" d="M286.46,175.68v249.84h-21.15V129.31l21.15,46.37Z"/><path class="la" d="M174,178.55v249.16h21.22V132.25l-21.22,46.3Z"/><path class="la" d="M204.29,112.46V427.71h21.15V66.09l-21.15,46.38Z"/><path class="la" d="M234.5,46.38V427.7h21.22V0l-21.22,46.38Z"/><path class="lc" d="M128.91,438.88v84.67c0,29-21.53,43.5-64.58,43.5S0,552.53,0,523.49v-84.61H49.08v85.73c0,11.1,2.12,18.66,6.42,22.73,6.87,4.84,15.28,7.02,23.64,6.12,22.2,0,33.38-9.97,33.38-29.91v-84.67h16.4Z"/><path class="lc" d="M304.66,438.88v126.13h-37.53l-70.7-79.82v79.82h-16.47v-126.13h31.12l77.11,86.26v-86.26h16.47Z"/><path class="lc" d="M407.53,438.88v126.13h-49.09v-126.13h49.09Z"/><path class="lc" d="M581.09,438.88v12.69h-41.55v113.52h-52.03v-113.59h-41.76v-12.69h135.37l-.03,.07Z"/><path class="lc" d="M728.82,438.88v12.69h-60.68v38.14h50.98v12.69h-50.98v50h70.92v12.69h-119.98v-126.13h109.74v-.07Z"/><path class="lc" d="M779.88,565.02v-126.13h70.17c49.85,0,74.77,21.07,74.77,63.22s-25.83,62.89-77.49,62.92h-67.45Zm49.09-10.42h12.91c9.66,1.06,19.12-3.33,24.55-11.39,4.52-7.64,6.78-21.38,6.78-41.25s-2.23-33.61-6.7-41.24c-4.53-7.55-12.69-11.33-24.62-11.33h-12.91v105.2Z"/><path class="lc" d="M386.38,379.37v3.85h-13.6v9.49h11.55v3.85h-11.55v12.31h-4.83v-29.51h18.43Z"/><path class="lc" d="M395.75,381.71c0,.39-.08,.77-.23,1.13-.14,.36-.37,.67-.67,.9-.28,.27-.62,.48-.99,.6-.72,.3-1.54,.3-2.27,0-.34-.14-.65-.34-.9-.6-.23-.28-.43-.59-.6-.9-.3-.72-.3-1.54,0-2.27,.16-.33,.36-.63,.6-.9,.24-.28,.55-.49,.9-.6,.36-.15,.74-.23,1.13-.23s.78,.07,1.13,.23c.35,.16,.69,.36,.99,.6,.25,.28,.47,.59,.67,.9,.13,.37,.2,.75,.23,1.13Zm-.76,6.27v20.92h-4.38v-20.92h4.38Z"/><path class="lc" d="M409.27,387.68c1.21,0,2.41,.2,3.55,.6,1.05,.44,2.02,1.05,2.87,1.81,.8,.86,1.44,1.86,1.89,2.95,.48,1.29,.7,2.65,.67,4.02,.04,.46-.04,.92-.23,1.34-.2,.26-.51,.4-.83,.38h-13.44c.04,1.05,.22,2.09,.53,3.1,.27,.81,.71,1.56,1.29,2.19,.51,.58,1.16,1.02,1.89,1.29,.79,.31,1.64,.46,2.49,.46,.77,.02,1.53-.08,2.27-.3,.6-.23,1.21-.46,1.66-.67s.83-.46,1.21-.67c.26-.19,.58-.29,.9-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.52,.59-1.1,1.12-1.74,1.59-.67,.43-1.38,.78-2.12,1.06-.73,.27-1.49,.47-2.27,.6-.75,.13-1.51,.18-2.27,.15-1.38,.03-2.75-.23-4.02-.76-1.22-.47-2.33-1.19-3.25-2.12-.94-1-1.66-2.18-2.12-3.47-.54-1.55-.8-3.19-.76-4.83-.01-1.39,.22-2.77,.67-4.08,.43-1.21,1.09-2.31,1.96-3.25,.87-.94,1.92-1.68,3.1-2.19,1.24-.59,2.59-.88,3.96-.85Zm.15,3.17c-1.39-.08-2.75,.4-3.77,1.34-.99,1.06-1.6,2.41-1.74,3.85h10.42c.02-.68-.08-1.36-.3-2.01-.21-.6-.52-1.16-.9-1.66-.42-.48-.93-.86-1.51-1.13-.7-.29-1.45-.42-2.2-.38h0Z"/><path class="lc" d="M426.88,378.54v30.37h-4.38v-30.37h4.38Z"/><path class="lc" d="M447.41,408.98c-.53,.04-1.01-.31-1.13-.83l-.38-2.27c-.41,.48-.86,.93-1.34,1.34-.53,.38-1.06,.76-1.59,1.06-.57,.3-1.18,.53-1.81,.67-.66,.15-1.33,.22-2.01,.23-1.09,.03-2.18-.2-3.17-.67-.97-.47-1.83-1.16-2.49-2.01-.73-1.01-1.26-2.15-1.59-3.35-.39-1.5-.57-3.05-.53-4.6,0-1.46,.2-2.9,.6-4.3,.37-1.26,.99-2.44,1.81-3.47,.76-.98,1.74-1.75,2.87-2.27,1.18-.56,2.47-.84,3.77-.83,1.09-.01,2.16,.19,3.17,.6,.89,.39,1.68,.95,2.34,1.66v-11.25h4.38v30.37h-2.87l-.04-.07Zm-6.95-3.25c1,.04,1.99-.19,2.87-.67,.86-.54,1.62-1.22,2.27-2.01v-9.78c-.52-.71-1.21-1.29-2.01-1.66-.77-.31-1.59-.47-2.42-.46-1.59-.08-3.12,.62-4.08,1.89-1.07,1.66-1.57,3.62-1.43,5.59-.03,1.12,.07,2.25,.3,3.35,.17,.78,.47,1.52,.9,2.19,.39,.54,.91,.99,1.51,1.29,.69,.16,1.39,.25,2.1,.27Z"/><path class="lc" d="M481.92,384.43c-.11,.21-.27,.39-.46,.53-.19,.1-.39,.15-.6,.15-.32-.02-.64-.12-.9-.3-.3-.23-.76-.46-1.21-.76-.53-.31-1.08-.57-1.66-.76-.73-.23-1.5-.33-2.27-.3-.74-.02-1.48,.08-2.19,.3-.57,.18-1.11,.47-1.59,.83-.42,.36-.75,.79-.99,1.29-.22,.53-.32,1.09-.3,1.66,0,.68,.2,1.34,.6,1.89,.43,.54,.97,.98,1.59,1.29,.69,.39,1.43,.7,2.19,.9,.83,.3,1.66,.53,2.57,.83,.88,.29,1.74,.64,2.57,1.06,.8,.37,1.53,.85,2.19,1.43,.69,.6,1.23,1.35,1.59,2.19,.42,.98,.62,2.03,.6,3.1,.01,1.26-.22,2.52-.67,3.7-.45,1.13-1.11,2.16-1.96,3.02-.91,.87-1.99,1.56-3.17,2.01-1.37,.54-2.83,.8-4.3,.76-.94,.01-1.88-.09-2.79-.3-.87-.21-1.73-.46-2.57-.76-.8-.31-1.56-.72-2.27-1.21-.7-.45-1.33-.98-1.89-1.59l1.43-2.27c.11-.19,.27-.35,.46-.46,.19-.09,.39-.14,.6-.15,.39,.03,.77,.19,1.06,.46,.38,.3,.83,.6,1.34,.99,.61,.4,1.27,.73,1.96,.99,.87,.32,1.79,.48,2.72,.46,1.45,.09,2.89-.37,4.02-1.29,.95-.9,1.47-2.16,1.43-3.47,.01-.72-.2-1.42-.6-2.01-.4-.56-.95-1.01-1.59-1.29-.69-.39-1.43-.7-2.19-.9-.83-.23-1.66-.53-2.57-.76s-1.74-.6-2.57-.99c-.83-.34-1.58-.86-2.19-1.51-.69-.62-1.24-1.4-1.59-2.27-.81-2.06-.81-4.36,0-6.42,.44-.98,1.06-1.87,1.81-2.64,.87-.79,1.87-1.43,2.95-1.89,1.29-.47,2.65-.7,4.02-.67,1.6,0,3.19,.28,4.69,.83,1.37,.5,2.63,1.27,3.7,2.27l-1.02,2.02Z"/><path class="lc" d="M496.8,387.68c1.21,0,2.41,.2,3.55,.6,1.05,.4,2,1.02,2.79,1.81,.83,.84,1.47,1.85,1.89,2.95,.48,1.29,.7,2.65,.67,4.02,.04,.46-.04,.92-.23,1.34-.19,.27-.51,.41-.83,.38h-13.43c.04,1.05,.22,2.09,.53,3.1,.27,.81,.71,1.56,1.29,2.19,.51,.58,1.16,1.02,1.89,1.29,.79,.31,1.64,.46,2.49,.46,.74,.03,1.48-.07,2.19-.3,.6-.23,1.21-.46,1.66-.67s.83-.46,1.21-.67c.26-.2,.58-.31,.9-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.52,.59-1.1,1.12-1.74,1.59-.67,.43-1.38,.78-2.12,1.06-.73,.27-1.49,.47-2.27,.6-.75,.13-1.51,.18-2.27,.15-1.38,.03-2.75-.23-4.02-.76-1.22-.47-2.33-1.19-3.25-2.12-.94-1-1.66-2.18-2.12-3.47-.54-1.55-.8-3.19-.76-4.83-.01-1.39,.22-2.77,.67-4.08,.43-1.21,1.09-2.31,1.96-3.25,.87-.94,1.92-1.68,3.1-2.19,1.29-.57,2.69-.86,4.1-.85Zm.07,3.17c-1.39-.08-2.75,.4-3.77,1.34-.99,1.06-1.6,2.41-1.74,3.85h10.42c.02-.68-.08-1.36-.3-2.01-.21-.6-.52-1.16-.9-1.66-.42-.48-.93-.86-1.51-1.13-.69-.29-1.44-.42-2.19-.38h0Z"/><path class="lc" d="M509.87,408.98v-20.96h2.57c.34-.02,.69,.05,.99,.23,.23,.15,.3,.46,.38,.9l.23,2.72c.55-1.21,1.38-2.27,2.42-3.1,.94-.77,2.13-1.17,3.35-1.13,.43,0,.86,.06,1.29,.15,.38,.07,.74,.23,1.06,.46l-.3,3.35c-.04,.17-.12,.32-.23,.46-.13,.1-.29,.15-.46,.15-.3,0-.61-.02-.9-.07-.4-.09-.8-.14-1.21-.15-.57-.02-1.14,.09-1.66,.3-.46,.19-.9,.44-1.29,.76-.39,.38-.71,.81-.98,1.29-.3,.53-.53,1.06-.83,1.66v12.99h-4.42Z"/><path class="lc" d="M522.64,387.99h3.63c.29-.02,.59,.06,.83,.23,.21,.15,.37,.36,.46,.6l4.6,12.16c.21,.57,.39,1.15,.53,1.74,.16,.55,.29,1.1,.38,1.66,.09-.56,.21-1.12,.38-1.66,.15-.53,.3-1.13,.53-1.74l4.76-12.16c.08-.25,.24-.46,.46-.6,.24-.17,.54-.25,.83-.23h3.48l-8.38,20.92h-4.02l-8.45-20.92Z"/><path class="lc" d="M551.79,381.71c0,.39-.08,.77-.23,1.13-.14,.34-.34,.65-.6,.9-.28,.27-.62,.48-.99,.6-.72,.3-1.54,.3-2.27,0-.34-.14-.65-.34-.9-.6-.23-.28-.43-.59-.6-.9-.15-.36-.23-.74-.23-1.13,0-.39,.07-.78,.23-1.13,.14-.34,.34-.65,.6-.9,.26-.25,.57-.46,.9-.6,.36-.15,.74-.23,1.13-.23s.78,.07,1.13,.23c.34,.17,.67,.37,.99,.6,.25,.26,.46,.57,.6,.9,.16,.35,.24,.74,.23,1.13Zm-.76,6.27v20.92h-4.38v-20.92h4.38Z"/><path class="lc" d="M571.42,392.13l-.38,.38c-.16,.1-.34,.15-.53,.15-.27-.01-.53-.09-.76-.23-.28-.21-.58-.39-.9-.53-.4-.23-.84-.41-1.29-.53-.62-.16-1.25-.24-1.89-.23-.86-.04-1.72,.14-2.49,.53-.68,.37-1.3,.85-1.81,1.43-.53,.69-.89,1.49-1.06,2.34-.25,1.01-.38,2.05-.38,3.1,0,1.07,.13,2.13,.38,3.17,.21,.85,.59,1.65,1.13,2.34,.45,.62,1.05,1.11,1.74,1.43,.73,.34,1.53,.52,2.34,.53,.68,.03,1.37-.07,2.01-.3,.46-.19,.91-.42,1.34-.67,.33-.19,.63-.41,.9-.67,.23-.21,.52-.32,.83-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.5,.59-1.05,1.12-1.66,1.59-.61,.43-1.27,.78-1.96,1.06-.68,.28-1.39,.48-2.12,.6-.75,.13-1.51,.18-2.27,.15-1.25,.02-2.49-.24-3.63-.76-1.11-.5-2.12-1.22-2.95-2.12-.87-.99-1.53-2.15-1.92-3.4-.5-1.46-.75-2.99-.76-4.53-.02-1.46,.21-2.92,.67-4.3,.4-1.25,1.04-2.4,1.89-3.4,.87-.96,1.92-1.73,3.1-2.27,1.37-.56,2.83-.84,4.3-.83,1.38-.04,2.75,.21,4.02,.76,1.15,.52,2.2,1.24,3.1,2.12l-1.12,1.42Z"/><path class="lc" d="M584.72,387.68c1.21,0,2.41,.2,3.55,.6,1.06,.42,2.03,1.04,2.87,1.81,.83,.84,1.47,1.85,1.89,2.95,.48,1.29,.7,2.65,.67,4.02,.04,.46-.04,.92-.23,1.34-.2,.26-.51,.4-.83,.38h-13.44c.04,1.05,.22,2.09,.53,3.1,.27,.81,.71,1.56,1.29,2.19,.51,.58,1.16,1.02,1.89,1.29,.79,.31,1.64,.46,2.49,.46,.77,.02,1.53-.08,2.27-.3,.57-.18,1.12-.41,1.66-.67,.46-.23,.83-.46,1.21-.67,.26-.2,.58-.31,.9-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.52,.59-1.1,1.12-1.74,1.59-.67,.43-1.38,.78-2.12,1.06-.73,.27-1.49,.47-2.27,.6-.75,.13-1.51,.18-2.27,.15-1.38,.03-2.75-.23-4.02-.76-1.21-.5-2.31-1.22-3.25-2.12-.94-1-1.66-2.18-2.12-3.47-.54-1.55-.8-3.19-.76-4.83-.01-1.39,.22-2.77,.67-4.08,.43-1.21,1.1-2.32,1.97-3.26,.87-.94,1.92-1.68,3.1-2.19,1.23-.59,2.59-.88,3.95-.84Zm.07,3.17c-1.39-.08-2.75,.4-3.77,1.34-.99,1.06-1.6,2.41-1.74,3.85h10.45c.02-.68-.08-1.36-.3-2.01-.21-.6-.52-1.16-.9-1.66-.42-.48-.93-.86-1.51-1.13-.71-.25-1.47-.38-2.22-.38h0Z"/><path class="lc" d="M610.25,391.83c-.06,.17-.2,.31-.38,.38-.16,.1-.34,.15-.53,.15-.27-.01-.53-.09-.76-.23-.3-.15-.6-.3-.99-.46s-.83-.3-1.29-.46c-.56-.16-1.15-.24-1.74-.23-.51,0-1.02,.07-1.51,.23-.4,.12-.79,.29-1.13,.53-.28,.22-.51,.51-.67,.83-.16,.33-.23,.69-.23,1.06-.02,.45,.14,.89,.46,1.21,.34,.35,.75,.64,1.21,.83,.53,.23,1.06,.46,1.66,.67s1.29,.38,1.96,.6c.65,.21,1.28,.46,1.89,.76,.61,.26,1.17,.62,1.66,1.06,.5,.41,.91,.93,1.21,1.51,.33,.68,.48,1.43,.46,2.19,.06,2.93-1.87,5.54-4.69,6.35-1.13,.34-2.3,.52-3.47,.53-.71,0-1.42-.07-2.12-.23-.66-.14-1.32-.32-1.96-.53-.6-.23-1.18-.51-1.74-.83-.51-.31-.99-.66-1.43-1.06l1.06-1.66c.11-.19,.27-.35,.46-.46,.21-.09,.44-.15,.67-.15,.31-.02,.61,.09,.83,.3,.3,.23,.63,.44,.98,.6,.42,.26,.87,.46,1.34,.6,.64,.19,1.3,.29,1.96,.3,.59,0,1.17-.07,1.74-.23,.45-.13,.86-.36,1.21-.67,.27-.26,.5-.57,.67-.9,.15-.36,.23-.74,.23-1.13,.03-.47-.14-.94-.46-1.29-.34-.38-.75-.68-1.21-.9-.53-.23-1.06-.46-1.74-.67-.68-.21-1.29-.38-1.96-.6-.67-.22-1.32-.47-1.96-.76-.62-.31-1.21-.69-1.74-1.13-.51-.44-.92-.98-1.21-1.59-.63-1.53-.6-3.25,.07-4.76,.32-.78,.84-1.45,1.51-1.96,.72-.59,1.54-1.05,2.42-1.34,1.08-.35,2.21-.53,3.35-.53,1.32-.02,2.62,.2,3.85,.67,1.09,.4,2.07,1.05,2.87,1.89l-.82,1.51Z"/></svg></div>
+        <span class="logo-label" style="color:rgba(255,255,255,0.5);">On Red — Special Use</span>
+      </div>
+      <div class="logo-cell bg-gray">
+        <div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 924.81 567.05" style="display:block;width:200px;height:auto;" aria-label="United Field Services"><defs><style>.la{fill:#72262a}.lb{fill:#f0d8aa}.lc{fill:#1f1f1f}</style></defs><path class="lb" d="M346.96,307.92v117.6h-21.22v-163.97l21.22,46.37Z"/><path class="lb" d="M316.75,241.76v183.76h-21.22V195.47l21.22,46.3Z"/><path class="lb" d="M286.46,175.68v249.84h-21.15V129.31l21.15,46.37Z"/><path class="la" d="M174,178.55v249.16h21.22V132.25l-21.22,46.3Z"/><path class="la" d="M204.29,112.46V427.71h21.15V66.09l-21.15,46.38Z"/><path class="la" d="M234.5,46.38V427.7h21.22V0l-21.22,46.38Z"/><path class="lc" d="M128.91,438.88v84.67c0,29-21.53,43.5-64.58,43.5S0,552.53,0,523.49v-84.61H49.08v85.73c0,11.1,2.12,18.66,6.42,22.73,6.87,4.84,15.28,7.02,23.64,6.12,22.2,0,33.38-9.97,33.38-29.91v-84.67h16.4Z"/><path class="lc" d="M304.66,438.88v126.13h-37.53l-70.7-79.82v79.82h-16.47v-126.13h31.12l77.11,86.26v-86.26h16.47Z"/><path class="lc" d="M407.53,438.88v126.13h-49.09v-126.13h49.09Z"/><path class="lc" d="M581.09,438.88v12.69h-41.55v113.52h-52.03v-113.59h-41.76v-12.69h135.37l-.03,.07Z"/><path class="lc" d="M728.82,438.88v12.69h-60.68v38.14h50.98v12.69h-50.98v50h70.92v12.69h-119.98v-126.13h109.74v-.07Z"/><path class="lc" d="M779.88,565.02v-126.13h70.17c49.85,0,74.77,21.07,74.77,63.22s-25.83,62.89-77.49,62.92h-67.45Zm49.09-10.42h12.91c9.66,1.06,19.12-3.33,24.55-11.39,4.52-7.64,6.78-21.38,6.78-41.25s-2.23-33.61-6.7-41.24c-4.53-7.55-12.69-11.33-24.62-11.33h-12.91v105.2Z"/><path class="lc" d="M386.38,379.37v3.85h-13.6v9.49h11.55v3.85h-11.55v12.31h-4.83v-29.51h18.43Z"/><path class="lc" d="M395.75,381.71c0,.39-.08,.77-.23,1.13-.14,.36-.37,.67-.67,.9-.28,.27-.62,.48-.99,.6-.72,.3-1.54,.3-2.27,0-.34-.14-.65-.34-.9-.6-.23-.28-.43-.59-.6-.9-.3-.72-.3-1.54,0-2.27,.16-.33,.36-.63,.6-.9,.24-.28,.55-.49,.9-.6,.36-.15,.74-.23,1.13-.23s.78,.07,1.13,.23c.35,.16,.69,.36,.99,.6,.25,.28,.47,.59,.67,.9,.13,.37,.2,.75,.23,1.13Zm-.76,6.27v20.92h-4.38v-20.92h4.38Z"/><path class="lc" d="M409.27,387.68c1.21,0,2.41,.2,3.55,.6,1.05,.44,2.02,1.05,2.87,1.81,.8,.86,1.44,1.86,1.89,2.95,.48,1.29,.7,2.65,.67,4.02,.04,.46-.04,.92-.23,1.34-.2,.26-.51,.4-.83,.38h-13.44c.04,1.05,.22,2.09,.53,3.1,.27,.81,.71,1.56,1.29,2.19,.51,.58,1.16,1.02,1.89,1.29,.79,.31,1.64,.46,2.49,.46,.77,.02,1.53-.08,2.27-.3,.6-.23,1.21-.46,1.66-.67s.83-.46,1.21-.67c.26-.19,.58-.29,.9-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.52,.59-1.1,1.12-1.74,1.59-.67,.43-1.38,.78-2.12,1.06-.73,.27-1.49,.47-2.27,.6-.75,.13-1.51,.18-2.27,.15-1.38,.03-2.75-.23-4.02-.76-1.22-.47-2.33-1.19-3.25-2.12-.94-1-1.66-2.18-2.12-3.47-.54-1.55-.8-3.19-.76-4.83-.01-1.39,.22-2.77,.67-4.08,.43-1.21,1.09-2.31,1.96-3.25,.87-.94,1.92-1.68,3.1-2.19,1.24-.59,2.59-.88,3.96-.85Zm.15,3.17c-1.39-.08-2.75,.4-3.77,1.34-.99,1.06-1.6,2.41-1.74,3.85h10.42c.02-.68-.08-1.36-.3-2.01-.21-.6-.52-1.16-.9-1.66-.42-.48-.93-.86-1.51-1.13-.7-.29-1.45-.42-2.2-.38h0Z"/><path class="lc" d="M426.88,378.54v30.37h-4.38v-30.37h4.38Z"/><path class="lc" d="M447.41,408.98c-.53,.04-1.01-.31-1.13-.83l-.38-2.27c-.41,.48-.86,.93-1.34,1.34-.53,.38-1.06,.76-1.59,1.06-.57,.3-1.18,.53-1.81,.67-.66,.15-1.33,.22-2.01,.23-1.09,.03-2.18-.2-3.17-.67-.97-.47-1.83-1.16-2.49-2.01-.73-1.01-1.26-2.15-1.59-3.35-.39-1.5-.57-3.05-.53-4.6,0-1.46,.2-2.9,.6-4.3,.37-1.26,.99-2.44,1.81-3.47,.76-.98,1.74-1.75,2.87-2.27,1.18-.56,2.47-.84,3.77-.83,1.09-.01,2.16,.19,3.17,.6,.89,.39,1.68,.95,2.34,1.66v-11.25h4.38v30.37h-2.87l-.04-.07Zm-6.95-3.25c1,.04,1.99-.19,2.87-.67,.86-.54,1.62-1.22,2.27-2.01v-9.78c-.52-.71-1.21-1.29-2.01-1.66-.77-.31-1.59-.47-2.42-.46-1.59-.08-3.12,.62-4.08,1.89-1.07,1.66-1.57,3.62-1.43,5.59-.03,1.12,.07,2.25,.3,3.35,.17,.78,.47,1.52,.9,2.19,.39,.54,.91,.99,1.51,1.29,.69,.16,1.39,.25,2.1,.27Z"/><path class="lc" d="M481.92,384.43c-.11,.21-.27,.39-.46,.53-.19,.1-.39,.15-.6,.15-.32-.02-.64-.12-.9-.3-.3-.23-.76-.46-1.21-.76-.53-.31-1.08-.57-1.66-.76-.73-.23-1.5-.33-2.27-.3-.74-.02-1.48,.08-2.19,.3-.57,.18-1.11,.47-1.59,.83-.42,.36-.75,.79-.99,1.29-.22,.53-.32,1.09-.3,1.66,0,.68,.2,1.34,.6,1.89,.43,.54,.97,.98,1.59,1.29,.69,.39,1.43,.7,2.19,.9,.83,.3,1.66,.53,2.57,.83,.88,.29,1.74,.64,2.57,1.06,.8,.37,1.53,.85,2.19,1.43,.69,.6,1.23,1.35,1.59,2.19,.42,.98,.62,2.03,.6,3.1,.01,1.26-.22,2.52-.67,3.7-.45,1.13-1.11,2.16-1.96,3.02-.91,.87-1.99,1.56-3.17,2.01-1.37,.54-2.83,.8-4.3,.76-.94,.01-1.88-.09-2.79-.3-.87-.21-1.73-.46-2.57-.76-.8-.31-1.56-.72-2.27-1.21-.7-.45-1.33-.98-1.89-1.59l1.43-2.27c.11-.19,.27-.35,.46-.46,.19-.09,.39-.14,.6-.15,.39,.03,.77,.19,1.06,.46,.38,.3,.83,.6,1.34,.99,.61,.4,1.27,.73,1.96,.99,.87,.32,1.79,.48,2.72,.46,1.45,.09,2.89-.37,4.02-1.29,.95-.9,1.47-2.16,1.43-3.47,.01-.72-.2-1.42-.6-2.01-.4-.56-.95-1.01-1.59-1.29-.69-.39-1.43-.7-2.19-.9-.83-.23-1.66-.53-2.57-.76s-1.74-.6-2.57-.99c-.83-.34-1.58-.86-2.19-1.51-.69-.62-1.24-1.4-1.59-2.27-.81-2.06-.81-4.36,0-6.42,.44-.98,1.06-1.87,1.81-2.64,.87-.79,1.87-1.43,2.95-1.89,1.29-.47,2.65-.7,4.02-.67,1.6,0,3.19,.28,4.69,.83,1.37,.5,2.63,1.27,3.7,2.27l-1.02,2.02Z"/><path class="lc" d="M496.8,387.68c1.21,0,2.41,.2,3.55,.6,1.05,.4,2,1.02,2.79,1.81,.83,.84,1.47,1.85,1.89,2.95,.48,1.29,.7,2.65,.67,4.02,.04,.46-.04,.92-.23,1.34-.19,.27-.51,.41-.83,.38h-13.43c.04,1.05,.22,2.09,.53,3.1,.27,.81,.71,1.56,1.29,2.19,.51,.58,1.16,1.02,1.89,1.29,.79,.31,1.64,.46,2.49,.46,.74,.03,1.48-.07,2.19-.3,.6-.23,1.21-.46,1.66-.67s.83-.46,1.21-.67c.26-.2,.58-.31,.9-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.52,.59-1.1,1.12-1.74,1.59-.67,.43-1.38,.78-2.12,1.06-.73,.27-1.49,.47-2.27,.6-.75,.13-1.51,.18-2.27,.15-1.38,.03-2.75-.23-4.02-.76-1.22-.47-2.33-1.19-3.25-2.12-.94-1-1.66-2.18-2.12-3.47-.54-1.55-.8-3.19-.76-4.83-.01-1.39,.22-2.77,.67-4.08,.43-1.21,1.09-2.31,1.96-3.25,.87-.94,1.92-1.68,3.1-2.19,1.29-.57,2.69-.86,4.1-.85Zm.07,3.17c-1.39-.08-2.75,.4-3.77,1.34-.99,1.06-1.6,2.41-1.74,3.85h10.42c.02-.68-.08-1.36-.3-2.01-.21-.6-.52-1.16-.9-1.66-.42-.48-.93-.86-1.51-1.13-.69-.29-1.44-.42-2.19-.38h0Z"/><path class="lc" d="M509.87,408.98v-20.96h2.57c.34-.02,.69,.05,.99,.23,.23,.15,.3,.46,.38,.9l.23,2.72c.55-1.21,1.38-2.27,2.42-3.1,.94-.77,2.13-1.17,3.35-1.13,.43,0,.86,.06,1.29,.15,.38,.07,.74,.23,1.06,.46l-.3,3.35c-.04,.17-.12,.32-.23,.46-.13,.1-.29,.15-.46,.15-.3,0-.61-.02-.9-.07-.4-.09-.8-.14-1.21-.15-.57-.02-1.14,.09-1.66,.3-.46,.19-.9,.44-1.29,.76-.39,.38-.71,.81-.98,1.29-.3,.53-.53,1.06-.83,1.66v12.99h-4.42Z"/><path class="lc" d="M522.64,387.99h3.63c.29-.02,.59,.06,.83,.23,.21,.15,.37,.36,.46,.6l4.6,12.16c.21,.57,.39,1.15,.53,1.74,.16,.55,.29,1.1,.38,1.66,.09-.56,.21-1.12,.38-1.66,.15-.53,.3-1.13,.53-1.74l4.76-12.16c.08-.25,.24-.46,.46-.6,.24-.17,.54-.25,.83-.23h3.48l-8.38,20.92h-4.02l-8.45-20.92Z"/><path class="lc" d="M551.79,381.71c0,.39-.08,.77-.23,1.13-.14,.34-.34,.65-.6,.9-.28,.27-.62,.48-.99,.6-.72,.3-1.54,.3-2.27,0-.34-.14-.65-.34-.9-.6-.23-.28-.43-.59-.6-.9-.15-.36-.23-.74-.23-1.13,0-.39,.07-.78,.23-1.13,.14-.34,.34-.65,.6-.9,.26-.25,.57-.46,.9-.6,.36-.15,.74-.23,1.13-.23s.78,.07,1.13,.23c.34,.17,.67,.37,.99,.6,.25,.26,.46,.57,.6,.9,.16,.35,.24,.74,.23,1.13Zm-.76,6.27v20.92h-4.38v-20.92h4.38Z"/><path class="lc" d="M571.42,392.13l-.38,.38c-.16,.1-.34,.15-.53,.15-.27-.01-.53-.09-.76-.23-.28-.21-.58-.39-.9-.53-.4-.23-.84-.41-1.29-.53-.62-.16-1.25-.24-1.89-.23-.86-.04-1.72,.14-2.49,.53-.68,.37-1.3,.85-1.81,1.43-.53,.69-.89,1.49-1.06,2.34-.25,1.01-.38,2.05-.38,3.1,0,1.07,.13,2.13,.38,3.17,.21,.85,.59,1.65,1.13,2.34,.45,.62,1.05,1.11,1.74,1.43,.73,.34,1.53,.52,2.34,.53,.68,.03,1.37-.07,2.01-.3,.46-.19,.91-.42,1.34-.67,.33-.19,.63-.41,.9-.67,.23-.21,.52-.32,.83-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.5,.59-1.05,1.12-1.66,1.59-.61,.43-1.27,.78-1.96,1.06-.68,.28-1.39,.48-2.12,.6-.75,.13-1.51,.18-2.27,.15-1.25,.02-2.49-.24-3.63-.76-1.11-.5-2.12-1.22-2.95-2.12-.87-.99-1.53-2.15-1.92-3.4-.5-1.46-.75-2.99-.76-4.53-.02-1.46,.21-2.92,.67-4.3,.4-1.25,1.04-2.4,1.89-3.4,.87-.96,1.92-1.73,3.1-2.27,1.37-.56,2.83-.84,4.3-.83,1.38-.04,2.75,.21,4.02,.76,1.15,.52,2.2,1.24,3.1,2.12l-1.12,1.42Z"/><path class="lc" d="M584.72,387.68c1.21,0,2.41,.2,3.55,.6,1.06,.42,2.03,1.04,2.87,1.81,.83,.84,1.47,1.85,1.89,2.95,.48,1.29,.7,2.65,.67,4.02,.04,.46-.04,.92-.23,1.34-.2,.26-.51,.4-.83,.38h-13.44c.04,1.05,.22,2.09,.53,3.1,.27,.81,.71,1.56,1.29,2.19,.51,.58,1.16,1.02,1.89,1.29,.79,.31,1.64,.46,2.49,.46,.77,.02,1.53-.08,2.27-.3,.57-.18,1.12-.41,1.66-.67,.46-.23,.83-.46,1.21-.67,.26-.2,.58-.31,.9-.3,.32,0,.62,.13,.83,.38l1.29,1.59c-.52,.59-1.1,1.12-1.74,1.59-.67,.43-1.38,.78-2.12,1.06-.73,.27-1.49,.47-2.27,.6-.75,.13-1.51,.18-2.27,.15-1.38,.03-2.75-.23-4.02-.76-1.21-.5-2.31-1.22-3.25-2.12-.94-1-1.66-2.18-2.12-3.47-.54-1.55-.8-3.19-.76-4.83-.01-1.39,.22-2.77,.67-4.08,.43-1.21,1.1-2.32,1.97-3.26,.87-.94,1.92-1.68,3.1-2.19,1.23-.59,2.59-.88,3.95-.84Zm.07,3.17c-1.39-.08-2.75,.4-3.77,1.34-.99,1.06-1.6,2.41-1.74,3.85h10.45c.02-.68-.08-1.36-.3-2.01-.21-.6-.52-1.16-.9-1.66-.42-.48-.93-.86-1.51-1.13-.71-.25-1.47-.38-2.22-.38h0Z"/><path class="lc" d="M610.25,391.83c-.06,.17-.2,.31-.38,.38-.16,.1-.34,.15-.53,.15-.27-.01-.53-.09-.76-.23-.3-.15-.6-.3-.99-.46s-.83-.3-1.29-.46c-.56-.16-1.15-.24-1.74-.23-.51,0-1.02,.07-1.51,.23-.4,.12-.79,.29-1.13,.53-.28,.22-.51,.51-.67,.83-.16,.33-.23,.69-.23,1.06-.02,.45,.14,.89,.46,1.21,.34,.35,.75,.64,1.21,.83,.53,.23,1.06,.46,1.66,.67s1.29,.38,1.96,.6c.65,.21,1.28,.46,1.89,.76,.61,.26,1.17,.62,1.66,1.06,.5,.41,.91,.93,1.21,1.51,.33,.68,.48,1.43,.46,2.19,.06,2.93-1.87,5.54-4.69,6.35-1.13,.34-2.3,.52-3.47,.53-.71,0-1.42-.07-2.12-.23-.66-.14-1.32-.32-1.96-.53-.6-.23-1.18-.51-1.74-.83-.51-.31-.99-.66-1.43-1.06l1.06-1.66c.11-.19,.27-.35,.46-.46,.21-.09,.44-.15,.67-.15,.31-.02,.61,.09,.83,.3,.3,.23,.63,.44,.98,.6,.42,.26,.87,.46,1.34,.6,.64,.19,1.3,.29,1.96,.3,.59,0,1.17-.07,1.74-.23,.45-.13,.86-.36,1.21-.67,.27-.26,.5-.57,.67-.9,.15-.36,.23-.74,.23-1.13,.03-.47-.14-.94-.46-1.29-.34-.38-.75-.68-1.21-.9-.53-.23-1.06-.46-1.74-.67-.68-.21-1.29-.38-1.96-.6-.67-.22-1.32-.47-1.96-.76-.62-.31-1.21-.69-1.74-1.13-.51-.44-.92-.98-1.21-1.59-.63-1.53-.6-3.25,.07-4.76,.32-.78,.84-1.45,1.51-1.96,.72-.59,1.54-1.05,2.42-1.34,1.08-.35,2.21-.53,3.35-.53,1.32-.02,2.62,.2,3.85,.67,1.09,.4,2.07,1.05,2.87,1.89l-.82,1.51Z"/></svg></div>
+        <span class="logo-label" style="color:var(--ufs-mid-gray);">On Gray — Alternate</span>
+      </div>
+    </div>
+
+    <div class="logo-rules">
+      <div class="rule-card do">
+        <h4>✓ Do</h4>
+        <p>Use only approved color combinations. Maintain clear space equal to the height of the "U" around all edges. Scale proportionally only. Use vector files for all print.</p>
+      </div>
+      <div class="rule-card dont">
+        <h4>✗ Don't</h4>
+        <p>Don't stretch, skew, or rotate the logo. Don't add drop shadows or effects. Don't use on complex photo backgrounds without a clear protective field. Don't recreate the logo in other typefaces.</p>
+      </div>
+      <div class="rule-card">
+        <h4>Minimum Size</h4>
+        <p><strong>Digital:</strong> 120px wide minimum<br><strong>Print:</strong> 30mm wide minimum<br><br>Below these sizes, use the standalone hex mark only.</p>
+      </div>
+      <div class="rule-card">
+        <h4>Clear Space</h4>
+        <p>The minimum clear space around the logo equals the height of the letter "U" in the wordmark. No other elements may enter this zone — text, imagery, or other logos.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── 03. COLOR ─── -->
+  <div class="section">
+    <p class="section-label">03 — Color</p>
+    <h2 class="section-title">Color Palette</h2>
+    <p class="section-intro">The UFS palette is built on authority and precision. Charcoal black grounds all communications; UFS Red drives urgency and action; warm neutrals provide breathing room.</p>
+
+    <div class="palette-primary">
+      <div class="color-block" style="background:#1f1f1f;color:white;">
+        <span class="color-name">UFS Charcoal</span>
+        <span class="color-hex">#1F1F1F</span>
+        <span class="color-role">Primary / Wordmark</span>
+      </div>
+      <div class="color-block" style="background:#72262a;color:white;">
+        <span class="color-name">UFS Burgundy</span>
+        <span class="color-hex">#72262A</span>
+        <span class="color-role">Brand Red — CTAs</span>
+      </div>
+      <div class="color-block" style="background:#f0d8aa;color:#1f1f1f;">
+        <span class="color-name">UFS Gold</span>
+        <span class="color-hex">#F0D8AA</span>
+        <span class="color-role">Logo Mark Accent</span>
+      </div>
+      <div class="color-block" style="background:var(--ufs-white);border-right:1px solid #eee;">
+        <span class="color-name">White</span>
+        <span class="color-hex">#FFFFFF</span>
+        <span class="color-role">Surface</span>
+      </div>
+    </div>
+
+    <div class="palette-secondary">
+      <div class="color-block" style="background:var(--ufs-off-white);">
+        <span class="color-name" style="font-size:0.65rem;">Off White</span>
+        <span class="color-hex" style="font-size:0.65rem;">#F7F5F2</span>
+      </div>
+      <div class="color-block" style="background:var(--ufs-warm-gray);">
+        <span class="color-name" style="font-size:0.65rem;">Warm Gray</span>
+        <span class="color-hex" style="font-size:0.65rem;">#E8E4DF</span>
+      </div>
+      <div class="color-block" style="background:var(--ufs-mid-gray);color:white;">
+        <span class="color-name" style="font-size:0.65rem;">Mid Gray</span>
+        <span class="color-hex" style="font-size:0.65rem;">#9E9A96</span>
+      </div>
+      <div class="color-block" style="background:var(--ufs-dark-gray);color:white;">
+        <span class="color-name" style="font-size:0.65rem;">Dark Gray</span>
+        <span class="color-hex" style="font-size:0.65rem;">#3A3A3A</span>
+      </div>
+      <div class="color-block" style="background:var(--ufs-charcoal);color:white;">
+        <span class="color-name" style="font-size:0.65rem;">Charcoal</span>
+        <span class="color-hex" style="font-size:0.65rem;">#2C2C2C</span>
+      </div>
+    </div>
+
+    <table class="color-usage-table">
+      <thead><tr><th>Color</th><th>Primary Use</th><th>Secondary Use</th><th>Never Use For</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="color-swatch-inline" style="background:#1f1f1f;"></span>UFS Charcoal</td>
+          <td>Hero backgrounds, headers, nav bars, wordmark</td>
+          <td>Text on light backgrounds, footer</td>
+          <td>Body copy on dark surfaces</td>
+        </tr>
+        <tr>
+          <td><span class="color-swatch-inline" style="background:#72262a;"></span>UFS Burgundy</td>
+          <td>Primary CTAs, buttons, links, key accents</td>
+          <td>Section dividers, building mark (left columns)</td>
+          <td>Large background areas, body text</td>
+        </tr>
+        <tr>
+          <td><span class="color-swatch-inline" style="background:#f0d8aa;border:1px solid #ddd;"></span>UFS Gold</td>
+          <td>Logo mark accent (right building columns)</td>
+          <td>Warm decorative accents on dark backgrounds</td>
+          <td>Body text, UI backgrounds, buttons</td>
+        </tr>
+        <tr>
+          <td><span class="color-swatch-inline" style="background:#FFFFFF;border:1px solid #ddd;"></span>White</td>
+          <td>Content areas, card surfaces</td>
+          <td>Text on dark/red backgrounds</td>
+          <td>Never as a standalone design element</td>
+        </tr>
+        <tr>
+          <td><span class="color-swatch-inline" style="background:#F7F5F2;"></span>Off White</td>
+          <td>Page background, email background</td>
+          <td>Secondary sections, alternating rows</td>
+          <td>Do not use for text</td>
+        </tr>
+        <tr>
+          <td><span class="color-swatch-inline" style="background:#9E9A96;"></span>Mid Gray</td>
+          <td>Supporting text, metadata, captions</td>
+          <td>Disabled states, borders</td>
+          <td>Headlines or primary UI text</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── 04. TYPOGRAPHY ─── -->
+  <div class="section">
+    <p class="section-label">04 — Typography</p>
+    <h2 class="section-title">Type System</h2>
+    <p class="section-intro">Two typefaces. One serif for authority and presence. One sans for clarity and function. The pairing creates trust — editorial confidence backed by operational precision.</p>
+
+    <div class="type-showcase">
+      <div class="type-spec">
+        <div class="type-meta">
+          <strong>Playfair Display</strong>
+          <span>Display / Headlines</span>
+          <span>Weights: 700, 900</span>
+          <span>Usage: H1, H2, pull quotes, hero text</span>
+          <span style="margin-top:8px;display:block;">
+            <span class="tag tag-red">Primary Display</span>
+          </span>
+        </div>
+        <div>
+          <p style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;line-height:1.1;color:var(--ufs-black);margin-bottom:16px;">Protecting Every Property.</p>
+          <p style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--ufs-dark-gray);">Reliable Field Services for REO Professionals</p>
+        </div>
+      </div>
+      <div class="type-spec">
+        <div class="type-meta">
+          <strong>DM Sans</strong>
+          <span>Body / Interface</span>
+          <span>Weights: 300, 400, 500, 600</span>
+          <span>Usage: Body, UI, labels, nav, captions</span>
+          <span style="margin-top:8px;display:block;">
+            <span class="tag tag-black">Body / UI</span>
+          </span>
+        </div>
+        <div>
+          <p style="font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:400;color:var(--ufs-dark-gray);margin-bottom:12px;line-height:1.7;">We work with REO agents, banks, and asset managers — handling property inspections, occupancy checks, maintenance, and preservation orders so you can focus on your portfolio.</p>
+          <p style="font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--ufs-mid-gray);">Submit Order → Track in Real Time → Documentation Ready</p>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:0.8rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--ufs-mid-gray);margin-bottom:20px;">Type Scale</p>
+    <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:40px;">
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:0;row-gap:24px;align-items:baseline;">
+        <span style="font-family:var(--font-mono);font-size:0.68rem;color:var(--ufs-mid-gray);">Display · 72px</span>
+        <p style="font-family:'Playfair Display',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:900;line-height:1;color:var(--ufs-black);">United</p>
+        <span style="font-family:var(--font-mono);font-size:0.68rem;color:var(--ufs-mid-gray);">H1 · 48px</span>
+        <p style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;line-height:1.1;color:var(--ufs-black);">Field Services Partner</p>
+        <span style="font-family:var(--font-mono);font-size:0.68rem;color:var(--ufs-mid-gray);">H2 · 32px</span>
+        <p style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--ufs-black);">Our Services</p>
+        <span style="font-family:var(--font-mono);font-size:0.68rem;color:var(--ufs-mid-gray);">H3 · 22px</span>
+        <p style="font-family:'DM Sans',sans-serif;font-size:1.35rem;font-weight:600;color:var(--ufs-black);">Property Preservation</p>
+        <span style="font-family:var(--font-mono);font-size:0.68rem;color:var(--ufs-mid-gray);">Body · 16px</span>
+        <p style="font-family:'DM Sans',sans-serif;font-size:1rem;color:var(--ufs-dark-gray);font-weight:400;">We provide full REO field services to make sure properties are secure, well-maintained, and in compliance with all applicable laws.</p>
+        <span style="font-family:var(--font-mono);font-size:0.68rem;color:var(--ufs-mid-gray);">Small · 13px</span>
+        <p style="font-family:'DM Sans',sans-serif;font-size:0.82rem;color:var(--ufs-mid-gray);">Order #123456 · Submitted March 31, 2026 · Status: In Progress</p>
+        <span style="font-family:var(--font-mono);font-size:0.68rem;color:var(--ufs-mid-gray);">Label · 11px</span>
+        <p style="font-family:'DM Sans',sans-serif;font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;color:var(--ufs-mid-gray);">Client Portal · REO Field Services · Become a Client</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Fallback stack:</strong> If Google Fonts are unavailable, use <code style="font-family:monospace;">Georgia, 'Times New Roman', serif</code> for display and <code style="font-family:monospace;">-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif</code> for body.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── 05. VOICE & TONE ─── -->
+  <div class="section">
+    <p class="section-label">05 — Voice & Tone</p>
+    <h2 class="section-title">How We Speak</h2>
+    <p class="section-intro">UFS speaks like a trusted industry veteran — confident, direct, never salesy. We lead with competence, not hype.</p>
+
+    <div class="voice-grid">
+      <div class="voice-card">
+        <h3>Direct</h3>
+        <p>We say what we mean without filler. No buzzwords, no fluff. Every sentence earns its place.</p>
+        <div class="voice-ex">"Submit your order. We handle the rest."</div>
+      </div>
+      <div class="voice-card">
+        <h3>Expert</h3>
+        <p>We speak the language of REO. We understand the workflow. We reference real job types, real platforms, real expectations.</p>
+        <div class="voice-ex">"Occupancy checks, preservation orders, lock changes — all tracked in one place."</div>
+      </div>
+      <div class="voice-card">
+        <h3>Warm</h3>
+        <p>Professional doesn't mean cold. We're human. We build relationships. We follow up.</p>
+        <div class="voice-ex">"Really enjoyed connecting with you today."</div>
+      </div>
+    </div>
+
+    <div class="copy-pairs">
+      <div class="copy-pair-col good">
+        <h4>✓ Write This</h4>
+        <div class="copy-item">Submit your first order in 60 seconds.</div>
+        <div class="copy-item">We handle inspections, occupancy checks, and preservation.</div>
+        <div class="copy-item">Your documentation is ready when your asset manager asks for it.</div>
+        <div class="copy-item">Track every order in real time from your portal.</div>
+        <div class="copy-item">No forms to fill out — I can set your account up right now.</div>
+      </div>
+      <div class="copy-pair-col bad">
+        <h4>✗ Not This</h4>
+        <div class="copy-item">Leverage our best-in-class synergistic solutions.</div>
+        <div class="copy-item">We are a full-service provider of comprehensive residential real estate maintenance.</div>
+        <div class="copy-item">Please do not hesitate to reach out at your earliest convenience.</div>
+        <div class="copy-item">Revolutionize your real estate business with our streamlined platform!</div>
+        <div class="copy-item">We are thrilled to announce our exciting new partnership.</div>
+      </div>
+    </div>
+
+    <div class="three-col" style="margin-top:32px;">
+      <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:24px;">
+        <h4 style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;color:var(--ufs-black);">Email Tone</h4>
+        <p style="font-size:0.85rem;color:var(--ufs-dark-gray);">Conversational and action-oriented. Short paragraphs. One clear CTA per email. Never more than 3 paragraphs before the ask.</p>
+      </div>
+      <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:24px;">
+        <h4 style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;color:var(--ufs-black);">Website Tone</h4>
+        <p style="font-size:0.85rem;color:var(--ufs-dark-gray);">Confident and benefit-led. Lead with what the client gets. Use active voice. Sub-headlines that answer "why should I care?"</p>
+      </div>
+      <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:24px;">
+        <h4 style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;color:var(--ufs-black);">Newsletter Tone</h4>
+        <p style="font-size:0.85rem;color:var(--ufs-dark-gray);">Industry-expert voice. Data-first. Insightful, not promotional. The Disposition Desk informs — it doesn't sell. One soft CTA per issue, at the end.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── 06. ICONOGRAPHY ─── -->
+  <div class="section">
+    <p class="section-label">06 — Iconography</p>
+    <h2 class="section-title">Icons & Symbols</h2>
+    <p class="section-intro">Icons reinforce service categories. Use outline-style, 2px stroke weight. Never use filled icons in primary UI — reserve fills for status indicators only.</p>
+
+    <div class="icon-grid">
+      <div class="icon-cell">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        Property Inspection
+      </div>
+      <div class="icon-cell">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Secure / Lock Change
+      </div>
+      <div class="icon-cell">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Occupancy Check
+      </div>
+      <div class="icon-cell">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/></svg>
+        Maintenance
+      </div>
+      <div class="icon-cell">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Work Order
+      </div>
+      <div class="icon-cell">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Portal Search
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="rule-card do">
+        <h4>✓ Icon Usage Rules</h4>
+        <p>Use 24×24px grid. 1.5px stroke weight. Rounded line-caps. Always use the same icon style library throughout a single document or template (Lucide preferred).</p>
+      </div>
+      <div class="rule-card dont">
+        <h4>✗ Icon Misuse</h4>
+        <p>Don't mix filled and outline icon styles. Don't resize icons non-uniformly. Don't use icons smaller than 16px in UI. Don't use stock emoji as substitute icons in professional materials.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── 07. SPACING & LAYOUT ─── -->
+  <div class="section">
+    <p class="section-label">07 — Spacing & Layout</p>
+    <h2 class="section-title">Grid & Spacing</h2>
+    <p class="section-intro">A consistent 8px base unit governs all spacing. Layouts breathe — generous white space communicates professionalism and trust.</p>
+
+    <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:40px;margin-bottom:32px;">
+      <p style="font-size:0.75rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--ufs-mid-gray);margin-bottom:24px;">Spacing Scale (8px base)</p>
+      <div class="spacing-row">
+        <div class="spacing-block"><div class="spacing-visual" style="width:8px;height:8px;"></div><span class="spacing-val">4px</span></div>
+        <div class="spacing-block"><div class="spacing-visual" style="width:8px;height:16px;"></div><span class="spacing-val">8px</span></div>
+        <div class="spacing-block"><div class="spacing-visual" style="width:8px;height:24px;"></div><span class="spacing-val">12px</span></div>
+        <div class="spacing-block"><div class="spacing-visual" style="width:8px;height:32px;"></div><span class="spacing-val">16px</span></div>
+        <div class="spacing-block"><div class="spacing-visual" style="width:8px;height:40px;"></div><span class="spacing-val">24px</span></div>
+        <div class="spacing-block"><div class="spacing-visual" style="width:8px;height:56px;"></div><span class="spacing-val">32px</span></div>
+        <div class="spacing-block"><div class="spacing-visual" style="width:8px;height:72px;"></div><span class="spacing-val">48px</span></div>
+        <div class="spacing-block"><div class="spacing-visual" style="width:8px;height:96px;"></div><span class="spacing-val">64px</span></div>
+        <div class="spacing-block"><div class="spacing-visual" style="width:8px;height:128px;"></div><span class="spacing-val">80px</span></div>
+      </div>
+    </div>
+
+    <div class="three-col">
+      <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:24px;">
+        <h4 style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">Web Grid</h4>
+        <p style="font-size:0.85rem;color:var(--ufs-dark-gray);">12-column grid. Max content width: 1160px. Gutter: 24px. Outer margin: 40px (desktop), 24px (mobile).</p>
+      </div>
+      <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:24px;">
+        <h4 style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">Email Grid</h4>
+        <p style="font-size:0.85rem;color:var(--ufs-dark-gray);">Single-column, max 600px wide. Content padding: 40px sides. Section padding: 32px vertical.</p>
+      </div>
+      <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:24px;">
+        <h4 style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">Print Grid</h4>
+        <p style="font-size:0.85rem;color:var(--ufs-dark-gray);">A4/Letter. 20mm margins. Body text 10–11pt. Headlines 24–36pt. Line spacing 1.4–1.6.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── 08. BUTTON & UI ─── -->
+  <div class="section">
+    <p class="section-label">08 — UI Components</p>
+    <h2 class="section-title">Buttons & Controls</h2>
+    <p class="section-intro">Button hierarchy is strict. One primary action per view. Secondary actions are subordinate — never competing visually with the primary.</p>
+
+    <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:48px;margin-bottom:32px;">
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:40px;">
+        <button style="background:var(--ufs-red);color:white;border:none;padding:14px 28px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;letter-spacing:0.04em;cursor:pointer;border-radius:2px;">Become a Client →</button>
+        <button style="background:var(--ufs-black);color:white;border:none;padding:14px 28px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;letter-spacing:0.04em;cursor:pointer;border-radius:2px;">Login</button>
+        <button style="background:transparent;color:var(--ufs-black);border:1.5px solid var(--ufs-black);padding:13px 28px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;letter-spacing:0.04em;cursor:pointer;border-radius:2px;">Learn More</button>
+        <button style="background:transparent;color:var(--ufs-red);border:1.5px solid var(--ufs-red);padding:13px 28px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;letter-spacing:0.04em;cursor:pointer;border-radius:2px;">Register →</button>
+        <button disabled style="background:var(--ufs-warm-gray);color:var(--ufs-mid-gray);border:none;padding:14px 28px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:not-allowed;border-radius:2px;">Disabled</button>
+      </div>
+      <div style="font-size:0.8rem;color:var(--ufs-mid-gray);display:grid;grid-template-columns:repeat(5,1fr);gap:8px;text-align:center;">
+        <span>Primary CTA</span><span>Secondary Action</span><span>Outline Dark</span><span>Outline Red</span><span>Disabled</span>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="rule-card">
+        <h4>Button Rules</h4>
+        <p>Min touch target: 44×44px. Use "→" arrow on primary CTAs. Border-radius: 2px (sharp, professional). Letter-spacing: 0.04em. Font-weight: 600. No rounded "pill" buttons in professional contexts.</p>
+      </div>
+      <div class="rule-card">
+        <h4>Email Buttons</h4>
+        <p>Always use HTML table-based buttons for email (not CSS-only). Background-color on the td element. Padding: 14px 28px. Width: auto, not full-width unless mobile. Always include a fallback text link below.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── 09. PHOTOGRAPHY ─── -->
+  <div class="section">
+    <p class="section-label">09 — Photography & Imagery</p>
+    <h2 class="section-title">Visual Language</h2>
+    <p class="section-intro">Photography communicates competence and scale. Use real properties, real work, real outcomes — not stock smiles or abstract tech metaphors.</p>
+
+    <div class="image-rules-grid">
+      <div class="image-rule">
+        <div class="image-rule-visual" style="background:#E8E4DF;">
+          <div style="width:100%;height:100%;background:linear-gradient(135deg,#2C2C2C 0%,#1A1A1A 60%,#C0392B 100%);opacity:0.15;position:absolute;"></div>
+          <p style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--ufs-dark-gray);text-align:center;padding:20px;position:relative;">Exterior property photos,<br>work-in-progress shots</p>
+        </div>
+        <div class="image-rule-label"><strong style="color:#2E7D32;">✓ Use</strong>Exterior property photography — before/after preservation. Aerial shots of REO portfolios. Field reps on-site. Actual work order documentation photography.</div>
+      </div>
+      <div class="image-rule">
+        <div class="image-rule-visual" style="background:#F7F5F2;">
+          <p style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--ufs-mid-gray);text-align:center;padding:20px;">Generic office stock,<br>smiling realtors</p>
+        </div>
+        <div class="image-rule-label"><strong style="color:var(--ufs-red);">✗ Avoid</strong>Generic stock photography, smiling people in suits, abstract tech imagery, cityscapes that don't relate to our service areas, staged "professional" photos that feel inauthentic.</div>
+      </div>
+    </div>
+
+    <div class="three-col">
+      <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:24px;">
+        <h4 style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Treatment</h4>
+        <p style="font-size:0.85rem;color:var(--ufs-dark-gray);">Slightly desaturated with high contrast. Dark overlay (30–40% black) when used as hero backgrounds. Never filtered with vintage/warm tones.</p>
+      </div>
+      <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:24px;">
+        <h4 style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Aspect Ratios</h4>
+        <p style="font-size:0.85rem;color:var(--ufs-dark-gray);">Hero: 16:9. Card thumbnails: 4:3 or 3:2. Email header: 600×200px. Social: 1:1 or 4:5 for Instagram, 1.91:1 for LinkedIn.</p>
+      </div>
+      <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:24px;">
+        <h4 style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">File Formats</h4>
+        <p style="font-size:0.85rem;color:var(--ufs-dark-gray);">Web: WebP with JPEG fallback. Email: JPEG only (universal support). Print: TIFF or EPS, 300dpi minimum. Never GIF for photography.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── 10. DIGITAL APPLICATIONS ─── -->
+  <div class="section">
+    <p class="section-label">10 — Digital Applications</p>
+    <h2 class="section-title">Email & Digital Standards</h2>
+    <p class="section-intro">Email is our primary outreach channel. Every email must render on dark-mode clients, mobile screens, and legacy Outlook. Table-based HTML required.</p>
+
+    <div class="three-col" style="margin-bottom:32px;">
+      <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:24px;">
+        <h4 style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;color:var(--ufs-black);">Email Specs</h4>
+        <ul style="font-size:0.85rem;color:var(--ufs-dark-gray);list-style:none;line-height:2.2;">
+          <li>Max width: 600px</li>
+          <li>Background: #F7F5F2</li>
+          <li>Content bg: #FFFFFF</li>
+          <li>Font stack: DM Sans, then system</li>
+          <li>Body text: 16px / 1.6 line-height</li>
+          <li>No web fonts in Outlook</li>
+        </ul>
+      </div>
+      <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:24px;">
+        <h4 style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;color:var(--ufs-black);">Subject Line Rules</h4>
+        <ul style="font-size:0.85rem;color:var(--ufs-dark-gray);list-style:none;line-height:2.2;">
+          <li>Max 50 characters</li>
+          <li>Title case, no ALL CAPS</li>
+          <li>No emoji in cold outreach</li>
+          <li>Lead with benefit or context</li>
+          <li>Preheader: 85–100 chars</li>
+          <li>A/B test cold subject lines</li>
+        </ul>
+      </div>
+      <div style="background:var(--ufs-white);border:1px solid var(--ufs-warm-gray);padding:24px;">
+        <h4 style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;color:var(--ufs-black);">Accessibility</h4>
+        <ul style="font-size:0.85rem;color:var(--ufs-dark-gray);list-style:none;line-height:2.2;">
+          <li>Min contrast ratio: 4.5:1</li>
+          <li>All images need alt text</li>
+          <li>Link text must be descriptive</li>
+          <li>Min font size: 14px in email</li>
+          <li>Touch targets: 44×44px min</li>
+          <li>Test with VoiceOver / NVDA</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .page -->
+
+<!-- BACK COVER -->
+<div class="back-cover">
+  <div>
+    <h2>Questions about brand usage?</h2>
+    <p>Web: <a href="https://unitedffs.com">unitedffs.com</a></p>
+    <p>Client Portal: <a href="https://clients.unitedffs.com">clients.unitedffs.com</a></p>
+    <p>Help Center: <a href="https://unitedffs.com/help-center-for-clients/">unitedffs.com/help-center-for-clients</a></p>
+    <p>Client Line: (877) 463-9010</p>
+  </div>
+  <div>
+    <p style="color:rgba(255,255,255,0.4);font-size:0.82rem;margin-bottom:24px;">All brand assets, templates, and approved files are maintained by the marketing team. Always pull the latest approved assets — do not recreate from memory or screenshots.</p>
+    <span class="version-tag">UNITED FIELD SERVICES · BRAND GUIDELINES v1.0 · MARCH 2026 · CONFIDENTIAL</span>
+  </div>
+</div>
+
+</body>
+</html>

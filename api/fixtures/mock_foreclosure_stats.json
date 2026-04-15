@@ -1,0 +1,122 @@
+[
+  {
+    "state": "FL",
+    "total_listings": 2847,
+    "top_counties": [
+      {"name": "Miami-Dade County", "count": 412},
+      {"name": "Broward County", "count": 287},
+      {"name": "Hillsborough County", "count": 198},
+      {"name": "Duval County", "count": 176},
+      {"name": "Palm Beach County", "count": 165}
+    ],
+    "banks_mentioned": ["Wells Fargo", "Chase", "Bank of America", "Ocwen", "Fannie Mae"]
+  },
+  {
+    "state": "CA",
+    "total_listings": 1923,
+    "top_counties": [
+      {"name": "Los Angeles County", "count": 345},
+      {"name": "San Bernardino County", "count": 213},
+      {"name": "Riverside County", "count": 189},
+      {"name": "Sacramento County", "count": 134},
+      {"name": "Fresno County", "count": 98}
+    ],
+    "banks_mentioned": ["Chase", "Wells Fargo", "Fannie Mae", "Freddie Mac"]
+  },
+  {
+    "state": "TX",
+    "total_listings": 2134,
+    "top_counties": [
+      {"name": "Harris County", "count": 378},
+      {"name": "Dallas County", "count": 256},
+      {"name": "Bexar County", "count": 187},
+      {"name": "Tarrant County", "count": 145},
+      {"name": "Travis County", "count": 89}
+    ],
+    "banks_mentioned": ["Wells Fargo", "Carrington", "US Bank", "Chase"]
+  },
+  {
+    "state": "IL",
+    "total_listings": 1567,
+    "top_counties": [
+      {"name": "Cook County", "count": 623},
+      {"name": "Will County", "count": 112},
+      {"name": "DuPage County", "count": 87},
+      {"name": "Lake County", "count": 76},
+      {"name": "Kane County", "count": 54}
+    ],
+    "banks_mentioned": ["Bank of America", "Chase", "HUD", "Fannie Mae"]
+  },
+  {
+    "state": "OH",
+    "total_listings": 1245,
+    "top_counties": [
+      {"name": "Cuyahoga County", "count": 287},
+      {"name": "Franklin County", "count": 198},
+      {"name": "Hamilton County", "count": 134},
+      {"name": "Summit County", "count": 98},
+      {"name": "Montgomery County", "count": 76}
+    ],
+    "banks_mentioned": ["US Bank", "Wells Fargo", "Freddie Mac", "HUD"]
+  },
+  {
+    "state": "AZ",
+    "total_listings": 987,
+    "top_counties": [
+      {"name": "Maricopa County", "count": 534},
+      {"name": "Pima County", "count": 145},
+      {"name": "Pinal County", "count": 98},
+      {"name": "Yavapai County", "count": 45},
+      {"name": "Mohave County", "count": 34}
+    ],
+    "banks_mentioned": ["Fannie Mae", "Nationstar", "Shellpoint", "Wells Fargo"]
+  },
+  {
+    "state": "GA",
+    "total_listings": 1098,
+    "top_counties": [
+      {"name": "Fulton County", "count": 213},
+      {"name": "DeKalb County", "count": 178},
+      {"name": "Gwinnett County", "count": 134},
+      {"name": "Cobb County", "count": 98},
+      {"name": "Clayton County", "count": 87}
+    ],
+    "banks_mentioned": ["Freddie Mac", "Bank of America", "Chase", "PHH"]
+  },
+  {
+    "state": "MI",
+    "total_listings": 1345,
+    "top_counties": [
+      {"name": "Wayne County", "count": 456},
+      {"name": "Oakland County", "count": 167},
+      {"name": "Macomb County", "count": 134},
+      {"name": "Kent County", "count": 89},
+      {"name": "Genesee County", "count": 78}
+    ],
+    "banks_mentioned": ["HUD", "Wells Fargo", "Fannie Mae", "Bank of America"]
+  },
+  {
+    "state": "NJ",
+    "total_listings": 876,
+    "top_counties": [
+      {"name": "Essex County", "count": 134},
+      {"name": "Passaic County", "count": 98},
+      {"name": "Camden County", "count": 87},
+      {"name": "Hudson County", "count": 76},
+      {"name": "Bergen County", "count": 54}
+    ],
+    "banks_mentioned": ["Chase", "Bank of America", "Wells Fargo", "Ocwen"]
+  },
+  {
+    "state": "PA",
+    "total_listings": 934,
+    "top_counties": [
+      {"name": "Philadelphia County", "count": 234},
+      {"name": "Allegheny County", "count": 123},
+      {"name": "Delaware County", "count": 87},
+      {"name": "Montgomery County", "count": 76},
+      {"name": "Bucks County", "count": 54}
+    ],
+    "banks_mentioned": ["Bank of America", "Chase", "Freddie Mac", "Shellpoint"]
+  }
+]
