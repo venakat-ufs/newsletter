@@ -41,6 +41,9 @@ const SOURCE_DESCRIPTIONS: Record<string, string> = {
   williams_auction: "Williams & Williams — verified public REO auction listings, nationwide coverage",
   real_estate_sales_gov: "RealEstateSales.gov (GSA) — verified government-owned property auctions, no login needed",
   bid4assets: "Bid4Assets — county sheriff sales and tax lien auctions across CA, FL, PA, TX and more, fully public",
+  foreclosure_listings_usa: "ForeclosureListingsUSA — verified public database, state pages serve full addresses, prices, beds/baths in static HTML, no login",
+  foreclosure_listings_com: "ForeclosureListings.com — 1.4M+ listings (foreclosures, pre-foreclosures, short sales, sheriff sales), addresses in static HTML, no login",
+  mtg_law_firm_trustee: "MTG Law Firm Trustee Sales — California pre-REO trustee sale schedule with addresses, sale dates, debt amounts, and sold prices in public HTML",
   realtor_foreclosure: "Realtor.com foreclosure listing signal lane",
   grok: "AI-assisted X search enrichment",
   reddit: "Community sentiment and REO discussion from targeted subreddits",
@@ -69,6 +72,9 @@ const SOURCE_LABELS: Record<string, string> = {
   williams_auction: "Williams & Williams Auctions",
   real_estate_sales_gov: "RealEstateSales.gov (GSA)",
   bid4assets: "Bid4Assets Sheriff & Tax Sales",
+  foreclosure_listings_usa: "ForeclosureListingsUSA",
+  foreclosure_listings_com: "ForeclosureListings.com",
+  mtg_law_firm_trustee: "MTG Law Firm Trustee Sales (CA)",
   realtor_foreclosure: "Realtor Foreclosures",
   grok: "Grok / X",
   reddit: "Reddit",
@@ -122,6 +128,9 @@ const SECTION_SOURCE_KEYS: Record<string, string[]> = {
     "williams_auction",
     "real_estate_sales_gov",
     "bid4assets",
+    "foreclosure_listings_usa",
+    "foreclosure_listings_com",
+    "mtg_law_firm_trustee",
     "realtor_foreclosure",
     "zillow_research",
     "fhfa_news",
@@ -138,6 +147,9 @@ const SECTION_SOURCE_KEYS: Record<string, string[]> = {
     "williams_auction",
     "real_estate_sales_gov",
     "bid4assets",
+    "foreclosure_listings_usa",
+    "foreclosure_listings_com",
+    "mtg_law_firm_trustee",
     "realtor_foreclosure",
   ],
   hot_markets: [
@@ -151,6 +163,9 @@ const SECTION_SOURCE_KEYS: Record<string, string[]> = {
     "williams_auction",
     "real_estate_sales_gov",
     "bid4assets",
+    "foreclosure_listings_usa",
+    "foreclosure_listings_com",
+    "mtg_law_firm_trustee",
     "realtor_foreclosure",
   ],
   industry_news: [
@@ -204,6 +219,12 @@ const SOURCE_EXTRACTION_DETAILS: Record<string, string> = {
     "Pulls government-owned property auction listings from GSA RealEstateSales.gov — no login required, nationwide coverage.",
   bid4assets:
     "Pulls live county sheriff sales and tax lien auction listings from Bid4Assets, covering CA, FL, PA, TX and 20+ active auction counties.",
+  foreclosure_listings_usa:
+    "Pulls listing counts, addresses, prices, and property specs from ForeclosureListingsUSA state pages — 99K+ CA listings, fully server-rendered, no login needed.",
+  foreclosure_listings_com:
+    "Pulls listing counts, addresses, prices, and bed/bath details from ForeclosureListings.com state pages — 1.4M+ database, server-rendered, no login needed.",
+  mtg_law_firm_trustee:
+    "Pulls CA pre-REO trustee sale data — property addresses, trustee sale numbers, scheduled dates/times, estimated debt, and sold prices from public HTML calendar.",
   realtor_foreclosure:
     "Pulls foreclosure listing signal counts from Realtor.com public web indexing, plus sample listing links.",
   zillow_research:
@@ -232,6 +253,9 @@ const SOURCE_GROUPS: Record<string, SourceGroup> = {
   williams_auction: "official_inventory",
   real_estate_sales_gov: "official_inventory",
   bid4assets: "official_inventory",
+  foreclosure_listings_usa: "official_inventory",
+  foreclosure_listings_com: "official_inventory",
+  mtg_law_firm_trustee: "official_inventory",
   realtor_foreclosure: "official_inventory",
   zillow_research: "official_research",
   hud_user: "official_research",

@@ -127,6 +127,11 @@ const FREE_LISTING_SIGNAL_SOURCES = [
   { key: "williams_auction", label: "Williams & Williams Auctions", domain: "williamsauction.com" },
   { key: "real_estate_sales_gov", label: "RealEstateSales.gov (GSA)", domain: "realestatesales.gov" },
   { key: "bid4assets", label: "Bid4Assets (Sheriff & Tax Sales)", domain: "bid4assets.com" },
+  // Verified large public listing databases (static HTML, no login)
+  { key: "foreclosure_listings_usa", label: "ForeclosureListingsUSA", domain: "foreclosurelistingsusa.com" },
+  { key: "foreclosure_listings_com", label: "ForeclosureListings.com", domain: "foreclosurelistings.com" },
+  // Pre-REO trustee sale data (CA trustee schedules, addresses, debt amounts)
+  { key: "mtg_law_firm_trustee", label: "MTG Law Firm Trustee Sales (CA)", domain: "salesinformation.mtglawfirm.com" },
   // Public listing portals
   { key: "realtor_foreclosure", label: "Realtor.com Foreclosures", domain: "realtor.com" },
 ];
@@ -152,6 +157,12 @@ const OPTIONAL_NO_SIGNAL_REASON_BY_SOURCE: Record<string, string> = {
     "No live RealEstateSales.gov pages matched REO/foreclosure signal keywords in this run.",
   bid4assets:
     "No live Bid4Assets sheriff/tax-sale pages matched REO/foreclosure signal keywords in this run.",
+  foreclosure_listings_usa:
+    "No live ForeclosureListingsUSA state pages matched listing signal keywords in this run.",
+  foreclosure_listings_com:
+    "No live ForeclosureListings.com state pages matched listing signal keywords in this run.",
+  mtg_law_firm_trustee:
+    "No live MTG Law Firm trustee sale pages matched foreclosure signal keywords in this run.",
   usajobs_jobs:
     "No matching USAJobs housing/default-servicing roles were found in this run.",
   greenhouse_jobs:
@@ -190,6 +201,10 @@ const FREE_LISTING_SEED_PATHS: Record<string, string[]> = {
   williams_auction: ["/", "/properties/", "/reo/"],
   real_estate_sales_gov: ["/", "/auctions/"],
   bid4assets: ["/sheriffsales", "/county-tax-sales", "/"],
+  // State-level pages contain actual listing data (homepage is navigation only)
+  foreclosure_listings_usa: ["/california/", "/texas/", "/florida/", "/georgia/", "/arizona/"],
+  foreclosure_listings_com: ["/list/FL/", "/list/CA/", "/list/TX/", "/list/GA/", "/list/AZ/"],
+  mtg_law_firm_trustee: ["/", "/PendingSales.aspx"],
   realtor_foreclosure: ["/foreclosure", "/realestateandhomes-search"],
 };
 const BANK_HIRING_STRONG_KEYWORDS = [

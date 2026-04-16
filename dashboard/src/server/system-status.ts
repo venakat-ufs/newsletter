@@ -284,6 +284,39 @@ export async function getSystemStatus(): Promise<{
           : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
       },
       {
+        key: "foreclosure_listings_usa",
+        label: "ForeclosureListingsUSA",
+        state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
+        summary: settings.freeListingSignalsEnabled
+          ? "Verified accessible — state pages show full addresses, prices, beds/baths in static HTML. No login required. 99K+ CA listings alone."
+          : "Free listing-signal collection is disabled.",
+        action: settings.freeListingSignalsEnabled
+          ? "Review listing signal counts from CA, TX, FL, GA, AZ state pages after each pipeline run."
+          : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
+      },
+      {
+        key: "foreclosure_listings_com",
+        label: "ForeclosureListings.com",
+        state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
+        summary: settings.freeListingSignalsEnabled
+          ? "Verified accessible — 1.4M+ listings (foreclosures, pre-foreclosures, short sales, sheriff sales). Addresses and prices in static HTML, no login required."
+          : "Free listing-signal collection is disabled.",
+        action: settings.freeListingSignalsEnabled
+          ? "Review listing counts from FL, CA, TX, GA, AZ state pages after each pipeline run."
+          : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
+      },
+      {
+        key: "mtg_law_firm_trustee",
+        label: "MTG Law Firm Trustee Sales (CA Pre-REO)",
+        state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
+        summary: settings.freeListingSignalsEnabled
+          ? "Verified accessible — CA trustee sale schedule with property addresses, sale dates, estimated debt, and sold prices in public HTML. This is pre-REO pipeline data."
+          : "Free listing-signal collection is disabled.",
+        action: settings.freeListingSignalsEnabled
+          ? "Review CA trustee sale counts and scheduled auction properties after each pipeline run."
+          : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
+      },
+      {
         key: "realtor_foreclosure",
         label: "Realtor.com Foreclosures",
         state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
