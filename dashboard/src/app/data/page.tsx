@@ -542,7 +542,7 @@ function GsaAuctionsPanel({ snap }: { snap: SourceSnapshot | undefined }) {
               </div>
               <p className="text-sm font-bold text-[#1a1a1a] group-hover:text-[#1e4d6e] transition leading-tight">{String(p.agency)}</p>
               <p className="mt-1 text-[10px] text-[#7a7165] leading-snug">{String(p.description || "")}</p>
-              {p.listing_count && (
+              {!!p.listing_count && (
                 <p className="mt-1.5 text-[11px] font-bold text-[#1a1a1a]">{Number(p.listing_count).toLocaleString()} auctions</p>
               )}
               <p className="mt-1.5 text-[10px] text-[#1e4d6e] font-medium group-hover:underline">View auctions →</p>
