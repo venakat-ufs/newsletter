@@ -1,4 +1,5 @@
 import fs from "fs/promises";
+import path from "path";
 
 import { resolveRepoPath } from "@/server/paths";
 
@@ -12,13 +13,15 @@ export interface WorkflowLogEntry {
   context?: Record<string, unknown>;
 }
 
-const LOG_FILE = resolveRepoPath("data", "workflow-log.json");
+// On Vercel, /var/task is read-only — use /tmp for ephemeral log storage
+const LOG_DIR = process.env.VERCEL ? "/tmp" : resolveRepoPath("data");
+const LOG_FILE = path.join(LOG_DIR, "workflow-log.json");
 const MAX_LOG_ENTRIES = 400;
 
 let writeQueue: Promise<void> = Promise.resolve();
 
 async function ensureLogFile(): Promise<void> {
-  await fs.mkdir(resolveRepoPath("data"), { recursive: true });
+  await fs.mkdir(LOG_DIR, { recursive: true });
   try {
     await fs.access(LOG_FILE);
   } catch {
