@@ -136,6 +136,7 @@ const FREE_LISTING_SIGNAL_SOURCES = [
   { key: "newrez_shellpoint_reo", label: "NewRez / Shellpoint", domain: "newrez.com" },
   { key: "selene_finance_reo", label: "Selene Finance", domain: "selenefinance.com" },
   { key: "carrington_reo", label: "Carrington Mortgage", domain: "carringtonmortgage.com" },
+  { key: "foreclosure_listings_usa", label: "Foreclosure Listings USA", domain: "foreclosurelistingsusa.com" },
 ];
 const FREE_LISTING_SIGNAL_SOURCE_KEYS = new Set(
   FREE_LISTING_SIGNAL_SOURCES.map((source) => source.key),
@@ -218,6 +219,7 @@ const FREE_LISTING_SEED_PATHS: Record<string, string[]> = {
   newrez_shellpoint_reo: ["/", "/shellpoint/"],
   selene_finance_reo: ["/", "/real-estate/"],
   carrington_reo: ["/", "/buy-a-home/"],
+  foreclosure_listings_usa: ["/", "/listings/", "/foreclosures/"],
 };
 const BANK_HIRING_STRONG_KEYWORDS = [
   "reo",
@@ -3297,7 +3299,6 @@ export async function collectAllSources(): Promise<{
     { key: "homesteps", runner: () => collectHomeSteps(settings) },
     { key: "linkedin_jobs", runner: () => collectLinkedInJobs() },
     { key: "grok", runner: () => collectGrok(settings) },
-    { key: "reddit", runner: () => collectReddit(settings) },
     { key: "news_api", runner: () => collectNewsApi(settings) },
   ];
 

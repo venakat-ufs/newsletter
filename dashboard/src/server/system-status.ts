@@ -82,17 +82,15 @@ export async function getSystemStatus(): Promise<{
         action: settings.grokApiKey ? "Review source logs after pipeline." : "Add GROK_API_KEY or rely on other sources.",
       },
       {
-        key: "reddit",
-        label: "Reddit",
-        state: settings.redditUserAgent ? "ready" : "warning",
-        summary:
-          settings.redditClientId && settings.redditClientSecret
-            ? "App credentials configured."
-            : "Using public JSON fallback without official app credentials.",
-        action:
-          settings.redditClientId && settings.redditClientSecret
-            ? "Monitor logs for subreddit failures."
-            : "Optional: add Reddit app credentials for stronger reliability.",
+        key: "foreclosure_listings_usa",
+        label: "Foreclosure Listings USA",
+        state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
+        summary: settings.freeListingSignalsEnabled
+          ? "foreclosurelistingsusa.com listing-signal collection is enabled."
+          : "Free listing-signal collection is disabled.",
+        action: settings.freeListingSignalsEnabled
+          ? "Review listing signal counts and sample links after each pipeline run."
+          : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
       },
       {
         key: "news_api",
