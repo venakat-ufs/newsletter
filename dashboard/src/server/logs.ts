@@ -13,15 +13,28 @@ export interface WorkflowLogEntry {
   context?: Record<string, unknown>;
 }
 
-// On Vercel, /var/task is read-only — use /tmp for ephemeral log storage
-const LOG_DIR = process.env.VERCEL ? "/tmp" : resolveRepoPath("data");
+// On Vercel, /var/task is read-only — use /tmp for ephemeral log storage.
+// Check multiple signals: VERCEL env var, or path starting with /var/task.
+function getLogDir(): string {
+  if (process.env.VERCEL || process.env.VERCEL_ENV) return "/tmp";
+  const repoPath = resolveRepoPath("data");
+  if (repoPath.startsWith("/var/task")) return "/tmp";
+  return repoPath;
+}
+
+const LOG_DIR = getLogDir();
 const LOG_FILE = path.join(LOG_DIR, "workflow-log.json");
 const MAX_LOG_ENTRIES = 400;
 
 let writeQueue: Promise<void> = Promise.resolve();
 
 async function ensureLogFile(): Promise<void> {
-  await fs.mkdir(LOG_DIR, { recursive: true });
+  try {
+    await fs.mkdir(LOG_DIR, { recursive: true });
+  } catch {
+    // Filesystem not writable — skip log persistence
+    return;
+  }
   try {
     await fs.access(LOG_FILE);
   } catch {
@@ -31,9 +44,8 @@ async function ensureLogFile(): Promise<void> {
 
 async function readLogFile(): Promise<WorkflowLogEntry[]> {
   await ensureLogFile();
-  const raw = await fs.readFile(LOG_FILE, "utf8");
-
   try {
+    const raw = await fs.readFile(LOG_FILE, "utf8");
     const parsed = JSON.parse(raw) as WorkflowLogEntry[];
     return Array.isArray(parsed) ? parsed : [];
   } catch {
