@@ -3119,162 +3119,144 @@ function matchesRedditKeywords(title: string, text: string): boolean {
   return REDDIT_KEYWORDS.some((keyword) => combined.includes(keyword));
 }
 
+/** Obtain a Reddit application-only OAuth2 bearer token. */
+async function getRedditBearerToken(clientId: string, clientSecret: string, userAgent: string): Promise<string> {
+  const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
+  const response = await fetchWithTimeout("https://www.reddit.com/api/v1/access_token", {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${credentials}`,
+      "User-Agent": userAgent,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "grant_type=client_credentials",
+    cache: "no-store",
+  }, 10000);
+
+  if (!response.ok) {
+    throw new Error(`Reddit OAuth token request failed: HTTP ${response.status}`);
+  }
+
+  const payload = (await response.json()) as { access_token?: string; error?: string };
+  if (payload.error || !payload.access_token) {
+    throw new Error(`Reddit OAuth error: ${payload.error ?? "no access_token returned"}`);
+  }
+  return payload.access_token;
+}
+
+type RedditPost = {
+  title?: string;
+  selftext?: string;
+  score?: number;
+  num_comments?: number;
+  author?: string;
+  permalink?: string;
+  created_utc?: number;
+  subreddit?: string;
+};
+
 async function collectReddit(settings: Settings): Promise<SourceResult> {
+  if (!settings.redditClientId || !settings.redditClientSecret) {
+    return createResult({
+      source: "reddit",
+      data: [],
+      errors: ["REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET are required. Register a script app at https://www.reddit.com/prefs/apps"],
+      success: false,
+    });
+  }
+
+  const userAgent = settings.redditUserAgent || "ufs-newsletter/1.0 (by /u/ufs_newsletter)";
+  let bearerToken: string;
+
+  try {
+    bearerToken = await getRedditBearerToken(settings.redditClientId, settings.redditClientSecret, userAgent);
+  } catch (error) {
+    return createResult({
+      source: "reddit",
+      data: [],
+      errors: [`Reddit OAuth failed: ${error instanceof Error ? error.message : "unknown error"}`],
+      success: false,
+    });
+  }
+
+  const oauthHeaders = {
+    Authorization: `Bearer ${bearerToken}`,
+    "User-Agent": userAgent,
+    Accept: "application/json",
+  };
+
   const errors: string[] = [];
   const posts: Array<Record<string, unknown>> = [];
   const seen = new Set<string>();
 
-  for (const subreddit of SUBREDDITS) {
-    try {
-      const url = new URL(`https://www.reddit.com/r/${subreddit}/top.json`);
-      url.searchParams.set("t", "week");
-      url.searchParams.set("limit", "20");
-      url.searchParams.set("raw_json", "1");
-
-      const response = await fetchWithTimeout(url, {
-        headers: {
-          Accept: "application/json",
-          "User-Agent": settings.redditUserAgent,
-        },
-        cache: "no-store",
-      }, 12000);
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      const payload = (await response.json()) as {
-        data?: {
-          children?: Array<{
-            data?: {
-              title?: string;
-              selftext?: string;
-              score?: number;
-              num_comments?: number;
-              author?: string;
-              permalink?: string;
-              created_utc?: number;
-            };
-          }>;
-        };
-      };
-
-      for (const child of payload.data?.children ?? []) {
-        const post = child.data ?? {};
-        const title = post.title ?? "";
-        const text = post.selftext ?? "";
-        const permalink = post.permalink ?? "";
-        const articleUrl = permalink ? `https://reddit.com${permalink}` : "";
-        if (!articleUrl || seen.has(articleUrl) || !matchesRedditKeywords(title, text)) {
-          continue;
-        }
-
-        seen.add(articleUrl);
-        posts.push({
-          subreddit,
-          title,
-          text: text.slice(0, 1000),
-          score: post.score ?? 0,
-          num_comments: post.num_comments ?? 0,
-          author: post.author ?? "[deleted]",
-          url: articleUrl,
-          created_utc: post.created_utc ?? 0,
-          retrieval_mode: settings.redditClientId && settings.redditClientSecret ? "public_json_fallback" : "public_json",
-        });
-      }
-    } catch (error) {
-      errors.push(
-        `Subreddit r/${subreddit} failed: ${error instanceof Error ? error.message : "unknown error"}`,
-      );
+  function processRedditChildren(children: Array<{ data?: RedditPost }>, mode: string) {
+    for (const child of children) {
+      const post = child.data ?? {};
+      const title = post.title ?? "";
+      const text = post.selftext ?? "";
+      const permalink = post.permalink ?? "";
+      const articleUrl = permalink ? `https://reddit.com${permalink}` : "";
+      if (!articleUrl || seen.has(articleUrl) || !matchesRedditKeywords(title, text)) continue;
+      seen.add(articleUrl);
+      posts.push({
+        subreddit: post.subreddit ?? "unknown",
+        title,
+        text: text.slice(0, 1000),
+        score: post.score ?? 0,
+        num_comments: post.num_comments ?? 0,
+        author: post.author ?? "[deleted]",
+        url: articleUrl,
+        created_utc: post.created_utc ?? 0,
+        retrieval_mode: mode,
+      });
     }
   }
 
+  // Fetch top posts from each subreddit via OAuth API
+  for (const subreddit of SUBREDDITS) {
+    try {
+      const url = new URL(`https://oauth.reddit.com/r/${subreddit}/top`);
+      url.searchParams.set("t", "week");
+      url.searchParams.set("limit", "25");
+      url.searchParams.set("raw_json", "1");
+
+      const response = await fetchWithTimeout(url, { headers: oauthHeaders, cache: "no-store" }, 12000);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const payload = (await response.json()) as { data?: { children?: Array<{ data?: RedditPost }> } };
+      processRedditChildren(payload.data?.children ?? [], "oauth_subreddit");
+    } catch (error) {
+      errors.push(`r/${subreddit}: ${error instanceof Error ? error.message : "unknown error"}`);
+    }
+  }
+
+  // If subreddits returned nothing, try OAuth search
   if (posts.length === 0) {
     for (const query of REDDIT_SEARCH_QUERIES) {
       try {
-        const url = new URL("https://www.reddit.com/search.json");
+        const url = new URL("https://oauth.reddit.com/search");
         url.searchParams.set("q", query);
         url.searchParams.set("sort", "top");
         url.searchParams.set("t", "week");
-        url.searchParams.set("limit", "20");
+        url.searchParams.set("limit", "25");
         url.searchParams.set("raw_json", "1");
 
-        const response = await fetchWithTimeout(
-          url,
-          {
-            headers: {
-              Accept: "application/json",
-              "User-Agent": settings.redditUserAgent,
-            },
-            cache: "no-store",
-          },
-          12000,
-        );
+        const response = await fetchWithTimeout(url, { headers: oauthHeaders, cache: "no-store" }, 12000);
+        if (!response.ok) continue;
 
-        if (!response.ok) {
-          continue;
-        }
-
-        const payload = (await response.json()) as {
-          data?: {
-            children?: Array<{
-              data?: {
-                title?: string;
-                selftext?: string;
-                score?: number;
-                num_comments?: number;
-                author?: string;
-                permalink?: string;
-                created_utc?: number;
-                subreddit?: string;
-              };
-            }>;
-          };
-        };
-
-        for (const child of payload.data?.children ?? []) {
-          const post = child.data ?? {};
-          const title = post.title ?? "";
-          const text = post.selftext ?? "";
-          const permalink = post.permalink ?? "";
-          const articleUrl = permalink ? `https://reddit.com${permalink}` : "";
-          if (!articleUrl || seen.has(articleUrl) || !matchesRedditKeywords(title, text)) {
-            continue;
-          }
-
-          seen.add(articleUrl);
-          posts.push({
-            subreddit: post.subreddit ?? "search",
-            title,
-            text: text.slice(0, 1000),
-            score: post.score ?? 0,
-            num_comments: post.num_comments ?? 0,
-            author: post.author ?? "[deleted]",
-            url: articleUrl,
-            created_utc: post.created_utc ?? 0,
-            retrieval_mode: "search_fallback",
-          });
-        }
+        const payload = (await response.json()) as { data?: { children?: Array<{ data?: RedditPost }> } };
+        processRedditChildren(payload.data?.children ?? [], "oauth_search");
       } catch {
         continue;
       }
     }
   }
 
-  if (posts.length > 0 || errors.length === 0) {
-    return createResult({
-      source: "reddit",
-      data: posts,
-      errors: posts.length > 0 ? [] : errors,
-      success: posts.length > 0 || errors.length === 0,
-    });
-  }
-
   return createResult({
     source: "reddit",
-    data: [],
-    errors: errors.length > 0 ? errors : ["Reddit public JSON returned no matching posts."],
-    success: false,
+    data: posts,
+    errors: posts.length > 0 ? [] : errors,
+    success: posts.length > 0,
   });
 }
 
@@ -3299,6 +3281,7 @@ export async function collectAllSources(): Promise<{
     { key: "homesteps", runner: () => collectHomeSteps(settings) },
     { key: "linkedin_jobs", runner: () => collectLinkedInJobs() },
     { key: "grok", runner: () => collectGrok(settings) },
+    { key: "reddit", optional: true, runner: () => collectReddit(settings) },
     { key: "news_api", runner: () => collectNewsApi(settings) },
   ];
 

@@ -82,6 +82,17 @@ export async function getSystemStatus(): Promise<{
         action: settings.grokApiKey ? "Review source logs after pipeline." : "Add GROK_API_KEY or rely on other sources.",
       },
       {
+        key: "reddit",
+        label: "Reddit",
+        state: settings.redditClientId && settings.redditClientSecret ? "ready" : "blocked",
+        summary: settings.redditClientId && settings.redditClientSecret
+          ? "Reddit OAuth credentials configured — community sentiment collection is enabled."
+          : "Reddit requires OAuth credentials (REDDIT_CLIENT_ID + REDDIT_CLIENT_SECRET). Register a free script app at reddit.com/prefs/apps.",
+        action: settings.redditClientId && settings.redditClientSecret
+          ? "Review subreddit posts in source logs after each pipeline run."
+          : "Go to reddit.com/prefs/apps → create app → script type → add REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET to Vercel env vars.",
+      },
+      {
         key: "foreclosure_listings_usa",
         label: "Foreclosure Listings USA",
         state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
