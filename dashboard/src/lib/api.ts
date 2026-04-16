@@ -275,7 +275,7 @@ export async function generateDraft(newsletterId: number): Promise<Draft> {
   );
 }
 
-export async function triggerPipeline(): Promise<{
+export async function triggerPipeline(force = false): Promise<{
   newsletter_id: number;
   issue_number: number;
   draft_id: number;
@@ -285,7 +285,8 @@ export async function triggerPipeline(): Promise<{
   reused_existing: boolean;
   message: string;
 }> {
-  return fetchApi(`/api/pipeline/trigger`, { method: "POST" });
+  const url = force ? `/api/pipeline/trigger?force=true` : `/api/pipeline/trigger`;
+  return fetchApi(url, { method: "POST" });
 }
 
 export async function scheduleNewsletter(newsletterId: number): Promise<{

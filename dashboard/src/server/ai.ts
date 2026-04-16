@@ -1,30 +1,18 @@
-import fs from "fs/promises";
-
 import { getSettings } from "@/server/env";
 import { appendWorkflowLog } from "@/server/logs";
-import { resolveRepoPath } from "@/server/paths";
+import { SECTION_PROMPTS } from "@/server/prompts";
 
-const SECTION_PROMPTS: Record<string, string> = {
-  market_pulse: "market_pulse.txt",
-  top_banks: "top_banks.txt",
-  hot_markets: "hot_markets.txt",
-  industry_news: "industry_news.txt",
-  bank_hiring_intel: "bank_hiring_intel.txt",
-  ufs_spotlight: "ufs_spotlight.txt",
-};
-
-async function loadPrompt(sectionType: string): Promise<string> {
-  const fileName = SECTION_PROMPTS[sectionType];
-  if (!fileName) {
+function loadPrompt(sectionType: string): string {
+  const prompt = SECTION_PROMPTS[sectionType];
+  if (!prompt) {
     throw new Error(`Unknown section type: ${sectionType}`);
   }
-
-  return fs.readFile(resolveRepoPath("api", "prompts", fileName), "utf8");
+  return prompt;
 }
 
 async function draftSection(sectionType: string, sectionData: Record<string, unknown>): Promise<Record<string, unknown>> {
   const settings = getSettings();
-  const promptTemplate = await loadPrompt(sectionType);
+  const promptTemplate = loadPrompt(sectionType);
   let dataString = JSON.stringify(sectionData.data ?? [], null, 2);
 
   if (dataString.length > 15000) {

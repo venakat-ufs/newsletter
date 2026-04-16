@@ -58,11 +58,11 @@ export default function DraftsPage() {
     }
   }
 
-  async function handleTriggerPipeline() {
+  async function handleTriggerPipeline(force = false) {
     try {
       setPipelineRunning(true);
       setPipelineResult(null);
-      const result = await triggerPipeline();
+      const result = await triggerPipeline(force);
       setPipelineResult(result.message);
       await loadDashboard();
     } catch (err) {
@@ -136,13 +136,23 @@ export default function DraftsPage() {
               Create or refresh the current newsletter issue by pulling live data
               from the configured sources.
             </p>
-            <button
-              onClick={handleTriggerPipeline}
-              disabled={pipelineRunning}
-              className="mt-4 rounded-full bg-[#1a1a1a] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#2c2c2c] disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {pipelineRunning ? "Pulling data..." : "Run Step 1"}
-            </button>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                onClick={() => handleTriggerPipeline(false)}
+                disabled={pipelineRunning}
+                className="rounded-full bg-[#1a1a1a] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#2c2c2c] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {pipelineRunning ? "Pulling data..." : "Run Step 1"}
+              </button>
+              <button
+                onClick={() => handleTriggerPipeline(true)}
+                disabled={pipelineRunning}
+                title="Discard existing draft and re-collect all data"
+                className="rounded-full border border-[#72262a]/30 bg-white px-4 py-2.5 text-sm font-semibold text-[#72262a] transition hover:bg-[#f9f0f0] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Force refresh
+              </button>
+            </div>
           </div>
 
           <div className={`rounded-[28px] border p-5 ${stepStyles[1]}`}>
