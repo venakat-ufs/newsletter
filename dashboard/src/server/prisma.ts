@@ -66,7 +66,8 @@ async function readLegacyDatabase(): Promise<DatabaseRecord | null> {
 }
 
 async function importLegacyJsonIfNeeded(): Promise<void> {
-  await fs.mkdir(DATA_DIR, { recursive: true });
+  // DATA_DIR may not be writable (e.g., Vercel /var/task) — ignore mkdir errors
+  await fs.mkdir(DATA_DIR, { recursive: true }).catch(() => undefined);
 
   const newsletterCount = await prisma.newsletter.count();
   if (newsletterCount > 0) {
