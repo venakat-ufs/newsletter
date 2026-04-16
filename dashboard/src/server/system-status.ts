@@ -115,6 +115,17 @@ export async function getSystemStatus(): Promise<{
           : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
       },
       {
+        key: "bid4assets",
+        label: "Bid4Assets (Sheriff & Tax Sales)",
+        state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
+        summary: settings.freeListingSignalsEnabled
+          ? "Bid4Assets county sheriff sales and tax lien auction signals are enabled. Covers CA, FL, PA, TX, and other active auction counties with no login required."
+          : "Free listing-signal collection is disabled.",
+        action: settings.freeListingSignalsEnabled
+          ? "Review sheriff sale and county tax auction listing counts after each pipeline run."
+          : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
+      },
+      {
         key: "news_api",
         label: "News API",
         state: settings.newsApiKey ? "ready" : "blocked",
@@ -177,35 +188,23 @@ export async function getSystemStatus(): Promise<{
       {
         key: "google_jobs",
         label: "Google Jobs Signals",
-        state: settings.freeJobsSourcesEnabled ? "ready" : "blocked",
-        summary: settings.freeJobsSourcesEnabled
-          ? "Free Google Jobs-style search signal collection is enabled."
-          : "Free jobs-source collection is disabled.",
-        action: settings.freeJobsSourcesEnabled
-          ? "Review signal quality and sampled job links in the draft source table."
-          : "Set FREE_JOBS_SOURCES_ENABLED=true to collect Google Jobs-style signals.",
+        state: "blocked",
+        summary: "Removed — permanently returns HTTP 403 on all server-side requests. Cannot be collected without a browser session.",
+        action: "No action available. Source removed from pipeline.",
       },
       {
         key: "ziprecruiter_jobs",
         label: "ZipRecruiter Jobs",
-        state: settings.freeJobsSourcesEnabled ? "ready" : "blocked",
-        summary: settings.freeJobsSourcesEnabled
-          ? "ZipRecruiter job-signal collection is enabled."
-          : "Free jobs-source collection is disabled.",
-        action: settings.freeJobsSourcesEnabled
-          ? "Review signal quality and sampled job links in the draft source table."
-          : "Set FREE_JOBS_SOURCES_ENABLED=true to collect ZipRecruiter signals.",
+        state: "blocked",
+        summary: "Removed — permanently returns HTTP 403 on all server-side requests.",
+        action: "No action available. Source removed from pipeline.",
       },
       {
         key: "company_career_jobs",
         label: "Company Career Pages",
-        state: settings.freeJobsSourcesEnabled ? "ready" : "blocked",
-        summary: settings.freeJobsSourcesEnabled
-          ? "Direct company career-page signal collection is enabled."
-          : "Free jobs-source collection is disabled.",
-        action: settings.freeJobsSourcesEnabled
-          ? "Review top employers from direct career-page signals after pipeline runs."
-          : "Set FREE_JOBS_SOURCES_ENABLED=true to collect company career-page signals.",
+        state: "blocked",
+        summary: "Removed — Wells Fargo and other career sites return HTTP 403 on all server-side requests.",
+        action: "No action available. Source removed from pipeline.",
       },
       {
         key: "usajobs_jobs",

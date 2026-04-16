@@ -29,11 +29,12 @@ const stepClasses: Record<string, string> = {
 };
 
 const groupDescriptions: Record<string, string> = {
-  "Official Inventory": "Direct listing inventory and institution-owned property sources",
+  "Official Inventory": "Direct listing inventory — HUD, Freddie Mac, Bank of America REO, auction platforms, and county sheriff/tax sales",
   "Official Research": "Primary market and policy releases from official organizations",
+  "Hiring Intel": "Job postings across LinkedIn, USAJobs, Greenhouse, and Lever for REO, foreclosure, and default servicing roles",
   "Editorial Headlines": "Published newsroom articles filtered for industry relevance",
-  "Community Signals": "Public community discussion and sentiment",
-  "AI Enrichment": "AI-assisted search signals that should support, not lead, decisions",
+  "Community Signals": "Public community discussion and sentiment from Reddit subreddits",
+  "AI Enrichment": "AI-assisted X search signals that should support, not lead, decisions",
   "Legacy Sources": "Archived source lanes kept only for older stored issues",
 };
 type SourceFilterMode = "all" | "live" | "degraded" | "offline";
@@ -339,7 +340,7 @@ export function IssueCommandCenter({ draft }: { draft: Draft }) {
                             {source.label}
                           </div>
                           <div className="mt-1 text-[11px] leading-4 text-[#76695d]">
-                            {pretextCompact(source.description, 105)}
+                            {pretextCompact(source.description, 160)}
                           </div>
                         </div>
                         <span
@@ -372,14 +373,20 @@ export function IssueCommandCenter({ draft }: { draft: Draft }) {
 
                       <div
                         className={`mt-4 rounded-[18px] px-3 py-3 text-xs leading-5 ${
-                          source.latestError
-                            ? "border border-amber-200 bg-amber-50 text-amber-900"
-                            : "border border-emerald-100 bg-emerald-50 text-emerald-900"
+                          source.mode === "offline"
+                            ? "border border-rose-200 bg-rose-50 text-rose-900"
+                            : source.latestError
+                              ? "border border-amber-200 bg-amber-50 text-amber-900"
+                              : "border border-emerald-100 bg-emerald-50 text-emerald-900"
                         }`}
                       >
-                        {source.latestError
-                          ? `Latest issue: ${source.latestError}`
-                          : "Latest pull completed without source-level errors."}
+                        {source.mode === "offline" && source.latestError
+                          ? `Offline — ${source.latestError}`
+                          : source.mode === "degraded" && source.latestError
+                            ? `Degraded — ${source.latestError}`
+                            : source.latestError
+                              ? `Note: ${source.latestError}`
+                              : "Latest pull completed without source-level errors."}
                       </div>
                     </div>
                   ))}

@@ -126,6 +126,7 @@ const FREE_LISTING_SIGNAL_SOURCES = [
   { key: "xome", label: "Xome", domain: "xome.com" },
   { key: "williams_auction", label: "Williams & Williams Auctions", domain: "williamsauction.com" },
   { key: "real_estate_sales_gov", label: "RealEstateSales.gov (GSA)", domain: "realestatesales.gov" },
+  { key: "bid4assets", label: "Bid4Assets (Sheriff & Tax Sales)", domain: "bid4assets.com" },
   // Public listing portals
   { key: "realtor_foreclosure", label: "Realtor.com Foreclosures", domain: "realtor.com" },
 ];
@@ -149,6 +150,8 @@ const OPTIONAL_NO_SIGNAL_REASON_BY_SOURCE: Record<string, string> = {
     "No live Williams & Williams Auctions pages matched REO/foreclosure signal keywords in this run.",
   real_estate_sales_gov:
     "No live RealEstateSales.gov pages matched REO/foreclosure signal keywords in this run.",
+  bid4assets:
+    "No live Bid4Assets sheriff/tax-sale pages matched REO/foreclosure signal keywords in this run.",
   usajobs_jobs:
     "No matching USAJobs housing/default-servicing roles were found in this run.",
   greenhouse_jobs:
@@ -186,6 +189,7 @@ const FREE_LISTING_SEED_PATHS: Record<string, string[]> = {
   xome: ["/", "/auctions/"],
   williams_auction: ["/", "/properties/", "/reo/"],
   real_estate_sales_gov: ["/", "/auctions/"],
+  bid4assets: ["/sheriffsales", "/county-tax-sales", "/"],
   realtor_foreclosure: ["/foreclosure", "/realestateandhomes-search"],
 };
 const BANK_HIRING_STRONG_KEYWORDS = [
@@ -3261,13 +3265,11 @@ export async function collectAllSources(): Promise<{
   }
 
   if (settings.freeJobsSourcesEnabled) {
+    // google_jobs, ziprecruiter_jobs, company_career_jobs removed — permanently 403 blocked
     const grokIndex = sourceDefinitions.findIndex((definition) => definition.key === "grok");
     sourceDefinitions.splice(
       grokIndex >= 0 ? grokIndex : sourceDefinitions.length,
       0,
-      { key: "google_jobs", optional: true, runner: () => collectGoogleJobsSignals() },
-      { key: "ziprecruiter_jobs", optional: true, runner: () => collectZipRecruiterJobs() },
-      { key: "company_career_jobs", optional: true, runner: () => collectCompanyCareerJobs() },
       { key: "usajobs_jobs", optional: true, runner: () => collectUsaJobsSignals() },
       { key: "greenhouse_jobs", optional: true, runner: () => collectGreenhouseJobsSignals() },
       { key: "lever_jobs", optional: true, runner: () => collectLeverJobsSignals() },
