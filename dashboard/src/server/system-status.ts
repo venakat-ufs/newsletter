@@ -93,11 +93,22 @@ export async function getSystemStatus(): Promise<{
           : "Go to reddit.com/prefs/apps → create app → script type → add REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET to Vercel env vars.",
       },
       {
-        key: "foreclosure_listings_usa",
-        label: "Foreclosure Listings USA",
+        key: "williams_auction",
+        label: "Williams & Williams Auctions",
         state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
         summary: settings.freeListingSignalsEnabled
-          ? "foreclosurelistingsusa.com listing-signal collection is enabled."
+          ? "Williams & Williams REO auction listing signals are enabled."
+          : "Free listing-signal collection is disabled.",
+        action: settings.freeListingSignalsEnabled
+          ? "Review listing signal counts and sample links after each pipeline run."
+          : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
+      },
+      {
+        key: "real_estate_sales_gov",
+        label: "RealEstateSales.gov (GSA)",
+        state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
+        summary: settings.freeListingSignalsEnabled
+          ? "GSA government property auction signals are enabled."
           : "Free listing-signal collection is disabled.",
         action: settings.freeListingSignalsEnabled
           ? "Review listing signal counts and sample links after each pipeline run."
@@ -285,114 +296,11 @@ export async function getSystemStatus(): Promise<{
           : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
       },
       {
-        key: "redfin_foreclosure",
-        label: "Redfin Foreclosures",
-        state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
-        summary: settings.freeListingSignalsEnabled
-          ? "Redfin foreclosure signal collection is enabled."
-          : "Free listing-signal collection is disabled.",
-        action: settings.freeListingSignalsEnabled
-          ? "Review listing signal counts and sample links after each pipeline run."
-          : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
-      },
-      {
-        key: "wells_fargo_reo",
-        label: "Wells Fargo REO",
-        state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
-        summary: settings.freeListingSignalsEnabled
-          ? "Wells Fargo REO signal collection is enabled."
-          : "Free listing-signal collection is disabled.",
-        action: settings.freeListingSignalsEnabled
-          ? "Review listing signal counts after each pipeline run."
-          : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
-      },
-      {
-        key: "chase_reo",
-        label: "Chase REO",
-        state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
-        summary: settings.freeListingSignalsEnabled
-          ? "Chase REO signal collection is enabled."
-          : "Free listing-signal collection is disabled.",
-        action: settings.freeListingSignalsEnabled
-          ? "Review listing signal counts after each pipeline run."
-          : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
-      },
-      {
-        key: "us_bank_reo",
-        label: "US Bank REO",
-        state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
-        summary: settings.freeListingSignalsEnabled
-          ? "US Bank REO signal collection is enabled."
-          : "Free listing-signal collection is disabled.",
-        action: settings.freeListingSignalsEnabled
-          ? "Review listing signal counts after each pipeline run."
-          : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
-      },
-      {
-        key: "mr_cooper_reo",
-        label: "Mr. Cooper",
-        state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
-        summary: settings.freeListingSignalsEnabled
-          ? "Mr. Cooper signal collection is enabled."
-          : "Free listing-signal collection is disabled.",
-        action: settings.freeListingSignalsEnabled
-          ? "Review listing signal counts after each pipeline run."
-          : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
-      },
-      {
-        key: "phh_mortgage_reo",
-        label: "PHH Mortgage",
-        state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
-        summary: settings.freeListingSignalsEnabled
-          ? "PHH Mortgage signal collection is enabled."
-          : "Free listing-signal collection is disabled.",
-        action: settings.freeListingSignalsEnabled
-          ? "Review listing signal counts after each pipeline run."
-          : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
-      },
-      {
-        key: "newrez_shellpoint_reo",
-        label: "NewRez / Shellpoint",
-        state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
-        summary: settings.freeListingSignalsEnabled
-          ? "NewRez / Shellpoint signal collection is enabled."
-          : "Free listing-signal collection is disabled.",
-        action: settings.freeListingSignalsEnabled
-          ? "Review listing signal counts after each pipeline run."
-          : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
-      },
-      {
-        key: "selene_finance_reo",
-        label: "Selene Finance",
-        state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
-        summary: settings.freeListingSignalsEnabled
-          ? "Selene Finance signal collection is enabled."
-          : "Free listing-signal collection is disabled.",
-        action: settings.freeListingSignalsEnabled
-          ? "Review listing signal counts after each pipeline run."
-          : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
-      },
-      {
-        key: "carrington_reo",
-        label: "Carrington Mortgage",
-        state: settings.freeListingSignalsEnabled ? "ready" : "blocked",
-        summary: settings.freeListingSignalsEnabled
-          ? "Carrington Mortgage signal collection is enabled."
-          : "Free listing-signal collection is disabled.",
-        action: settings.freeListingSignalsEnabled
-          ? "Review listing signal counts after each pipeline run."
-          : "Set FREE_LISTING_SIGNALS_ENABLED=true to enable free listing lanes.",
-      },
-      {
         key: "homepath",
-        label: "HomePath",
-        state: settings.homepathEnabled ? "warning" : "blocked",
-        summary: settings.homepathEnabled
-          ? "HomePath collection is enabled, but the site may still block this runtime."
-          : "HomePath is on hold by default because the public site is blocking this runtime.",
-        action: settings.homepathEnabled
-          ? "If it still fails, provide HOMEPATH_COOKIE from an allowed session or disable the lane again."
-          : "Set HOMEPATH_ENABLED=true only if you have an allowed HomePath session.",
+        label: "HomePath (Fannie Mae)",
+        state: "blocked",
+        summary: "HomePath is permanently blocked — fanniemae.com returns 403 CloudFront for all server-side access. This source cannot be collected without a browser session.",
+        action: "No action available. HomePath blocks all automated access.",
       },
       {
         key: "smtp",

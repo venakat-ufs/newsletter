@@ -120,23 +120,14 @@ const BANK_HIRING_COMPANY_CAREER_SITES = [
   { company: "US Bank", domain: "careers.usbank.com" },
 ];
 const FREE_LISTING_SIGNAL_SOURCES = [
+  // Verified active auction/listing platforms
   { key: "auction_com", label: "Auction.com", domain: "auction.com" },
   { key: "hubzu", label: "Hubzu", domain: "hubzu.com" },
   { key: "xome", label: "Xome", domain: "xome.com" },
-  { key: "attom_data", label: "ATTOM Data", domain: "attomdata.com" },
-  { key: "ice_mortgage_tech", label: "ICE Mortgage Tech", domain: "mortgagetech.ice.com" },
-  { key: "reox_directory", label: "REOX Directory", domain: "thereox.com" },
+  { key: "williams_auction", label: "Williams & Williams Auctions", domain: "williamsauction.com" },
+  { key: "real_estate_sales_gov", label: "RealEstateSales.gov (GSA)", domain: "realestatesales.gov" },
+  // Public listing portals
   { key: "realtor_foreclosure", label: "Realtor.com Foreclosures", domain: "realtor.com" },
-  { key: "redfin_foreclosure", label: "Redfin Foreclosures", domain: "redfin.com" },
-  { key: "wells_fargo_reo", label: "Wells Fargo REO", domain: "wellsfargo.com" },
-  { key: "chase_reo", label: "Chase REO", domain: "chase.com" },
-  { key: "us_bank_reo", label: "US Bank REO", domain: "usbank.com" },
-  { key: "mr_cooper_reo", label: "Mr. Cooper", domain: "mrcooper.com" },
-  { key: "phh_mortgage_reo", label: "PHH Mortgage", domain: "phhmortgage.com" },
-  { key: "newrez_shellpoint_reo", label: "NewRez / Shellpoint", domain: "newrez.com" },
-  { key: "selene_finance_reo", label: "Selene Finance", domain: "selenefinance.com" },
-  { key: "carrington_reo", label: "Carrington Mortgage", domain: "carringtonmortgage.com" },
-  { key: "foreclosure_listings_usa", label: "Foreclosure Listings USA", domain: "foreclosurelistingsusa.com" },
 ];
 const FREE_LISTING_SIGNAL_SOURCE_KEYS = new Set(
   FREE_LISTING_SIGNAL_SOURCES.map((source) => source.key),
@@ -154,12 +145,10 @@ const OPTIONAL_NO_SIGNAL_REASON_BY_SOURCE: Record<string, string> = {
     "No matching ZipRecruiter REO/default-servicing job cards were found this run.",
   company_career_jobs:
     "No matching REO/default-servicing roles were found on tracked company career sites.",
-  attom_data:
-    "No live ATTOM pages matched foreclosure/listing signal keywords in this run.",
-  ice_mortgage_tech:
-    "No live ICE Mortgage Technology pages matched foreclosure/listing signal keywords in this run.",
-  reox_directory:
-    "No live REOX directory pages matched REO signal keywords in this run.",
+  williams_auction:
+    "No live Williams & Williams Auctions pages matched REO/foreclosure signal keywords in this run.",
+  real_estate_sales_gov:
+    "No live RealEstateSales.gov pages matched REO/foreclosure signal keywords in this run.",
   usajobs_jobs:
     "No matching USAJobs housing/default-servicing roles were found in this run.",
   greenhouse_jobs:
@@ -189,37 +178,15 @@ const BROAD_LISTING_SIGNAL_KEYWORDS = [
   "property",
 ];
 const BROAD_LISTING_SOURCE_KEYS = new Set([
-  "attom_data",
-  "ice_mortgage_tech",
-  "reox_directory",
-  "redfin_foreclosure",
-  "wells_fargo_reo",
-  "chase_reo",
-  "us_bank_reo",
-  "mr_cooper_reo",
-  "phh_mortgage_reo",
-  "newrez_shellpoint_reo",
-  "selene_finance_reo",
-  "carrington_reo",
+  "realtor_foreclosure",
 ]);
 const FREE_LISTING_SEED_PATHS: Record<string, string[]> = {
   auction_com: ["/residential/", "/search"],
   hubzu: ["/", "/properties/"],
   xome: ["/", "/auctions/"],
-  attom_data: ["/", "/solutions/property-data/", "/news/"],
-  ice_mortgage_tech: ["/", "/resources/", "/products/"],
-  reox_directory: ["/member-directory", "/"],
+  williams_auction: ["/", "/properties/", "/reo/"],
+  real_estate_sales_gov: ["/", "/auctions/"],
   realtor_foreclosure: ["/foreclosure", "/realestateandhomes-search"],
-  redfin_foreclosure: ["/foreclosures", "/news/"],
-  wells_fargo_reo: ["/mortgage/", "/mortgage/real-estate-owned/"],
-  chase_reo: ["/personal/mortgage", "/personal/mortgage/real-estate"],
-  us_bank_reo: ["/home-loans/mortgage", "/home-loans/mortgage/real-estate-owned.html"],
-  mr_cooper_reo: ["/", "/homeowners/"],
-  phh_mortgage_reo: ["/", "/loan-servicing/"],
-  newrez_shellpoint_reo: ["/", "/shellpoint/"],
-  selene_finance_reo: ["/", "/real-estate/"],
-  carrington_reo: ["/", "/buy-a-home/"],
-  foreclosure_listings_usa: ["/", "/listings/", "/foreclosures/"],
 };
 const BANK_HIRING_STRONG_KEYWORDS = [
   "reo",
