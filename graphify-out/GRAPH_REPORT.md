@@ -1,11 +1,11 @@
-# Graph Report - .  (2026-04-16)
+# Graph Report - .  (2026-04-21)
 
 ## Corpus Check
-- 117 files · ~71,345 words
+- 121 files · ~82,571 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 717 nodes · 1550 edges · 82 communities detected
+- 734 nodes · 1567 edges · 92 communities detected
 - Extraction: 72% EXTRACTED · 28% INFERRED · 0% AMBIGUOUS · INFERRED: 436 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
@@ -92,6 +92,16 @@
 - [[_COMMUNITY_Community 79|Community 79]]
 - [[_COMMUNITY_Community 80|Community 80]]
 - [[_COMMUNITY_Community 81|Community 81]]
+- [[_COMMUNITY_Community 82|Community 82]]
+- [[_COMMUNITY_Community 83|Community 83]]
+- [[_COMMUNITY_Community 84|Community 84]]
+- [[_COMMUNITY_Community 85|Community 85]]
+- [[_COMMUNITY_Community 86|Community 86]]
+- [[_COMMUNITY_Community 87|Community 87]]
+- [[_COMMUNITY_Community 88|Community 88]]
+- [[_COMMUNITY_Community 89|Community 89]]
+- [[_COMMUNITY_Community 90|Community 90]]
+- [[_COMMUNITY_Community 91|Community 91]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `SourceResult` - 78 edges
@@ -99,53 +109,53 @@
 3. `DraftStatus` - 25 edges
 4. `Draft` - 25 edges
 5. `NewsletterStatus` - 25 edges
-6. `GrokSource` - 22 edges
-7. `RedditSource` - 22 edges
-8. `fetchWithTimeout()` - 22 edges
+6. `fetchWithTimeout()` - 23 edges
+7. `GrokSource` - 22 edges
+8. `RedditSource` - 22 edges
 9. `Run all data sources and aggregate results.     Returns (raw_data_dict, sources_` - 21 edges
 10. `Async REO collector for new listing-only sources.` - 21 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Base` --uses--> `Article`  [INFERRED]
   api\database.py → api\models\article.py
-- `Article` --uses--> `Publish approved draft content as public article pages.`  [INFERRED]
-  api\models\article.py → api\routes\articles.py
-- `Article` --uses--> `Get all articles for a newsletter.`  [INFERRED]
-  api\models\article.py → api\routes\articles.py
-- `Article` --uses--> `Render a public article page for email click-throughs.`  [INFERRED]
-  api\models\article.py → api\routes\articles.py
-- `Article` --uses--> `Schedule approved newsletter for Mailchimp send (Tuesday 9AM).`  [INFERRED]
-  api\models\article.py → api\routes\newsletter.py
+- `Base` --uses--> `DraftStatus`  [INFERRED]
+  api\database.py → api\models\draft.py
+- `Base` --uses--> `Draft`  [INFERRED]
+  api\database.py → api\models\draft.py
+- `Base` --uses--> `NewsletterStatus`  [INFERRED]
+  api\database.py → api\models\newsletter.py
+- `Base` --uses--> `Newsletter`  [INFERRED]
+  api\database.py → api\models\newsletter.py
 
 ## Communities
 
 ### Community 0 - "Community 0"
-Cohesion: 0.03
-Nodes (61): ABC, Auction Portals Signal Source — checks availability of major REO/foreclosure auc, Probes all major REO/foreclosure auction portals for availability and listing si, BankForeclosuresSaleSource, BaseSource, collect(), Async-safe collect wrapper so both sync and async collectors are supported., Sync wrapper for legacy pipelines. (+53 more)
+Cohesion: 0.06
+Nodes (87): ABC, AuctionPortalsSource, _probe_portal(), Auction Portals Signal Source — checks availability of major REO/foreclosure auc, Probes all major REO/foreclosure auction portals for availability and listing si, Base, BaseSource, collect() (+79 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.1
-Nodes (60): ApprovalAction, ApprovalLog, AudienceTag, SectionType, AuctionPortalsSource, _probe_portal(), Base, BaseModel (+52 more)
-
-### Community 2 - "Community 2"
 Cohesion: 0.08
 Nodes (77): buildListingSeedUrls(), classifyBankHiringFocus(), collectAllSources(), collectBankOfAmericaReo(), collectCompanyCareerJobs(), collectFhfaNews(), collectGoogleJobsSignals(), collectGreenhouseJobsSignals() (+69 more)
 
-### Community 3 - "Community 3"
+### Community 2 - "Community 2"
 Cohesion: 0.1
 Nodes (37): aggregateForSections(), badRequest(), buildHiringMetadata(), buildIndustryNewsMetadata(), buildMarketPulseMetadata(), buildSpotlightMetadata(), buildStructuredSectionMetadata(), decorateDraftSections() (+29 more)
 
-### Community 4 - "Community 4"
+### Community 3 - "Community 3"
 Cohesion: 0.26
 Nodes (24): buildNewsletterHtml(), buildPreviewNewsletterHtmlFromSections(), escapeHtml(), excerptText(), extractBulletPoints(), extractStatSnippets(), formatIssueWeek(), normalizeNavigationUrl() (+16 more)
 
-### Community 5 - "Community 5"
+### Community 4 - "Community 4"
 Cohesion: 0.16
 Nodes (18): absolutize_url(), aggregate_banks(), aggregate_states(), build_property(), clean_text(), dedupe_properties(), detect_status(), extract_bank_mentions() (+10 more)
 
-### Community 6 - "Community 6"
+### Community 5 - "Community 5"
 Cohesion: 0.17
 Nodes (24): asArray(), asNullableString(), asNumber(), asRecord(), asString(), fetchApi(), generateDraft(), getArticles() (+16 more)
+
+### Community 6 - "Community 6"
+Cohesion: 0.14
+Nodes (18): ApprovalAction, ApprovalLog, AudienceTag, SectionType, BaseModel, Base, DeclarativeBase, DraftResponse (+10 more)
 
 ### Community 7 - "Community 7"
 Cohesion: 0.17
@@ -160,204 +170,204 @@ Cohesion: 0.19
 Nodes (4): badRequest(), GET(), parseDraftId(), PATCH()
 
 ### Community 10 - "Community 10"
+Cohesion: 0.17
+Nodes (2): statusDot(), statusLabel()
+
+### Community 11 - "Community 11"
 Cohesion: 0.32
 Nodes (3): get_pinchtab_cookie_header(), PinchTabClient, PinchTabSession
 
-### Community 11 - "Community 11"
+### Community 12 - "Community 12"
 Cohesion: 0.24
 Nodes (8): applyDeterministicHumanEdits(), buildSectionWithDefaults(), deepClone(), escapeRegex(), expectLinkToOpenExpectedTarget(), getTestCredentials(), login(), upsertSection()
 
-### Community 12 - "Community 12"
+### Community 13 - "Community 13"
 Cohesion: 0.31
 Nodes (8): _build_headers(), _collect_listing_items(), _collect_research_items(), _parse_listing_count(), _parse_listing_urls(), _parse_rss_items(), _read_xml_tag(), _strip_tags()
 
-### Community 13 - "Community 13"
+### Community 14 - "Community 14"
 Cohesion: 0.22
 Nodes (2): filterRows(), sortRows()
 
-### Community 14 - "Community 14"
+### Community 15 - "Community 15"
+Cohesion: 0.31
+Nodes (7): _distress_score(), _fetch_tsv(), _latest_period_rows(), Download, decompress, and parse a Redfin gzipped TSV file., Filter to the most recent period and a single property type., Score a market by distress signals relevant to REO activity:     - High inventor, _safe_float()
+
+### Community 16 - "Community 16"
 Cohesion: 0.36
 Nodes (7): main(), _needs_rebuild(), Auto-sync script: rebuilds graphify graph + Obsidian vault when api/ source file, Call graphify's internal rebuild directly (no subprocess needed)., Regenerate the Obsidian vault from the updated graph.json., _rebuild_graph(), _rebuild_vault()
 
-### Community 15 - "Community 15"
-Cohesion: 0.43
-Nodes (7): aggregate_for_sections(), collect_all_legacy_sources(), collect_all_sources(), get_all_sources(), get_source_by_name(), _get_source_data(), run_pipeline()
+### Community 17 - "Community 17"
+Cohesion: 0.32
+Nodes (6): _extract_count(), _extract_json_data(), _flatten_keys(), Try to extract listing count from page HTML., Look for embedded JSON state with listing data., Recursively collect keys from a nested dict.
 
-### Community 16 - "Community 16"
+### Community 18 - "Community 18"
 Cohesion: 0.25
 Nodes (1): POST()
 
-### Community 17 - "Community 17"
+### Community 19 - "Community 19"
 Cohesion: 0.54
 Nodes (7): constantTimeEqual(), createSessionToken(), getAuthConfig(), hexFromBytes(), signValue(), validateCredentials(), verifySessionToken()
 
-### Community 18 - "Community 18"
+### Community 20 - "Community 20"
 Cohesion: 0.46
 Nodes (7): buildHtmlContent(), getCampaignStatus(), getMailchimpBlockReason(), mailchimpHeaders(), nextTuesdayAt9Utc(), requireMailchimpSettings(), scheduleCampaign()
 
-### Community 19 - "Community 19"
+### Community 21 - "Community 21"
 Cohesion: 0.32
 Nodes (3): ensureDatabaseReady(), importLegacyJsonIfNeeded(), readLegacyDatabase()
 
-### Community 20 - "Community 20"
+### Community 22 - "Community 22"
 Cohesion: 0.29
 Nodes (6): collect_source(), collect_sources(), list_sources(), List the available Python source collectors., Run every source collector once and return the live summary., Run a single source collector for manual debugging.
 
-### Community 21 - "Community 21"
+### Community 23 - "Community 23"
 Cohesion: 0.52
 Nodes (6): collect_all_sources(), _collect_source_with_failover(), _dedupe_merged_properties(), _extract_source_payload(), get_new_reo_sources(), _merge_top_banks()
 
-### Community 22 - "Community 22"
+### Community 24 - "Community 24"
+Cohesion: 0.38
+Nodes (2): CountySource, Generic county foreclosure auction engine.      Expected normalized payload:
+
+### Community 25 - "Community 25"
 Cohesion: 0.57
 Nodes (6): buildDraftNewsletterPreview(), createTransporter(), escapeHtml(), normalizeSmtpError(), sendNewsletterPreviewEmail(), sendReviewNotification()
 
-### Community 23 - "Community 23"
+### Community 26 - "Community 26"
 Cohesion: 0.47
 Nodes (5): _draft_section(), generate_ai_draft(), _load_prompt(), Draft a single newsletter section using OpenAI., Generate AI drafts for all 5 newsletter sections.     raw_data should contain a
 
-### Community 24 - "Community 24"
-Cohesion: 0.33
-Nodes (0): 
-
-### Community 25 - "Community 25"
+### Community 27 - "Community 27"
 Cohesion: 0.6
 Nodes (5): getSettings(), parseEnvFile(), toBoolean(), toNumber(), toStringList()
 
-### Community 26 - "Community 26"
+### Community 28 - "Community 28"
+Cohesion: 0.47
+Nodes (3): ensureLogFile(), listWorkflowLogs(), readLogFile()
+
+### Community 29 - "Community 29"
 Cohesion: 0.6
 Nodes (5): getDashboardRoot(), getRepoRoot(), isDashboardRoot(), resolveDashboardPath(), resolveRepoPath()
 
-### Community 27 - "Community 27"
+### Community 30 - "Community 30"
 Cohesion: 0.6
 Nodes (3): fetch_with_scrapling(), fetch_with_stealth_retry(), ScraplingFetchResult
 
-### Community 28 - "Community 28"
+### Community 31 - "Community 31"
+Cohesion: 0.6
+Nodes (3): _fetch_largest_banks(), _fmt_billions(), Federal Reserve / FDIC Large Commercial Banks Source.  Pulls the top 25 U.S. com
+
+### Community 32 - "Community 32"
+Cohesion: 0.6
+Nodes (1): ForeclosureListingsUSASource
+
+### Community 33 - "Community 33"
+Cohesion: 0.6
+Nodes (1): ForeclosureRoverSource
+
+### Community 34 - "Community 34"
+Cohesion: 0.5
+Nodes (3): _probe_agency(), _probe_gsa(), GSA Auctions Source — U.S. General Services Administration property auctions.  G
+
+### Community 35 - "Community 35"
+Cohesion: 0.7
+Nodes (1): HomesForeclosureSource
+
+### Community 36 - "Community 36"
 Cohesion: 0.6
 Nodes (3): _is_relevant(), _parse_rss(), _rss_field()
 
-### Community 29 - "Community 29"
+### Community 37 - "Community 37"
+Cohesion: 0.6
+Nodes (1): PropwireSource
+
+### Community 38 - "Community 38"
 Cohesion: 0.7
 Nodes (1): RealtorForeclosureSource
 
-### Community 30 - "Community 30"
-Cohesion: 0.6
-Nodes (3): ensureLogFile(), listWorkflowLogs(), readLogFile()
-
-### Community 31 - "Community 31"
+### Community 39 - "Community 39"
 Cohesion: 0.4
 Nodes (0): 
 
-### Community 32 - "Community 32"
+### Community 40 - "Community 40"
 Cohesion: 0.67
 Nodes (3): BaseSettings, get_settings(), Settings
 
-### Community 33 - "Community 33"
-Cohesion: 0.83
-Nodes (2): _fetch_largest_banks(), _fmt_billions()
-
-### Community 34 - "Community 34"
+### Community 41 - "Community 41"
 Cohesion: 0.67
-Nodes (2): _probe_agency(), _probe_gsa()
+Nodes (1): BankForeclosuresSaleSource
 
-### Community 35 - "Community 35"
+### Community 42 - "Community 42"
 Cohesion: 0.67
 Nodes (2): _parse_rss(), _rss_field()
 
-### Community 36 - "Community 36"
+### Community 43 - "Community 43"
+Cohesion: 0.67
+Nodes (1): USHUDSource
+
+### Community 44 - "Community 44"
+Cohesion: 0.67
+Nodes (2): handleSubmit(), sanitizeNextPath()
+
+### Community 45 - "Community 45"
 Cohesion: 0.5
 Nodes (0): 
 
-### Community 37 - "Community 37"
+### Community 46 - "Community 46"
 Cohesion: 0.83
 Nodes (3): draftSection(), generateAiDraft(), loadPrompt()
 
-### Community 38 - "Community 38"
+### Community 47 - "Community 47"
 Cohesion: 0.67
 Nodes (2): latestLogForIntegration(), withRecentLogStatus()
 
-### Community 39 - "Community 39"
+### Community 48 - "Community 48"
 Cohesion: 0.67
 Nodes (2): getTestCredentials(), login()
 
-### Community 40 - "Community 40"
-Cohesion: 0.67
-Nodes (0): 
-
-### Community 41 - "Community 41"
+### Community 49 - "Community 49"
 Cohesion: 0.67
 Nodes (2): Kick off weekly data collection from all sources., trigger_pipeline()
 
-### Community 42 - "Community 42"
+### Community 50 - "Community 50"
 Cohesion: 1.0
 Nodes (2): _public_base_url(), publish_articles_from_draft()
 
-### Community 43 - "Community 43"
+### Community 51 - "Community 51"
 Cohesion: 0.67
 Nodes (2): Send email to reviewer when a new AI draft is ready for review., send_review_notification()
 
-### Community 44 - "Community 44"
+### Community 52 - "Community 52"
 Cohesion: 1.0
 Nodes (2): isPublicPath(), proxy()
 
-### Community 45 - "Community 45"
+### Community 53 - "Community 53"
 Cohesion: 1.0
 Nodes (2): handleTriggerPipeline(), loadDashboard()
 
-### Community 46 - "Community 46"
-Cohesion: 0.67
-Nodes (0): 
-
-### Community 47 - "Community 47"
-Cohesion: 0.67
-Nodes (1): load()
-
-### Community 48 - "Community 48"
-Cohesion: 1.0
-Nodes (2): handleSubmit(), sanitizeNextPath()
-
-### Community 49 - "Community 49"
-Cohesion: 0.67
-Nodes (0): 
-
-### Community 50 - "Community 50"
-Cohesion: 1.0
-Nodes (1): Build Obsidian vault from graphify graph.json
-
-### Community 51 - "Community 51"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 52 - "Community 52"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 53 - "Community 53"
-Cohesion: 1.0
-Nodes (0): 
-
 ### Community 54 - "Community 54"
-Cohesion: 1.0
+Cohesion: 0.67
 Nodes (0): 
 
 ### Community 55 - "Community 55"
-Cohesion: 1.0
-Nodes (0): 
+Cohesion: 0.67
+Nodes (1): load()
 
 ### Community 56 - "Community 56"
-Cohesion: 1.0
+Cohesion: 0.67
 Nodes (0): 
 
 ### Community 57 - "Community 57"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (2): getTitle(), TopHeader()
 
 ### Community 58 - "Community 58"
-Cohesion: 1.0
+Cohesion: 0.67
 Nodes (0): 
 
 ### Community 59 - "Community 59"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): Build Obsidian vault from graphify graph.json
 
 ### Community 60 - "Community 60"
 Cohesion: 1.0
@@ -405,7 +415,7 @@ Nodes (0):
 
 ### Community 71 - "Community 71"
 Cohesion: 1.0
-Nodes (1): Collect data from this source. Must not raise — return errors in SourceResult.
+Nodes (0): 
 
 ### Community 72 - "Community 72"
 Cohesion: 1.0
@@ -445,84 +455,126 @@ Nodes (1): Collect data from this source. Must not raise — return errors in So
 
 ### Community 81 - "Community 81"
 Cohesion: 1.0
+Nodes (0): 
+
+### Community 82 - "Community 82"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 83 - "Community 83"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 84 - "Community 84"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 85 - "Community 85"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 86 - "Community 86"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 87 - "Community 87"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 88 - "Community 88"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 89 - "Community 89"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 90 - "Community 90"
+Cohesion: 1.0
+Nodes (1): Collect data from this source. Must not raise — return errors in SourceResult.
+
+### Community 91 - "Community 91"
+Cohesion: 1.0
 Nodes (1): Run collect with error handling so pipeline never crashes from one source.
 
 ## Knowledge Gaps
 - **16 isolated node(s):** `Build Obsidian vault from graphify graph.json`, `Auto-sync script: rebuilds graphify graph + Obsidian vault when api/ source file`, `Call graphify's internal rebuild directly (no subprocess needed).`, `Regenerate the Obsidian vault from the updated graph.json.`, `Kick off weekly data collection from all sources.` (+11 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `Community 50`** (2 nodes): `build_vault.py`, `Build Obsidian vault from graphify graph.json`
+- **Thin community `Community 59`** (2 nodes): `build_vault.py`, `Build Obsidian vault from graphify graph.json`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 51`** (2 nodes): `main.py`, `health()`
+- **Thin community `Community 60`** (2 nodes): `main.py`, `health()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 52`** (2 nodes): `reo.py`, `collect_new_reo_sources()`
+- **Thin community `Community 61`** (2 nodes): `reo.py`, `collect_new_reo_sources()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 53`** (2 nodes): `tmp_check_banks.js`, `getTopBankRows()`
+- **Thin community `Community 62`** (2 nodes): `tmp_check_banks.js`, `getTopBankRows()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 54`** (2 nodes): `page.tsx`, `LegacyDraftListingsPage()`
+- **Thin community `Community 63`** (2 nodes): `page.tsx`, `LegacyDraftListingsPage()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 55`** (2 nodes): `page.tsx`, `ListingsInsightsIssuePage()`
+- **Thin community `Community 64`** (2 nodes): `page.tsx`, `ListingsInsightsIssuePage()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 56`** (2 nodes): `page.tsx`, `NewsInsightsIssuePage()`
+- **Thin community `Community 65`** (2 nodes): `page.tsx`, `NewsInsightsIssuePage()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 57`** (2 nodes): `page.tsx`, `PulseInsightsIssuePage()`
+- **Thin community `Community 66`** (2 nodes): `page.tsx`, `PulseInsightsIssuePage()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 58`** (2 nodes): `ApprovalActions()`, `ApprovalActions.tsx`
+- **Thin community `Community 67`** (2 nodes): `ApprovalActions()`, `ApprovalActions.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 59`** (2 nodes): `DashboardTour.tsx`, `DashboardTour()`
+- **Thin community `Community 68`** (2 nodes): `DashboardTour.tsx`, `DashboardTour()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 60`** (2 nodes): `DraftCard.tsx`, `DraftCard()`
+- **Thin community `Community 69`** (2 nodes): `DraftCard.tsx`, `DraftCard()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 61`** (2 nodes): `EmailPreview.tsx`, `EmailPreview()`
+- **Thin community `Community 70`** (2 nodes): `EmailPreview.tsx`, `EmailPreview()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 62`** (2 nodes): `LogoutButton.tsx`, `LogoutButton()`
+- **Thin community `Community 71`** (2 nodes): `LogoutButton.tsx`, `LogoutButton()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 63`** (2 nodes): `OperationsConsole.tsx`, `buildChecklist()`
+- **Thin community `Community 72`** (2 nodes): `OperationsConsole.tsx`, `buildChecklist()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 64`** (2 nodes): `TopicSourceTable.tsx`, `modeLabel()`
+- **Thin community `Community 73`** (2 nodes): `TopicSourceTable.tsx`, `modeLabel()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 65`** (1 nodes): `start_dev.ps1`
+- **Thin community `Community 74`** (1 nodes): `start_dev.ps1`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 66`** (1 nodes): `start_dev_capture.ps1`
+- **Thin community `Community 75`** (1 nodes): `start_dev_capture.ps1`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 67`** (1 nodes): `test_realtytrac.py`
+- **Thin community `Community 76`** (1 nodes): `test_realtytrac.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 68`** (1 nodes): `__init__.py`
+- **Thin community `Community 77`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 69`** (1 nodes): `__init__.py`
+- **Thin community `Community 78`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 70`** (1 nodes): `__init__.py`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 71`** (1 nodes): `Collect data from this source. Must not raise — return errors in SourceResult.`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 72`** (1 nodes): `__init__.py`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 73`** (1 nodes): `next-env.d.ts`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 74`** (1 nodes): `next.config.ts`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 75`** (1 nodes): `playwright.config.ts`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 76`** (1 nodes): `layout.tsx`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 77`** (1 nodes): `IssueCommandCenter.tsx`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 78`** (1 nodes): `SectionEditor.tsx`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 79`** (1 nodes): `types.ts`
+- **Thin community `Community 79`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 80`** (1 nodes): `Collect data from this source. Must not raise — return errors in SourceResult.`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 81`** (1 nodes): `Run collect with error handling so pipeline never crashes from one source.`
+- **Thin community `Community 81`** (1 nodes): `__init__.py`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 82`** (1 nodes): `next-env.d.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 83`** (1 nodes): `next.config.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 84`** (1 nodes): `playwright.config.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 85`** (1 nodes): `layout.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 86`** (1 nodes): `IssueCommandCenter.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 87`** (1 nodes): `SectionEditor.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 88`** (1 nodes): `prompts.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 89`** (1 nodes): `types.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 90`** (1 nodes): `Collect data from this source. Must not raise — return errors in SourceResult.`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 91`** (1 nodes): `Run collect with error handling so pipeline never crashes from one source.`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `SourceResult` connect `Community 0` to `Community 1`, `Community 29`?**
-  _High betweenness centrality (0.047) - this node is a cross-community bridge._
-- **Why does `BaseSource` connect `Community 0` to `Community 1`, `Community 29`?**
-  _High betweenness centrality (0.023) - this node is a cross-community bridge._
-- **Why does `Article` connect `Community 8` to `Community 1`?**
+- **Why does `SourceResult` connect `Community 0` to `Community 32`, `Community 33`, `Community 34`, `Community 35`, `Community 37`, `Community 38`, `Community 41`, `Community 43`, `Community 15`, `Community 17`, `Community 24`, `Community 31`?**
+  _High betweenness centrality (0.044) - this node is a cross-community bridge._
+- **Why does `BaseSource` connect `Community 0` to `Community 32`, `Community 33`, `Community 34`, `Community 35`, `Community 37`, `Community 38`, `Community 41`, `Community 43`, `Community 15`, `Community 17`, `Community 24`, `Community 31`?**
+  _High betweenness centrality (0.022) - this node is a cross-community bridge._
+- **Why does `Article` connect `Community 8` to `Community 0`, `Community 6`?**
   _High betweenness centrality (0.017) - this node is a cross-community bridge._
 - **Are the 75 inferred relationships involving `SourceResult` (e.g. with `Run all data sources and aggregate results.     Returns (raw_data_dict, sources_` and `Async REO collector for new listing-only sources.`) actually correct?**
   _`SourceResult` has 75 INFERRED edges - model-reasoned connections that need verification._

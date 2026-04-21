@@ -41,7 +41,7 @@ function pct(val: unknown): string {
 
 function deltaColor(val: unknown, _invertGood = false): string {
   const n = parseFloat(String(val ?? "").replace(/,/g, ""));
-  if (isNaN(n) || n === 0) return "text-[#7a7165]";
+  if (isNaN(n) || n === 0) return "text-[#6B7280]";
   const positive = n > 0;
   const good = _invertGood ? !positive : positive;
   return good ? "text-emerald-700" : "text-rose-600";
@@ -61,7 +61,7 @@ function statusLabel(success: boolean, errors: string[]): string {
 
 // ─── Mini bar chart (pure CSS, no lib) ───────────────────────────────────────
 
-function BarChart({ values, labels, color = "#72262a" }: {
+function BarChart({ values, labels, color = "#2563EB" }: {
   values: number[]; labels: string[]; color?: string;
 }) {
   const max = Math.max(...values, 1);
@@ -73,7 +73,7 @@ function BarChart({ values, labels, color = "#72262a" }: {
             className="w-full rounded-t-sm transition-all"
             style={{ height: `${Math.max(2, Math.round((v / max) * 48))}px`, backgroundColor: color }}
           />
-          <span className="text-[7px] text-[#9a8f84] truncate w-full text-center leading-none">{labels[i]}</span>
+          <span className="text-[7px] text-[#9CA3AF] truncate w-full text-center leading-none">{labels[i]}</span>
         </div>
       ))}
     </div>
@@ -86,11 +86,11 @@ function StatCard({ label, value, sub, href }: {
   label: string; value: string; sub?: string; href?: string;
 }) {
   const inner = (
-    <div className={`rounded-xl border border-black/8 bg-white px-4 py-3 shadow-sm h-full ${href ? "hover:shadow-md hover:border-[#72262a]/20 transition cursor-pointer" : ""}`}>
-      <p className="text-[10px] uppercase tracking-[0.15em] text-[#7a6b60]">{label}</p>
-      <p className="mt-1 text-2xl font-bold text-[#1a1a1a] leading-none">{value}</p>
-      {sub && <p className="mt-0.5 text-[10px] text-[#7a7165]">{sub}</p>}
-      {href && <p className="mt-1 text-[9px] text-[#72262a] font-medium">↗ View source</p>}
+    <div className={`rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 shadow-sm h-full ${href ? "hover:shadow-md hover:border-[#2563EB]/30 transition cursor-pointer" : ""}`}>
+      <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6B7280]">{label}</p>
+      <p className="mt-1 text-2xl font-bold text-[#111827] leading-none">{value}</p>
+      {sub && <p className="mt-0.5 text-[10px] text-[#9CA3AF]">{sub}</p>}
+      {href && <p className="mt-1 text-[9px] text-[#2563EB] font-medium">↗ View source</p>}
     </div>
   );
   return href ? (
@@ -104,12 +104,12 @@ function SectionHeader({ label, title, count, sub }: {
   return (
     <div className="flex items-end justify-between">
       <div>
-        <p className="text-[10px] uppercase tracking-[0.18em] text-[#7a6b60]">{label}</p>
-        <h2 className="mt-0.5 text-lg font-semibold text-[#1a1a1a]">{title}</h2>
-        {sub && <p className="mt-0.5 text-[11px] text-[#7a7165]">{sub}</p>}
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6B7280]">{label}</p>
+        <h2 className="mt-0.5 text-lg font-semibold text-[#111827]">{title}</h2>
+        {sub && <p className="mt-0.5 text-[11px] text-[#9CA3AF]">{sub}</p>}
       </div>
       {count !== undefined && (
-        <span className="rounded-full bg-[#f3e7e8] px-2.5 py-0.5 text-[11px] font-semibold text-[#72262a]">
+        <span className="rounded-full bg-[#EFF6FF] px-2.5 py-0.5 text-[11px] font-semibold text-[#2563EB]">
           {count} items
         </span>
       )}
@@ -120,17 +120,17 @@ function SectionHeader({ label, title, count, sub }: {
 function SourceBadge({ snap, name }: { snap: SourceSnapshot | undefined; name: string }) {
   if (!snap) {
     return (
-      <div className="flex items-center gap-2 rounded-lg border border-black/8 bg-[#fbfaf8] px-3 py-2">
+      <div className="flex items-center gap-2 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2">
         <span className="h-2 w-2 rounded-full bg-slate-300 flex-shrink-0" />
-        <span className="text-xs text-[#1a1a1a] font-medium truncate">{name}</span>
-        <span className="ml-auto text-[10px] text-[#9a8f84] shrink-0">—</span>
+        <span className="text-xs text-[#111827] font-medium truncate">{name}</span>
+        <span className="ml-auto text-[10px] text-[#9CA3AF] shrink-0">—</span>
       </div>
     );
   }
   return (
-    <div className="flex items-center gap-2 rounded-lg border border-black/8 bg-[#fbfaf8] px-3 py-2">
+    <div className="flex items-center gap-2 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2">
       <span className={`h-2 w-2 rounded-full flex-shrink-0 ${statusDot(snap.success, snap.errors)}`} />
-      <span className="text-xs text-[#1a1a1a] font-medium truncate">{name}</span>
+      <span className="text-xs text-[#111827] font-medium truncate">{name}</span>
       <span className={`ml-auto text-[10px] shrink-0 ${snap.success ? "text-emerald-700" : "text-rose-600"}`}>
         {statusLabel(snap.success, snap.errors)}
       </span>
@@ -147,7 +147,7 @@ function FredPanel({ snap }: { snap: SourceSnapshot | undefined }) {
     unit: string; recent_observations: Array<{ date: string; value: string }>;
   }>;
   return (
-    <section className="rounded-2xl border border-black/8 bg-white/95 p-4 shadow-sm">
+    <section className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
       <SectionHeader
         label="Federal Reserve — FRED API"
         title="Mortgage Market Indicators"
@@ -164,22 +164,22 @@ function FredPanel({ snap }: { snap: SourceSnapshot | undefined }) {
           const nums = obs.map((o) => parseFloat(o.value)).filter((n) => !isNaN(n));
           const obsLabels = obs.map((o) => o.date.slice(5));
           return (
-            <div key={s.label} className="rounded-xl border border-black/8 bg-white p-3 shadow-sm">
-              <p className="text-[9px] uppercase tracking-[0.12em] text-[#7a6b60] leading-tight">
+            <div key={s.label} className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-3 shadow-sm">
+              <p className="text-[9px] font-semibold uppercase tracking-wider text-[#6B7280] leading-tight">
                 {s.label.split("—")[0].trim().replace(/^Delinquency Rate - /, "").slice(0, 40)}
               </p>
-              <p className="mt-1 text-xl font-bold text-[#1a1a1a]">{display}</p>
-              <p className="text-[10px] text-[#9a8f84]">{s.latest_date}</p>
+              <p className="mt-1 text-xl font-bold text-[#111827]">{display}</p>
+              <p className="text-[10px] text-[#9CA3AF]">{s.latest_date}</p>
               {nums.length > 2 && (
                 <div className="mt-2">
-                  <BarChart values={nums} labels={obsLabels} color="#72262a" />
+                  <BarChart values={nums} labels={obsLabels} color="#2563EB" />
                 </div>
               )}
               <a
                 href="https://fred.stlouisfed.org/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-1.5 block text-[9px] text-[#72262a] font-medium hover:underline"
+                className="mt-1.5 block text-[9px] text-[#2563EB] font-medium hover:underline"
               >
                 ↗ FRED Source
               </a>
@@ -208,7 +208,7 @@ function RedfinStatePanel({ snap }: { snap: SourceSnapshot | undefined }) {
   const stateLabels = top12.map((s) => s.state_code || (s.state || "").slice(0, 3));
 
   return (
-    <section className="rounded-2xl border border-black/8 bg-white/95 p-4 shadow-sm">
+    <section className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
       <SectionHeader
         label={`Redfin Public S3 · ${pulse.period}`}
         title="State Market Snapshot"
@@ -216,13 +216,13 @@ function RedfinStatePanel({ snap }: { snap: SourceSnapshot | undefined }) {
         sub="Median price, inventory, days on market — free public data"
       />
       <div className="mt-3 mb-4">
-        <p className="text-[10px] text-[#7a7165] mb-1.5">Median Sale Price ($K) — Top 12 States by Inventory</p>
-        <BarChart values={prices} labels={stateLabels} color="#3b6e8c" />
+        <p className="text-[10px] text-[#9CA3AF] mb-1.5">Median Sale Price ($K) — Top 12 States by Inventory</p>
+        <BarChart values={prices} labels={stateLabels} color="#3b82f6" />
       </div>
-      <div className="overflow-x-auto rounded-xl border border-black/8">
+      <div className="overflow-x-auto rounded-xl border border-[#E5E7EB]">
         <table className="min-w-full border-separate border-spacing-0 text-xs">
           <thead>
-            <tr className="bg-[#f4f0ea] text-left text-[10px] uppercase tracking-[0.1em] text-[#7a6b60]">
+            <tr className="bg-[#F9FAFB] text-left text-[10px] uppercase tracking-wider text-[#6B7280]">
               <th className="px-3 py-2">State</th>
               <th className="px-3 py-2">Median Price</th>
               <th className="px-3 py-2">YoY</th>
@@ -235,8 +235,8 @@ function RedfinStatePanel({ snap }: { snap: SourceSnapshot | undefined }) {
           </thead>
           <tbody>
             {top12.map((s, i) => (
-              <tr key={s.state || i} className={i % 2 === 0 ? "bg-white" : "bg-[#faf8f6]"}>
-                <td className="px-3 py-1.5 font-semibold text-[#1a1a1a]">{s.state || s.state_code}</td>
+              <tr key={s.state || i} className={i % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"}>
+                <td className="px-3 py-1.5 font-semibold text-[#111827]">{s.state || s.state_code}</td>
                 <td className="px-3 py-1.5">{fmt(s.median_sale_price)}</td>
                 <td className={`px-3 py-1.5 font-semibold ${deltaColor(s.median_sale_price_yoy)}`}>{pct(s.median_sale_price_yoy)}</td>
                 <td className="px-3 py-1.5">{fmt(s.inventory)}</td>
@@ -246,7 +246,7 @@ function RedfinStatePanel({ snap }: { snap: SourceSnapshot | undefined }) {
                 <td className="px-3 py-1.5">
                   <a href="https://redfin-public-data.s3.us-west-2.amazonaws.com/redfin_market_tracker/state_market_tracker.tsv000.gz"
                     target="_blank" rel="noopener noreferrer"
-                    className="text-[10px] text-[#72262a] hover:underline font-medium">↗ S3</a>
+                    className="text-[10px] text-[#2563EB] hover:underline font-medium">↗ S3</a>
                 </td>
               </tr>
             ))}
@@ -270,7 +270,7 @@ function RedfinHotMarketsPanel({ snap }: { snap: SourceSnapshot | undefined }) {
   const countyLabels = top15.map((c) => (c.region || "").replace(" County", "").slice(0, 8));
 
   return (
-    <section className="rounded-2xl border border-black/8 bg-white/95 p-4 shadow-sm">
+    <section className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
       <SectionHeader
         label={`Redfin · ${hm.period}`}
         title="Top Distressed Counties"
@@ -278,13 +278,13 @@ function RedfinHotMarketsPanel({ snap }: { snap: SourceSnapshot | undefined }) {
         sub="High inventory + price drops + extended days on market = distress signal"
       />
       <div className="mt-3 mb-4">
-        <p className="text-[10px] text-[#7a7165] mb-1.5">Distress Score — Top 15 Counties</p>
-        <BarChart values={scores} labels={countyLabels} color="#a83232" />
+        <p className="text-[10px] text-[#9CA3AF] mb-1.5">Distress Score — Top 15 Counties</p>
+        <BarChart values={scores} labels={countyLabels} color="#EF4444" />
       </div>
-      <div className="overflow-x-auto rounded-xl border border-black/8">
+      <div className="overflow-x-auto rounded-xl border border-[#E5E7EB]">
         <table className="min-w-full border-separate border-spacing-0 text-xs">
           <thead>
-            <tr className="bg-[#f4f0ea] text-left text-[10px] uppercase tracking-[0.1em] text-[#7a6b60]">
+            <tr className="bg-[#F9FAFB] text-left text-[10px] uppercase tracking-wider text-[#6B7280]">
               <th className="px-3 py-2">#</th>
               <th className="px-3 py-2">County</th>
               <th className="px-3 py-2">State</th>
@@ -298,12 +298,12 @@ function RedfinHotMarketsPanel({ snap }: { snap: SourceSnapshot | undefined }) {
           </thead>
           <tbody>
             {top15.map((c, i) => (
-              <tr key={c.region || i} className={i % 2 === 0 ? "bg-white" : "bg-[#faf8f6]"}>
-                <td className="px-3 py-1.5 font-bold text-[#72262a]">#{i + 1}</td>
-                <td className="px-3 py-1.5 font-semibold text-[#1a1a1a]">{c.region}</td>
-                <td className="px-3 py-1.5 text-[#5a5048]">{c.state_code}</td>
+              <tr key={c.region || i} className={i % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"}>
+                <td className="px-3 py-1.5 font-bold text-[#2563EB]">#{i + 1}</td>
+                <td className="px-3 py-1.5 font-semibold text-[#111827]">{c.region}</td>
+                <td className="px-3 py-1.5 text-[#374151]">{c.state_code}</td>
                 <td className="px-3 py-1.5">
-                  <span className="rounded-full bg-[#f3e7e8] px-2 py-0.5 text-[10px] font-bold text-[#72262a]">
+                  <span className="rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold text-red-600">
                     {c.distress_score}
                   </span>
                 </td>
@@ -314,7 +314,7 @@ function RedfinHotMarketsPanel({ snap }: { snap: SourceSnapshot | undefined }) {
                 <td className="px-3 py-1.5">
                   <a href="https://redfin-public-data.s3.us-west-2.amazonaws.com/redfin_market_tracker/county_market_tracker.tsv000.gz"
                     target="_blank" rel="noopener noreferrer"
-                    className="text-[10px] text-[#72262a] hover:underline font-medium">↗ S3</a>
+                    className="text-[10px] text-[#2563EB] hover:underline font-medium">↗ S3</a>
                 </td>
               </tr>
             ))}
@@ -338,7 +338,7 @@ function FedLargeBanksPanel({ snap }: { snap: SourceSnapshot | undefined }) {
   const bankLabels = top10.map((b) => String(b.bank_name || "").replace(/,.*/, "").replace(/\s+Bank.*/, "").slice(0, 10));
 
   return (
-    <section className="rounded-2xl border border-black/8 bg-white/95 p-4 shadow-sm">
+    <section className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
       <SectionHeader
         label={`FDIC BankFind · ${block.report_date} · Fed Reserve LCR`}
         title="Top 25 U.S. Commercial Banks"
@@ -346,13 +346,13 @@ function FedLargeBanksPanel({ snap }: { snap: SourceSnapshot | undefined }) {
         sub={`Combined assets of top 25: ${block.total_industry_assets_display || "—"} — institutions holding REO portfolios`}
       />
       <div className="mt-3 mb-4">
-        <p className="text-[10px] text-[#7a7165] mb-1.5">Total Assets ($T) — Top 10 Banks</p>
-        <BarChart values={assets} labels={bankLabels} color="#1e4d6e" />
+        <p className="text-[10px] text-[#9CA3AF] mb-1.5">Total Assets ($T) — Top 10 Banks</p>
+        <BarChart values={assets} labels={bankLabels} color="#1D4ED8" />
       </div>
-      <div className="overflow-x-auto rounded-xl border border-black/8">
+      <div className="overflow-x-auto rounded-xl border border-[#E5E7EB]">
         <table className="min-w-full border-separate border-spacing-0 text-xs">
           <thead>
-            <tr className="bg-[#f4f0ea] text-left text-[10px] uppercase tracking-[0.1em] text-[#7a6b60]">
+            <tr className="bg-[#F9FAFB] text-left text-[10px] uppercase tracking-wider text-[#6B7280]">
               <th className="px-3 py-2">#</th>
               <th className="px-3 py-2">Bank</th>
               <th className="px-3 py-2">State</th>
@@ -365,20 +365,20 @@ function FedLargeBanksPanel({ snap }: { snap: SourceSnapshot | undefined }) {
           </thead>
           <tbody>
             {block.banks.slice(0, 25).map((b, i) => (
-              <tr key={`${String(b.bank_name)}-${i}`} className={i % 2 === 0 ? "bg-white" : "bg-[#faf8f6]"}>
-                <td className="px-3 py-1.5 font-bold text-[#1e4d6e]">{String(b.rank)}</td>
-                <td className="px-3 py-1.5 font-semibold text-[#1a1a1a] max-w-[180px] truncate">{String(b.bank_name)}</td>
-                <td className="px-3 py-1.5 text-[#5a5048]">{String(b.state)}</td>
-                <td className="px-3 py-1.5 font-semibold text-[#1e4d6e]">{String(b.total_assets_display || "—")}</td>
+              <tr key={`${String(b.bank_name)}-${i}`} className={i % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"}>
+                <td className="px-3 py-1.5 font-bold text-[#1D4ED8]">{String(b.rank)}</td>
+                <td className="px-3 py-1.5 font-semibold text-[#111827] max-w-[180px] truncate">{String(b.bank_name)}</td>
+                <td className="px-3 py-1.5 text-[#374151]">{String(b.state)}</td>
+                <td className="px-3 py-1.5 font-semibold text-[#1D4ED8]">{String(b.total_assets_display || "—")}</td>
                 <td className="px-3 py-1.5">{String(b.total_deposits_display || "—")}</td>
                 <td className={`px-3 py-1.5 font-semibold ${Number(b.net_income_thousands || 0) >= 0 ? "text-emerald-700" : "text-rose-600"}`}>
                   {String(b.net_income_display || "—")}
                 </td>
-                <td className="px-3 py-1.5 text-[#9a8f84]">{String(b.report_date)}</td>
+                <td className="px-3 py-1.5 text-[#9CA3AF]">{String(b.report_date)}</td>
                 <td className="px-3 py-1.5">
                   <a href={String(b.source_url || "https://banks.data.fdic.gov/")}
                     target="_blank" rel="noopener noreferrer"
-                    className="text-[10px] text-[#72262a] hover:underline font-medium">↗ FDIC</a>
+                    className="text-[10px] text-[#2563EB] hover:underline font-medium">↗ FDIC</a>
                 </td>
               </tr>
             ))}
@@ -387,9 +387,9 @@ function FedLargeBanksPanel({ snap }: { snap: SourceSnapshot | undefined }) {
       </div>
       <div className="mt-2 flex gap-4 flex-wrap">
         <a href={block.reference_url} target="_blank" rel="noopener noreferrer"
-          className="text-[11px] text-[#5a5048] hover:text-[#72262a] hover:underline">Fed Reserve LCR Release →</a>
+          className="text-[11px] text-[#374151] hover:text-[#2563EB] hover:underline">Fed Reserve LCR Release →</a>
         <a href={block.ffiec_nic_url} target="_blank" rel="noopener noreferrer"
-          className="text-[11px] text-[#5a5048] hover:text-[#72262a] hover:underline">FFIEC NIC Holding Companies →</a>
+          className="text-[11px] text-[#374151] hover:text-[#2563EB] hover:underline">FFIEC NIC Holding Companies →</a>
       </div>
     </section>
   );
@@ -408,7 +408,7 @@ function FdicPanel({ snap }: { snap: SourceSnapshot | undefined }) {
   const bankNames = recent.map((f) => String(f.bank_name || "").split(" ")[0].slice(0, 8));
 
   return (
-    <section className="rounded-2xl border border-black/8 bg-white/95 p-4 shadow-sm">
+    <section className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
       <SectionHeader
         label="FDIC BankFind API"
         title="Recent Bank Failures"
@@ -416,13 +416,13 @@ function FdicPanel({ snap }: { snap: SourceSnapshot | undefined }) {
         sub="Failed banks' assets enter FDIC receivership — REO sold through acquiring institutions"
       />
       <div className="mt-3 mb-4">
-        <p className="text-[10px] text-[#7a7165] mb-1.5">Total Assets ($M) — Most Recent Failures</p>
-        <BarChart values={assets} labels={bankNames} color="#b45309" />
+        <p className="text-[10px] text-[#9CA3AF] mb-1.5">Total Assets ($M) — Most Recent Failures</p>
+        <BarChart values={assets} labels={bankNames} color="#F59E0B" />
       </div>
-      <div className="overflow-x-auto rounded-xl border border-black/8">
+      <div className="overflow-x-auto rounded-xl border border-[#E5E7EB]">
         <table className="min-w-full border-separate border-spacing-0 text-xs">
           <thead>
-            <tr className="bg-[#f4f0ea] text-left text-[10px] uppercase tracking-[0.1em] text-[#7a6b60]">
+            <tr className="bg-[#F9FAFB] text-left text-[10px] uppercase tracking-wider text-[#6B7280]">
               <th className="px-3 py-2">Bank</th>
               <th className="px-3 py-2">Location</th>
               <th className="px-3 py-2">Fail Date</th>
@@ -434,23 +434,23 @@ function FdicPanel({ snap }: { snap: SourceSnapshot | undefined }) {
           </thead>
           <tbody>
             {recent.map((f, i) => (
-              <tr key={`${String(f.bank_name)}-${i}`} className={i % 2 === 0 ? "bg-white" : "bg-[#faf8f6]"}>
-                <td className="px-3 py-1.5 font-semibold text-[#1a1a1a]">{String(f.bank_name)}</td>
-                <td className="px-3 py-1.5 text-[#5a5048]">{String(f.city_state || "")}</td>
+              <tr key={`${String(f.bank_name)}-${i}`} className={i % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"}>
+                <td className="px-3 py-1.5 font-semibold text-[#111827]">{String(f.bank_name)}</td>
+                <td className="px-3 py-1.5 text-[#374151]">{String(f.city_state || "")}</td>
                 <td className="px-3 py-1.5">{String(f.fail_date)}</td>
                 <td className="px-3 py-1.5 font-semibold">
                   {f.total_assets_thousands ? `$${(Number(f.total_assets_thousands) / 1000).toFixed(1)}M` : "—"}
                 </td>
-                <td className="px-3 py-1.5 text-[#5a5048] max-w-[120px] truncate">{String(f.acquiring_institution || "FDIC Receiver")}</td>
+                <td className="px-3 py-1.5 text-[#374151] max-w-[120px] truncate">{String(f.acquiring_institution || "FDIC Receiver")}</td>
                 <td className="px-3 py-1.5">
-                  <span className="rounded-full bg-[#fff3cd] px-2 py-0.5 text-[10px] font-semibold text-[#856404]">
+                  <span className="rounded-full bg-yellow-50 px-2 py-0.5 text-[10px] font-semibold text-yellow-700">
                     {String(f.resolution_type || "FAILURE")}
                   </span>
                 </td>
                 <td className="px-3 py-1.5">
                   <a href={String(f.portal_url || "https://www.fdic.gov/bank/individual/failed/banklist.html")}
                     target="_blank" rel="noopener noreferrer"
-                    className="text-[10px] text-[#72262a] hover:underline font-medium">↗ FDIC</a>
+                    className="text-[10px] text-[#2563EB] hover:underline font-medium">↗ FDIC</a>
                 </td>
               </tr>
             ))}
@@ -470,7 +470,7 @@ function AuctionPortalsPanel({ snap }: { snap: SourceSnapshot | undefined }) {
   if (!block?.portals?.length) return null;
 
   return (
-    <section className="rounded-2xl border border-black/8 bg-white/95 p-4 shadow-sm">
+    <section className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
       <SectionHeader
         label="REO & Foreclosure Auction Portals"
         title="Marketplace Monitor"
@@ -483,25 +483,25 @@ function AuctionPortalsPanel({ snap }: { snap: SourceSnapshot | undefined }) {
           return (
             <a key={i} href={String(p.search_url || p.portal_url || "#")}
               target="_blank" rel="noopener noreferrer"
-              className="group rounded-xl border border-black/8 bg-white p-3 shadow-sm hover:shadow-md hover:border-[#72262a]/25 transition block">
+              className="group rounded-xl border border-[#E5E7EB] bg-white p-3 shadow-sm hover:shadow-md hover:border-[#2563EB]/30 transition block">
               <div className="flex items-center justify-between mb-1.5">
                 <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide ${
-                  ok ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-600"
+                  ok ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-600"
                 }`}>
-                  <span className={`h-1.5 w-1.5 rounded-full ${ok ? "bg-emerald-500" : "bg-rose-400"}`} />
+                  <span className={`h-1.5 w-1.5 rounded-full ${ok ? "bg-emerald-500" : "bg-red-400"}`} />
                   {ok ? "Online" : "Blocked"}
                 </span>
-                <span className="text-[9px] text-[#9a8f84] uppercase tracking-wide">{String(p.category || "")}</span>
+                <span className="text-[9px] text-[#9CA3AF] uppercase tracking-wide">{String(p.category || "")}</span>
               </div>
-              <p className="text-sm font-bold text-[#1a1a1a] group-hover:text-[#72262a] transition leading-tight">{String(p.portal_name)}</p>
-              <p className="mt-1 text-[10px] text-[#7a7165] leading-snug line-clamp-2">{String(p.description || "")}</p>
+              <p className="text-sm font-bold text-[#111827] group-hover:text-[#2563EB] transition leading-tight">{String(p.portal_name)}</p>
+              <p className="mt-1 text-[10px] text-[#6B7280] leading-snug line-clamp-2">{String(p.description || "")}</p>
               <div className="mt-2 flex items-center justify-between">
                 {p.listing_count ? (
-                  <span className="text-[11px] font-bold text-[#1a1a1a]">{Number(p.listing_count).toLocaleString()} listings</span>
+                  <span className="text-[11px] font-bold text-[#111827]">{Number(p.listing_count).toLocaleString()} listings</span>
                 ) : (
-                  <span className="text-[10px] text-[#9a8f84] truncate">{String(p.note || "").slice(0, 30)}</span>
+                  <span className="text-[10px] text-[#9CA3AF] truncate">{String(p.note || "").slice(0, 30)}</span>
                 )}
-                <span className="text-[10px] text-[#72262a] font-medium group-hover:underline shrink-0 ml-1">Browse →</span>
+                <span className="text-[10px] text-[#2563EB] font-medium group-hover:underline shrink-0 ml-1">Browse →</span>
               </div>
             </a>
           );
@@ -520,7 +520,7 @@ function GsaAuctionsPanel({ snap }: { snap: SourceSnapshot | undefined }) {
   if (!block?.portals?.length) return null;
 
   return (
-    <section className="rounded-2xl border border-black/8 bg-white/95 p-4 shadow-sm">
+    <section className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
       <SectionHeader
         label="Federal Government Disposition"
         title="Government Property Auctions"
@@ -533,19 +533,19 @@ function GsaAuctionsPanel({ snap }: { snap: SourceSnapshot | undefined }) {
           return (
             <a key={i} href={String(p.portal_url || "#")}
               target="_blank" rel="noopener noreferrer"
-              className="group rounded-xl border border-black/8 bg-white p-3 shadow-sm hover:shadow-md hover:border-[#1e4d6e]/25 transition block">
+              className="group rounded-xl border border-[#E5E7EB] bg-white p-3 shadow-sm hover:shadow-md hover:border-[#2563EB]/30 transition block">
               <div className="flex items-center gap-2 mb-1.5">
                 <span className={`h-2 w-2 rounded-full shrink-0 ${ok ? "bg-emerald-500" : "bg-slate-300"}`} />
-                <span className="text-[9px] font-bold uppercase tracking-wider text-[#7a6b60]">
+                <span className="text-[9px] font-bold uppercase tracking-wider text-[#6B7280]">
                   {ok ? "Accessible" : "Unavailable"}
                 </span>
               </div>
-              <p className="text-sm font-bold text-[#1a1a1a] group-hover:text-[#1e4d6e] transition leading-tight">{String(p.agency)}</p>
-              <p className="mt-1 text-[10px] text-[#7a7165] leading-snug">{String(p.description || "")}</p>
+              <p className="text-sm font-bold text-[#111827] group-hover:text-[#2563EB] transition leading-tight">{String(p.agency)}</p>
+              <p className="mt-1 text-[10px] text-[#6B7280] leading-snug">{String(p.description || "")}</p>
               {!!p.listing_count && (
-                <p className="mt-1.5 text-[11px] font-bold text-[#1a1a1a]">{Number(p.listing_count).toLocaleString()} auctions</p>
+                <p className="mt-1.5 text-[11px] font-bold text-[#111827]">{Number(p.listing_count).toLocaleString()} auctions</p>
               )}
-              <p className="mt-1.5 text-[10px] text-[#1e4d6e] font-medium group-hover:underline">View auctions →</p>
+              <p className="mt-1.5 text-[10px] text-[#2563EB] font-medium group-hover:underline">View auctions →</p>
             </a>
           );
         })}
@@ -560,7 +560,7 @@ function HomeStepsPanel({ snap }: { snap: SourceSnapshot | undefined }) {
   if (!snap?.data?.length) return null;
   const signal = snap.data[0] as Record<string, unknown>;
   return (
-    <section className="rounded-2xl border border-black/8 bg-white/95 p-4 shadow-sm">
+    <section className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
       <SectionHeader label="Freddie Mac — HomeSteps" title="HomeSteps REO Portal" />
       <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <StatCard label="Portal" value="HomeSteps" sub="Freddie Mac official REO" href="https://www.homesteps.com/homes/search" />
@@ -572,11 +572,11 @@ function HomeStepsPanel({ snap }: { snap: SourceSnapshot | undefined }) {
       </div>
       <div className="mt-3 flex gap-3 flex-wrap">
         <a href="https://www.homesteps.com/homes/search" target="_blank" rel="noopener noreferrer"
-          className="rounded-full border border-[#72262a]/30 bg-[#f3e7e8] px-4 py-1.5 text-xs font-semibold text-[#72262a] transition hover:bg-[#ead8d9]">
+          className="rounded-lg border border-[#BFDBFE] bg-[#EFF6FF] px-4 py-1.5 text-xs font-semibold text-[#2563EB] transition hover:bg-[#DBEAFE]">
           Browse HomeSteps →
         </a>
         <a href="https://www.freddiemac.com/research/indices" target="_blank" rel="noopener noreferrer"
-          className="rounded-full border border-black/10 bg-white px-4 py-1.5 text-xs font-medium text-[#5a5048] transition hover:bg-[#f4f0ea]">
+          className="rounded-lg border border-[#E5E7EB] bg-white px-4 py-1.5 text-xs font-medium text-[#374151] transition hover:bg-[#F9FAFB]">
           Freddie Mac Research →
         </a>
       </div>
@@ -594,30 +594,30 @@ function NewsPanel({ snap, sourceName, sourceUrl }: {
     title: string; url: string; description: string; published_at: string;
   }>;
   return (
-    <div className="rounded-xl border border-black/8 bg-white p-3 shadow-sm flex flex-col">
+    <div className="rounded-xl border border-[#E5E7EB] bg-white p-3 shadow-sm flex flex-col">
       <div className="flex items-center justify-between mb-1">
-        <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#7a6b60]">{sourceName}</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280]">{sourceName}</p>
         {sourceUrl && (
           <a href={sourceUrl} target="_blank" rel="noopener noreferrer"
-            className="text-[9px] text-[#72262a] hover:underline font-medium">↗ Source</a>
+            className="text-[9px] text-[#2563EB] hover:underline font-medium">↗ Source</a>
         )}
       </div>
-      <p className="text-[11px] text-[#6a5f54] mb-2">{snap.data.length} articles</p>
+      <p className="text-[11px] text-[#6B7280] mb-2">{snap.data.length} articles</p>
       <div className="space-y-2">
         {articles.map((a, i) => (
-          <div key={i} className="border-t border-black/6 pt-2 first:border-0 first:pt-0">
+          <div key={i} className="border-t border-[#E5E7EB] pt-2 first:border-0 first:pt-0">
             <a href={a.url} target="_blank" rel="noopener noreferrer"
-              className="text-xs font-semibold text-[#1a1a1a] hover:text-[#72262a] hover:underline leading-tight block">
+              className="text-xs font-semibold text-[#111827] hover:text-[#2563EB] hover:underline leading-tight block">
               {a.title}
             </a>
             {a.description && (
-              <p className="mt-0.5 text-[10px] text-[#7a7165] leading-snug line-clamp-2">{a.description}</p>
+              <p className="mt-0.5 text-[10px] text-[#6B7280] leading-snug line-clamp-2">{a.description}</p>
             )}
             <div className="mt-0.5 flex items-center gap-2">
-              <p className="text-[10px] text-[#9a8f84]">{a.published_at}</p>
+              <p className="text-[10px] text-[#9CA3AF]">{a.published_at}</p>
               {a.url && (
                 <a href={a.url} target="_blank" rel="noopener noreferrer"
-                  className="text-[9px] text-[#72262a] hover:underline">↗ Read</a>
+                  className="text-[9px] text-[#2563EB] hover:underline">↗ Read</a>
               )}
             </div>
           </div>
@@ -686,12 +686,12 @@ export default function DataPage() {
     <div className="space-y-5">
 
       {/* ── Header ── */}
-      <section className="rounded-2xl border border-white/70 bg-white/88 p-5 shadow-[0_16px_50px_rgba(26,26,26,0.10)] backdrop-blur-xl">
+      <section className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="text-[10px] uppercase tracking-[0.2em] text-[#7a6b60]">Live Intelligence</p>
-            <h1 className="mt-1 text-2xl font-semibold text-[#1a1a1a]">Market Data Center</h1>
-            <p className="mt-1 text-sm text-[#6a5f54]">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6B7280]">Live Intelligence</p>
+            <h1 className="mt-1 text-2xl font-semibold text-[#111827]">Market Data Center</h1>
+            <p className="mt-1 text-sm text-[#6B7280]">
               REO market intelligence — {Object.keys(SOURCE_NAMES).length} sources aggregated live
             </p>
             {data && (
@@ -712,25 +712,25 @@ export default function DataPage() {
             )}
           </div>
           <div className="flex items-center gap-3">
-            {lastRun && <span className="text-[11px] text-[#7a7165]">Updated: {lastRun}</span>}
+            {lastRun && <span className="text-[11px] text-[#9CA3AF]">Updated: {lastRun}</span>}
             <button
               onClick={runCollect}
               disabled={loading}
-              className="rounded-full bg-[#72262a] px-5 py-2 text-sm font-semibold text-white shadow transition hover:bg-[#5a1e21] disabled:opacity-60"
+              className="rounded-lg bg-[#2563EB] px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#1D4ED8] disabled:opacity-60"
             >
               {loading ? "Collecting…" : "Refresh All Sources"}
             </button>
           </div>
         </div>
         {error && (
-          <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm text-rose-700">
+          <div className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">
             {error}
           </div>
         )}
       </section>
 
       {/* ── Source Status Grid ── */}
-      <section className="rounded-2xl border border-black/8 bg-white/95 p-4 shadow-sm">
+      <section className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
         <SectionHeader label="Pipeline Health" title="Source Status" count={Object.keys(SOURCE_NAMES).length} />
         <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
           {Object.entries(SOURCE_NAMES).map(([key, name]) => (
@@ -740,7 +740,7 @@ export default function DataPage() {
       </section>
 
       {loading && !data && (
-        <div className="rounded-2xl border border-dashed border-[#d8ccb9] bg-[#fbfaf8] py-16 text-center text-sm text-[#7a7165]">
+        <div className="rounded-xl border border-dashed border-[#D1D5DB] bg-white py-16 text-center text-sm text-[#6B7280]">
           Collecting from {Object.keys(SOURCE_NAMES).length} sources…
         </div>
       )}
@@ -756,7 +756,7 @@ export default function DataPage() {
           <GsaAuctionsPanel snap={src("gsa_auctions")} />
           <HomeStepsPanel snap={src("homesteps")} />
 
-          <section className="rounded-2xl border border-black/8 bg-white/95 p-4 shadow-sm">
+          <section className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
             <SectionHeader
               label="Industry Intelligence"
               title="News & Market Feeds"

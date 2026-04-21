@@ -14,3 +14,5 @@ coverage/
 *.egg-info/
 .pytest_cache/
 data/*.db*
+
+.vercel

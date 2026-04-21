@@ -134,6 +134,10 @@ const FREE_LISTING_SIGNAL_SOURCES = [
   { key: "mtg_law_firm_trustee", label: "MTG Law Firm Trustee Sales (CA)", domain: "salesinformation.mtglawfirm.com" },
   // Public listing portals
   { key: "realtor_foreclosure", label: "Realtor.com Foreclosures", domain: "realtor.com" },
+  // Additional REO & foreclosure listing sources
+  { key: "vrm_va_reo", label: "VRM Properties (VA REO)", domain: "vrmproperties.com" },
+  { key: "equator_reo", label: "Equator REO & Foreclosures", domain: "equator.com" },
+  { key: "propertyonion", label: "PropertyOnion (FL Foreclosures)", domain: "propertyonion.com" },
 ];
 const FREE_LISTING_SIGNAL_SOURCE_KEYS = new Set(
   FREE_LISTING_SIGNAL_SOURCES.map((source) => source.key),
@@ -169,6 +173,9 @@ const OPTIONAL_NO_SIGNAL_REASON_BY_SOURCE: Record<string, string> = {
     "No matching mortgage/default-servicing roles were found on tracked Greenhouse boards.",
   lever_jobs:
     "No matching mortgage/default-servicing roles were found on tracked Lever boards.",
+  vrm_va_reo: "VRM Properties VA REO page returned no listing signals in this run.",
+  equator_reo: "Equator REO search returned no foreclosure listing signals in this run.",
+  propertyonion: "PropertyOnion returned no Florida foreclosure auction signals in this run.",
 };
 const LISTING_SIGNAL_KEYWORDS = [
   "foreclosure",
@@ -193,6 +200,8 @@ const BROAD_LISTING_SIGNAL_KEYWORDS = [
 ];
 const BROAD_LISTING_SOURCE_KEYS = new Set([
   "realtor_foreclosure",
+  "vrm_va_reo",
+  "equator_reo",
 ]);
 const FREE_LISTING_SEED_PATHS: Record<string, string[]> = {
   auction_com: ["/residential/", "/search"],
@@ -206,6 +215,9 @@ const FREE_LISTING_SEED_PATHS: Record<string, string[]> = {
   foreclosure_listings_com: ["/list/FL/", "/list/CA/", "/list/TX/", "/list/GA/", "/list/AZ/"],
   mtg_law_firm_trustee: ["/", "/PendingSales.aspx"],
   realtor_foreclosure: ["/foreclosure", "/realestateandhomes-search"],
+  vrm_va_reo: ["/Properties-For-Sale", "/Properties-For-Sale?state=TX&currentPage=1", "/Properties-For-Sale?state=FL&currentPage=1", "/Properties-For-Sale?state=CA&currentPage=1"],
+  equator_reo: ["/srp?searchString=california&saleType=Foreclosure&autoType=STATE", "/srp?searchString=texas&saleType=Foreclosure&autoType=STATE", "/srp?searchString=florida&saleType=Foreclosure&autoType=STATE", "/srp?nearByFlag=true&saleType=Foreclosure"],
+  propertyonion: ["/", "/property_search/", "/property_search/?state=FL&type=foreclosure"],
 };
 const BANK_HIRING_STRONG_KEYWORDS = [
   "reo",

@@ -39,70 +39,80 @@ export default function ListingsInsightsHubPage() {
   }, []);
 
   return (
-    <div className="space-y-4">
-      <section className="rounded-2xl border border-white/70 bg-white/88 p-4 shadow-[0_16px_50px_rgba(26,26,26,0.10)] backdrop-blur-xl">
-        <div className="flex flex-wrap items-center justify-between gap-2">
+    <div className="space-y-6">
+      <div className="rounded-xl border border-[#E5E7EB] bg-white p-6 shadow-sm sm:p-8">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-[10px] uppercase tracking-[0.18em] text-[#7a6b60]">Insights hub</p>
-            <h1 className="mt-1 text-xl font-semibold text-[#1a1a1a]">Market Pulse + Listings Analytics</h1>
-            <p className="mt-1 text-xs text-[#6a5f54]">
-              Standalone analytics page separated from the newsletter editing flow.
+            <p className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Insights Hub</p>
+            <h1 className="mt-2 text-2xl font-semibold text-[#111827] sm:text-3xl">
+              Market Pulse + Listings Analytics
+            </h1>
+            <p className="mt-2 text-sm leading-6 text-[#6B7280]">
+              Standalone analytics separated from the newsletter editing flow.
             </p>
           </div>
           <Link
             href="/"
-            className="rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs font-semibold text-[#1a1a1a] transition hover:bg-[#f8f4ef]"
+            className="rounded-lg border border-[#E5E7EB] bg-white px-4 py-2 text-sm font-medium text-[#374151] transition hover:bg-[#F9FAFB]"
           >
             Back to dashboard
           </Link>
         </div>
-      </section>
+      </div>
 
       {error ? (
-        <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+        <div className="rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700 shadow-sm">
           {error}
         </div>
       ) : null}
 
-      <section className="rounded-2xl border border-black/8 bg-white/92 p-3 shadow-sm">
-        <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7a6b60]">Select issue</div>
-        <h2 className="mt-1 text-lg font-semibold text-[#1a1a1a]">Open analytics for any newsletter issue</h2>
+      <div className="rounded-xl border border-[#E5E7EB] bg-white shadow-sm">
+        <div className="border-b border-[#E5E7EB] px-6 py-4">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Select issue</p>
+          <h2 className="mt-1 text-lg font-semibold text-[#111827]">
+            Open analytics for any newsletter issue
+          </h2>
+        </div>
 
         {loading ? (
-          <div className="mt-3 rounded-lg border border-dashed border-[#d8ccb9] bg-[#fbfaf8] px-3 py-3 text-xs text-[#6c5f53]">
+          <div className="px-6 py-10 text-center text-sm text-[#6B7280]">
             Loading available issues...
           </div>
         ) : null}
 
         {!loading && drafts.length === 0 ? (
-          <div className="mt-3 rounded-lg border border-dashed border-[#d8ccb9] bg-[#fbfaf8] px-3 py-3 text-xs text-[#6c5f53]">
-            No issues found. Run pipeline first.
+          <div className="px-6 py-10 text-center text-sm text-[#6B7280]">
+            No issues found. Run the pipeline first.
           </div>
         ) : null}
 
         {!loading && drafts.length > 0 ? (
-          <div className="mt-3 overflow-auto rounded-lg border border-black/8">
-            <table className="min-w-full border-separate border-spacing-0 text-xs">
-              <thead>
-                <tr className="bg-[#f4f0ea] text-left uppercase tracking-[0.1em] text-[#7a6b60]">
-                  <th className="px-2.5 py-2">Issue</th>
-                  <th className="px-2.5 py-2">Week</th>
-                  <th className="px-2.5 py-2">Status</th>
-                  <th className="px-2.5 py-2">Action</th>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-[#E5E7EB]">
+              <thead className="bg-[#F9FAFB]">
+                <tr>
+                  <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Issue</th>
+                  <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Week</th>
+                  <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Status</th>
+                  <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Action</th>
                 </tr>
               </thead>
-              <tbody>
-                {drafts.map((draft, index) => (
-                  <tr key={draft.id} className={index % 2 === 0 ? "bg-white" : "bg-[#fcfaf7]"}>
-                    <td className="px-2.5 py-2 font-semibold text-[#1f1f1f]">
+              <tbody className="divide-y divide-[#E5E7EB]">
+                {drafts.map((draft) => (
+                  <tr key={draft.id} className="transition hover:bg-[#F9FAFB]">
+                    <td className="px-6 py-4 text-sm font-semibold text-[#111827]">
                       #{draft.issue_number ?? draft.newsletter_id}
                     </td>
-                    <td className="px-2.5 py-2 text-[#2e2a26]">{getIssueWeekLabel(draft.created_at)}</td>
-                    <td className="px-2.5 py-2 text-[#6d6157]">{draft.status.replaceAll("_", " ")}</td>
-                    <td className="px-2.5 py-2">
+                    <td className="px-6 py-4 text-sm text-[#6B7280]">
+                      {getIssueWeekLabel(draft.created_at)}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-[#6B7280]">
+                      {draft.status.replaceAll("_", " ")}
+                    </td>
+                    <td className="px-6 py-4">
                       <Link
                         href={`/insights/listings/${draft.id}`}
-                        className="rounded-full border border-black/10 bg-white px-2.5 py-1 text-[11px] font-semibold text-[#1a1a1a] transition hover:bg-[#f8f4ef]"
+                        className="rounded-lg bg-[#2563EB] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#1D4ED8]"
                       >
                         Open
                       </Link>
@@ -113,7 +123,7 @@ export default function ListingsInsightsHubPage() {
             </table>
           </div>
         ) : null}
-      </section>
+      </div>
     </div>
   );
 }

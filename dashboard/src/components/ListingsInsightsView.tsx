@@ -135,7 +135,7 @@ function DeltaTag({
   status?: string;
 }) {
   if (status === "insufficient_data") {
-    return <span className="text-[10px] font-semibold text-[#877b70]">Insufficient data</span>;
+    return <span className="text-[10px] font-semibold text-[#9CA3AF]">Insufficient data</span>;
   }
 
   if (status === "unchanged") {
@@ -143,10 +143,10 @@ function DeltaTag({
   }
 
   if (value === null || value === undefined || Number.isNaN(value)) {
-    return <span className="text-[10px] font-semibold text-[#877b70]">Insufficient data</span>;
+    return <span className="text-[10px] font-semibold text-[#9CA3AF]">Insufficient data</span>;
   }
 
-  const tone = value > 0 ? "text-emerald-700" : value < 0 ? "text-rose-700" : "text-[#877b70]";
+  const tone = value > 0 ? "text-emerald-700" : value < 0 ? "text-rose-700" : "text-[#9CA3AF]";
   const arrow = value > 0 ? "↑" : value < 0 ? "↓" : "→";
   const sign = value > 0 ? "+" : "";
 
@@ -169,34 +169,34 @@ function HorizontalBars({
   const maxValue = rows.reduce((max, row) => Math.max(max, row.value), 0) || 1;
 
   return (
-    <section className="rounded-2xl border border-black/8 bg-white/92 p-3 shadow-sm">
-      <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7a6b60]">
+    <section className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
+      <div className="text-[10px] font-semibold uppercase tracking-wider text-[#6B7280]">
         {subtitle}
       </div>
-      <h2 className="mt-1.5 text-lg font-semibold text-[#1a1a1a]">{title}</h2>
-      <div className="mt-2.5 max-h-[260px] space-y-2 overflow-y-auto pr-1">
+      <h2 className="mt-1.5 text-base font-semibold text-[#111827]">{title}</h2>
+      <div className="mt-3 max-h-[260px] space-y-2.5 overflow-y-auto pr-1">
         {rows.length === 0 ? (
-          <div className="rounded-lg border border-dashed border-[#d8ccb9] bg-[#fbfaf8] px-3 py-2 text-xs text-[#6c5f53]">
+          <div className="rounded-lg border border-dashed border-[#D1D5DB] bg-[#F9FAFB] px-3 py-2 text-xs text-[#6B7280]">
             No rows match current filters.
           </div>
         ) : null}
         {rows.map((row, index) => (
           <div key={`${row.name}-${index}`}>
             <div className="mb-1 flex items-center justify-between gap-1.5">
-              <div className="truncate text-sm font-semibold text-[#1a1a1a]">{row.name}</div>
+              <div className="truncate text-sm font-medium text-[#111827]">{row.name}</div>
               <div className="flex items-center gap-1.5">
-                <span className="text-xs font-semibold text-[#51473f]">{pretextCount(row.value)}</span>
+                <span className="text-xs font-semibold text-[#374151]">{pretextCount(row.value)}</span>
                 <DeltaTag value={row.delta} status={row.deltaStatus} />
               </div>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-[#ece8e2]">
+            <div className="h-1.5 overflow-hidden rounded-full bg-[#E5E7EB]">
               <div
-                className="h-full rounded-full bg-[#72262a]"
+                className="h-full rounded-full bg-[#2563EB]"
                 style={{ width: `${Math.max(6, Math.round((row.value / maxValue) * 100))}%` }}
               />
             </div>
             {row.context ? (
-              <div className="mt-0.5 text-[9px] leading-3.5 text-[#7a6d62]">
+              <div className="mt-0.5 text-[10px] text-[#9CA3AF]">
                 {pretextCompact(row.context, 72)}
               </div>
             ) : null}
@@ -217,10 +217,10 @@ function MiniCard({
   detail: string;
 }) {
   return (
-    <div className="rounded-lg border border-black/8 bg-[#fbfaf8] px-3 py-2">
-      <div className="text-[10px] uppercase tracking-[0.12em] text-[#7d7065]">{label}</div>
-      <div className="mt-0.5 text-lg font-semibold text-[#1a1a1a]">{value}</div>
-      <div className="text-[11px] text-[#706458]">{detail}</div>
+    <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3">
+      <div className="text-[10px] font-semibold uppercase tracking-wider text-[#6B7280]">{label}</div>
+      <div className="mt-1 text-xl font-semibold text-[#111827]">{value}</div>
+      <div className="text-xs text-[#9CA3AF]">{detail}</div>
     </div>
   );
 }
@@ -498,7 +498,7 @@ export function ListingsInsightsView({
 
   if (loading) {
     return (
-      <div className="rounded-3xl border border-white/70 bg-white/80 px-5 py-10 text-sm text-[#66584d] shadow-[0_24px_70px_rgba(26,26,26,0.10)]">
+      <div className="rounded-xl border border-[#E5E7EB] bg-white px-5 py-12 text-center text-sm text-[#6B7280] shadow-sm">
         Loading issue intelligence...
       </div>
     );
@@ -506,7 +506,7 @@ export function ListingsInsightsView({
 
   if (error || !draft) {
     return (
-      <div className="rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+      <div className="rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700 shadow-sm">
         {error ?? "Draft not found"}
       </div>
     );
@@ -524,33 +524,31 @@ export function ListingsInsightsView({
     : "Single source of truth for this issue. Newsletter sections and deep pages read from this data.";
 
   return (
-    <div className="space-y-3">
-      <section className="rounded-2xl border border-white/70 bg-white/88 p-4 shadow-[0_16px_50px_rgba(26,26,26,0.10)] backdrop-blur-xl">
-        <div className="flex flex-wrap items-center justify-between gap-2">
+    <div className="space-y-6">
+      <section className="rounded-xl border border-[#E5E7EB] bg-white p-6 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-[10px] uppercase tracking-[0.18em] text-[#7a6b60]">Issue intelligence center</p>
-            <h1 className="mt-1 text-xl font-semibold text-[#1a1a1a]">{pageTitle}</h1>
-            <p className="mt-1 text-xs text-[#685c51]">
-              {pageSubtitle}
-            </p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Issue Intelligence Center</p>
+            <h1 className="mt-2 text-2xl font-semibold text-[#111827]">{pageTitle}</h1>
+            <p className="mt-1 text-sm text-[#6B7280]">{pageSubtitle}</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Link
               href={`/drafts/${draft.id}`}
-              className="rounded-full bg-[#1a1a1a] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#2e2e2e]"
+              className="rounded-lg bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#1D4ED8]"
             >
               Open editor
             </Link>
             <Link
               href={backHref}
-              className="rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs font-semibold text-[#1a1a1a] transition hover:bg-[#f8f4ef]"
+              className="rounded-lg border border-[#E5E7EB] bg-white px-4 py-2 text-sm font-medium text-[#374151] transition hover:bg-[#F9FAFB]"
             >
               {backLabel}
             </Link>
           </div>
         </div>
 
-        <div className="mt-3 grid gap-2 sm:grid-cols-4">
+        <div className="mt-5 grid gap-3 sm:grid-cols-4">
           <MiniCard label="Inventory signals" value={pretextCount(totalInventorySignals)} detail="Tracked listing intensity" />
           <MiniCard label="Top bank volume" value={pretextCount(totalBankSignals)} detail="Institution-level activity" />
           <MiniCard label="Stories" value={pretextCount(newsRows.length)} detail="Industry stories in this issue" />
@@ -558,16 +556,16 @@ export function ListingsInsightsView({
         </div>
 
         {!newsOnly ? (
-          <div className="mt-3 flex flex-wrap gap-1.5">
+          <div className="mt-5 flex flex-wrap gap-1.5">
             {TABS.map((item) => (
               <button
                 key={item.key}
                 type="button"
                 onClick={() => setTab(item.key)}
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
                   tab === item.key
-                    ? "bg-[#72262a] text-white"
-                    : "border border-black/10 bg-white text-[#1a1a1a] hover:bg-[#f8f4ef]"
+                    ? "bg-[#2563EB] text-white"
+                    : "border border-[#E5E7EB] bg-white text-[#374151] hover:bg-[#F9FAFB]"
                 }`}
               >
                 {item.label}
@@ -576,19 +574,19 @@ export function ListingsInsightsView({
           </div>
         ) : null}
 
-        <div className={`mt-3 grid gap-2 ${newsOnly ? "md:grid-cols-1" : "md:grid-cols-4"}`}>
+        <div className={`mt-4 grid gap-2 ${newsOnly ? "md:grid-cols-1" : "md:grid-cols-4"}`}>
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search markets, banks, stories, links..."
-            className="h-9 rounded-lg border border-black/10 bg-white px-3 text-xs text-[#1a1a1a] outline-none focus:border-[#72262a]/55"
+            className="h-9 rounded-lg border border-[#D1D5DB] bg-white px-3 text-xs text-[#111827] outline-none transition focus:border-[#2563EB] focus:ring-2 focus:ring-[#DBEAFE]"
           />
           {!newsOnly ? (
             <>
               <select
                 value={sortMode}
                 onChange={(event) => setSortMode(event.target.value as SortMode)}
-                className="h-9 rounded-lg border border-black/10 bg-white px-3 text-xs text-[#1a1a1a] outline-none focus:border-[#72262a]/55"
+                className="h-9 rounded-lg border border-[#D1D5DB] bg-white px-3 text-xs text-[#111827] outline-none transition focus:border-[#2563EB]"
               >
                 <option value="value_desc">Sort: Highest count</option>
                 <option value="delta_desc">Sort: Highest delta</option>
@@ -597,7 +595,7 @@ export function ListingsInsightsView({
               <select
                 value={String(topN)}
                 onChange={(event) => setTopN(Number(event.target.value))}
-                className="h-9 rounded-lg border border-black/10 bg-white px-3 text-xs text-[#1a1a1a] outline-none focus:border-[#72262a]/55"
+                className="h-9 rounded-lg border border-[#D1D5DB] bg-white px-3 text-xs text-[#111827] outline-none transition focus:border-[#2563EB]"
               >
                 <option value="5">Top 5</option>
                 <option value="8">Top 8</option>
@@ -610,7 +608,7 @@ export function ListingsInsightsView({
                 min={0}
                 onChange={(event) => setMinValue(Math.max(0, Number(event.target.value) || 0))}
                 placeholder="Min value"
-                className="h-9 rounded-lg border border-black/10 bg-white px-3 text-xs text-[#1a1a1a] outline-none focus:border-[#72262a]/55"
+                className="h-9 rounded-lg border border-[#D1D5DB] bg-white px-3 text-xs text-[#111827] outline-none transition focus:border-[#2563EB]"
               />
             </>
           ) : null}
@@ -618,52 +616,52 @@ export function ListingsInsightsView({
       </section>
 
       {tab === "overview" ? (
-        <section className="rounded-2xl border border-black/8 bg-white/92 p-3 shadow-sm">
+        <section className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
           <div className="grid gap-3 lg:grid-cols-3">
-            <div className="rounded-xl border border-black/8 bg-[#fbfaf8] p-3">
-              <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7a6b60]">Market pulse</div>
-              <h2 className="mt-1 text-base font-semibold text-[#1a1a1a]">Inventory build and geographies</h2>
-              <div className="mt-2 text-xs text-[#675a4f]">
+            <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
+              <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Market pulse</div>
+              <h2 className="mt-1 text-base font-semibold text-[#111827]">Inventory build and geographies</h2>
+              <div className="mt-2 text-xs text-[#6B7280]">
                 {marketPulseStats.length > 0
                   ? `${marketPulseStats.length} metrics · ${marketPulseGeos.length} active geographies`
                   : "No market pulse metadata in this issue yet."}
               </div>
               <Link
                 href={`${insightBase}?tab=pulse`}
-                className="mt-3 inline-flex rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs font-semibold text-[#1a1a1a] hover:bg-[#f8f4ef]"
+                className="mt-3 inline-flex rounded-lg border border-[#E5E7EB] bg-white px-3 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F9FAFB]"
               >
                 More Pulse →
               </Link>
             </div>
-            <div className="rounded-xl border border-black/8 bg-[#fbfaf8] p-3">
-              <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7a6b60]">Top banks + hot markets</div>
-              <h2 className="mt-1 text-base font-semibold text-[#1a1a1a]">Servicer movement and county ranking</h2>
-              <div className="mt-2 text-xs text-[#675a4f]">
+            <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
+              <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Top banks + hot markets</div>
+              <h2 className="mt-1 text-base font-semibold text-[#111827]">Servicer movement and county ranking</h2>
+              <div className="mt-2 text-xs text-[#6B7280]">
                 {`${topBanksRows.length} institutions · ${hotMarketRows.length} ranked markets`}
               </div>
               <Link
                 href={`${insightBase}?tab=listings`}
-                className="mt-3 inline-flex rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs font-semibold text-[#1a1a1a] hover:bg-[#f8f4ef]"
+                className="mt-3 inline-flex rounded-lg border border-[#E5E7EB] bg-white px-3 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F9FAFB]"
               >
                 More Listings →
               </Link>
             </div>
-            <div className="rounded-xl border border-black/8 bg-[#fbfaf8] p-3">
-              <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7a6b60]">Industry + hiring intel</div>
-              <h2 className="mt-1 text-base font-semibold text-[#1a1a1a]">Headlines and employer signals</h2>
-              <div className="mt-2 text-xs text-[#675a4f]">
+            <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
+              <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Industry + hiring intel</div>
+              <h2 className="mt-1 text-base font-semibold text-[#111827]">Headlines and employer signals</h2>
+              <div className="mt-2 text-xs text-[#6B7280]">
                 {`${newsRows.length} stories · ${hiringEmployers.length} employers`}
               </div>
               <div className="mt-3 flex flex-wrap gap-2">
                 <Link
                   href={`/insights/news/${draft.id}`}
-                  className="inline-flex rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs font-semibold text-[#1a1a1a] hover:bg-[#f8f4ef]"
+                  className="inline-flex rounded-lg border border-[#E5E7EB] bg-white px-3 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F9FAFB]"
                 >
                   News Page →
                 </Link>
                 <Link
                   href={`${insightBase}?tab=employers`}
-                  className="inline-flex rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs font-semibold text-[#1a1a1a] hover:bg-[#f8f4ef]"
+                  className="inline-flex rounded-lg border border-[#E5E7EB] bg-white px-3 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F9FAFB]"
                 >
                   Employers →
                 </Link>
@@ -681,15 +679,15 @@ export function ListingsInsightsView({
             <HorizontalBars subtitle="Source Network" title="Inventory source intensity" rows={filteredInventory} />
           </div>
 
-          <section className="rounded-2xl border border-black/8 bg-white/92 p-3 shadow-sm">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7a6b60]">Readable representation</div>
-            <h2 className="mt-1 text-lg font-semibold text-[#1a1a1a]">Market Pulse + Listings tables</h2>
+          <section className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
+            <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Readable representation</div>
+            <h2 className="mt-1 text-lg font-semibold text-[#111827]">Market Pulse + Listings tables</h2>
 
             <div className="mt-3 grid gap-3 lg:grid-cols-2">
-              <div className="overflow-auto rounded-lg border border-black/8">
+              <div className="overflow-auto rounded-lg border border-[#E5E7EB]">
                 <table className="min-w-full border-separate border-spacing-0 text-xs">
                   <thead>
-                    <tr className="bg-[#f4f0ea] text-left uppercase tracking-[0.1em] text-[#7a6b60]">
+                    <tr className="bg-[#F9FAFB] text-left uppercase tracking-wider text-[#6B7280]">
                       <th className="px-2.5 py-2">#</th>
                       <th className="px-2.5 py-2">Servicer / Bank</th>
                       <th className="px-2.5 py-2">Listings</th>
@@ -699,11 +697,11 @@ export function ListingsInsightsView({
                   </thead>
                   <tbody>
                     {bankLeaderboard.map((row, index) => (
-                      <tr key={`bank-${row.name}-${index}`} className={index % 2 === 0 ? "bg-white" : "bg-[#fcfaf7]"}>
-                        <td className="px-2.5 py-2 font-semibold text-[#5c4f45]">{index + 1}</td>
-                        <td className="px-2.5 py-2 font-semibold text-[#1f1f1f]">{row.name}</td>
-                        <td className="px-2.5 py-2 text-[#2e2a26]">{pretextCount(row.value)}</td>
-                        <td className="px-2.5 py-2 text-[#6d6157]">{row.context ?? "National"}</td>
+                      <tr key={`bank-${row.name}-${index}`} className={index % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"}>
+                        <td className="px-2.5 py-2 font-semibold text-[#6B7280]">{index + 1}</td>
+                        <td className="px-2.5 py-2 font-semibold text-[#111827]">{row.name}</td>
+                        <td className="px-2.5 py-2 text-[#374151]">{pretextCount(row.value)}</td>
+                        <td className="px-2.5 py-2 text-[#6B7280]">{row.context ?? "National"}</td>
                         <td className="px-2.5 py-2"><DeltaTag value={row.delta} status={row.deltaStatus} /></td>
                       </tr>
                     ))}
@@ -711,10 +709,10 @@ export function ListingsInsightsView({
                 </table>
               </div>
 
-              <div className="overflow-auto rounded-lg border border-black/8">
+              <div className="overflow-auto rounded-lg border border-[#E5E7EB]">
                 <table className="min-w-full border-separate border-spacing-0 text-xs">
                   <thead>
-                    <tr className="bg-[#f4f0ea] text-left uppercase tracking-[0.1em] text-[#7a6b60]">
+                    <tr className="bg-[#F9FAFB] text-left uppercase tracking-wider text-[#6B7280]">
                       <th className="px-2.5 py-2">#</th>
                       <th className="px-2.5 py-2">Market</th>
                       <th className="px-2.5 py-2">Metro</th>
@@ -724,11 +722,11 @@ export function ListingsInsightsView({
                   </thead>
                   <tbody>
                     {marketLeaderboard.map((row, index) => (
-                      <tr key={`market-${row.name}-${index}`} className={index % 2 === 0 ? "bg-white" : "bg-[#fcfaf7]"}>
-                        <td className="px-2.5 py-2 font-semibold text-[#5c4f45]">{index + 1}</td>
-                        <td className="px-2.5 py-2 font-semibold text-[#1f1f1f]">{row.name}</td>
-                        <td className="px-2.5 py-2 text-[#6d6157]">{row.context ?? "Market"}</td>
-                        <td className="px-2.5 py-2 text-[#2e2a26]">{pretextCount(row.value)}</td>
+                      <tr key={`market-${row.name}-${index}`} className={index % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"}>
+                        <td className="px-2.5 py-2 font-semibold text-[#6B7280]">{index + 1}</td>
+                        <td className="px-2.5 py-2 font-semibold text-[#111827]">{row.name}</td>
+                        <td className="px-2.5 py-2 text-[#6B7280]">{row.context ?? "Market"}</td>
+                        <td className="px-2.5 py-2 text-[#374151]">{pretextCount(row.value)}</td>
                         <td className="px-2.5 py-2"><DeltaTag value={row.delta} status={row.deltaStatus} /></td>
                       </tr>
                     ))}
@@ -738,25 +736,25 @@ export function ListingsInsightsView({
             </div>
 
             <div className="mt-3 grid gap-2 md:grid-cols-2">
-              <div className="rounded-lg border border-black/8 bg-[#fbfaf8] px-3 py-2.5">
-                <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#7a6b60]">Top gainers</div>
+              <div className="rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2.5">
+                <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Top gainers</div>
                 <div className="mt-1.5 space-y-1 text-xs">
-                  {marketGainers.length === 0 ? <div className="text-[#7a6d62]">No positive movers in this issue.</div> : null}
+                  {marketGainers.length === 0 ? <div className="text-[#6B7280]">No positive movers in this issue.</div> : null}
                   {marketGainers.map((row) => (
                     <div key={`gain-${row.name}`} className="flex items-center justify-between gap-2">
-                      <span className="font-semibold text-[#1a1a1a]">{row.name}</span>
+                      <span className="font-semibold text-[#111827]">{row.name}</span>
                       <DeltaTag value={row.delta} status={row.deltaStatus} />
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="rounded-lg border border-black/8 bg-[#fbfaf8] px-3 py-2.5">
-                <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#7a6b60]">Top decliners</div>
+              <div className="rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2.5">
+                <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Top decliners</div>
                 <div className="mt-1.5 space-y-1 text-xs">
-                  {marketDecliners.length === 0 ? <div className="text-[#7a6d62]">No negative movers in this issue.</div> : null}
+                  {marketDecliners.length === 0 ? <div className="text-[#6B7280]">No negative movers in this issue.</div> : null}
                   {marketDecliners.map((row) => (
                     <div key={`loss-${row.name}`} className="flex items-center justify-between gap-2">
-                      <span className="font-semibold text-[#1a1a1a]">{row.name}</span>
+                      <span className="font-semibold text-[#111827]">{row.name}</span>
                       <DeltaTag value={row.delta} status={row.deltaStatus} />
                     </div>
                   ))}
@@ -768,13 +766,13 @@ export function ListingsInsightsView({
       ) : null}
 
       {tab === "pulse" ? (
-        <section className="rounded-2xl border border-black/8 bg-white/92 p-3 shadow-sm">
-          <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7a6b60]">Market pulse details</div>
-          <h2 className="mt-1 text-lg font-semibold text-[#1a1a1a]">Inventory, source mix, and geographies</h2>
+        <section className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
+          <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Market pulse details</div>
+          <h2 className="mt-1 text-lg font-semibold text-[#111827]">Inventory, source mix, and geographies</h2>
 
           <div className="mt-3 grid gap-2 md:grid-cols-4">
             {marketPulseStats.length === 0 ? (
-              <div className="md:col-span-4 rounded-lg border border-dashed border-[#d8ccb9] bg-[#fbfaf8] px-3 py-3 text-xs text-[#6c5f53]">
+              <div className="md:col-span-4 rounded-lg border border-dashed border-[#D1D5DB] bg-[#F9FAFB] px-3 py-3 text-xs text-[#6B7280]">
                 No market pulse metrics were generated for this issue.
               </div>
             ) : (
@@ -790,10 +788,10 @@ export function ListingsInsightsView({
           </div>
 
           <div className="mt-3 grid gap-3 lg:grid-cols-2">
-            <div className="overflow-auto rounded-lg border border-black/8">
+            <div className="overflow-auto rounded-lg border border-[#E5E7EB]">
               <table className="min-w-full border-separate border-spacing-0 text-xs">
                 <thead>
-                  <tr className="bg-[#f4f0ea] text-left uppercase tracking-[0.1em] text-[#7a6b60]">
+                  <tr className="bg-[#F9FAFB] text-left uppercase tracking-wider text-[#6B7280]">
                     <th className="px-2.5 py-2">Source</th>
                     <th className="px-2.5 py-2">Active</th>
                     <th className="px-2.5 py-2">Detail</th>
@@ -802,26 +800,26 @@ export function ListingsInsightsView({
                 <tbody>
                   {marketPulseSources.length === 0 ? (
                     <tr>
-                      <td className="px-2.5 py-2.5 text-[#6f6358]" colSpan={3}>
+                      <td className="px-2.5 py-2.5 text-[#6B7280]" colSpan={3}>
                         No source cards available.
                       </td>
                     </tr>
                   ) : null}
                   {marketPulseSources.map((row, index) => (
-                    <tr key={`src-${index}`} className={index % 2 === 0 ? "bg-white" : "bg-[#fcfaf7]"}>
-                      <td className="px-2.5 py-2 font-semibold text-[#1f1f1f]">{asText(row.source, "Source")}</td>
-                      <td className="px-2.5 py-2 text-[#2e2a26]">{pretextCount(asNumber(row.value))}</td>
-                      <td className="px-2.5 py-2 text-[#6e6258]">{asText(row.detail, "-")}</td>
+                    <tr key={`src-${index}`} className={index % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"}>
+                      <td className="px-2.5 py-2 font-semibold text-[#111827]">{asText(row.source, "Source")}</td>
+                      <td className="px-2.5 py-2 text-[#374151]">{pretextCount(asNumber(row.value))}</td>
+                      <td className="px-2.5 py-2 text-[#6B7280]">{asText(row.detail, "-")}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
 
-            <div className="overflow-auto rounded-lg border border-black/8">
+            <div className="overflow-auto rounded-lg border border-[#E5E7EB]">
               <table className="min-w-full border-separate border-spacing-0 text-xs">
                 <thead>
-                  <tr className="bg-[#f4f0ea] text-left uppercase tracking-[0.1em] text-[#7a6b60]">
+                  <tr className="bg-[#F9FAFB] text-left uppercase tracking-wider text-[#6B7280]">
                     <th className="px-2.5 py-2">Geography</th>
                     <th className="px-2.5 py-2">Source</th>
                     <th className="px-2.5 py-2">Value</th>
@@ -830,16 +828,16 @@ export function ListingsInsightsView({
                 <tbody>
                   {marketPulseGeos.length === 0 ? (
                     <tr>
-                      <td className="px-2.5 py-2.5 text-[#6f6358]" colSpan={3}>
+                      <td className="px-2.5 py-2.5 text-[#6B7280]" colSpan={3}>
                         No geography rows available.
                       </td>
                     </tr>
                   ) : null}
                   {marketPulseGeos.map((row, index) => (
-                    <tr key={`geo-${index}`} className={index % 2 === 0 ? "bg-white" : "bg-[#fcfaf7]"}>
-                      <td className="px-2.5 py-2 font-semibold text-[#1f1f1f]">{asText(row.label, "Market")}</td>
-                      <td className="px-2.5 py-2 text-[#6e6258]">{asText(row.sublabel, "-")}</td>
-                      <td className="px-2.5 py-2 text-[#2e2a26]">{pretextCount(asNumber(row.value))}</td>
+                    <tr key={`geo-${index}`} className={index % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"}>
+                      <td className="px-2.5 py-2 font-semibold text-[#111827]">{asText(row.label, "Market")}</td>
+                      <td className="px-2.5 py-2 text-[#6B7280]">{asText(row.sublabel, "-")}</td>
+                      <td className="px-2.5 py-2 text-[#374151]">{pretextCount(asNumber(row.value))}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -851,12 +849,12 @@ export function ListingsInsightsView({
 
       {tab === "news" ? (
         <>
-          <section className="rounded-2xl border border-black/8 bg-white/92 p-3 shadow-sm">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7a6b60]">Industry news</div>
-            <h2 className="mt-1 text-lg font-semibold text-[#1a1a1a]">Full story list</h2>
-            <div className="mt-3 max-h-[360px] space-y-2 overflow-auto rounded-lg border border-black/8 bg-[#fcfaf7] p-2">
+          <section className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
+            <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Industry news</div>
+            <h2 className="mt-1 text-lg font-semibold text-[#111827]">Full story list</h2>
+            <div className="mt-3 max-h-[360px] space-y-2 overflow-auto rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] p-2">
               {newsRows.length === 0 ? (
-                <div className="rounded-lg border border-dashed border-[#d8ccb9] bg-[#fbfaf8] px-3 py-3 text-xs text-[#6c5f53]">
+                <div className="rounded-lg border border-dashed border-[#D1D5DB] bg-[#F9FAFB] px-3 py-3 text-xs text-[#6B7280]">
                   No stories available for this issue yet.
                 </div>
               ) : null}
@@ -868,26 +866,26 @@ export function ListingsInsightsView({
                   <div
                     className={`rounded-lg border px-3 py-2 ${
                       story.url
-                        ? "border-black/8 bg-white transition hover:border-[#cdbfae] hover:bg-[#fff8f0]"
-                        : "border-black/8 bg-white"
+                        ? "border-[#E5E7EB] bg-white transition hover:border-[#BFDBFE] hover:bg-[#EFF6FF]"
+                        : "border-[#E5E7EB] bg-white"
                     }`}
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="rounded-full bg-[#f4f0ea] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6d6055]">
+                      <span className="rounded-full bg-[#F3F4F6] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#6B7280]">
                         {story.source}
                       </span>
-                      <div className="flex items-center gap-1.5 text-[10px] text-[#7a6d62]">
+                      <div className="flex items-center gap-1.5 text-[10px] text-[#6B7280]">
                         {storyDomain ? <span>{storyDomain}</span> : null}
                         <span>{storyDate}</span>
-                        <span className="font-semibold uppercase tracking-[0.1em] text-[#72262a]">
+                        <span className="font-semibold uppercase tracking-wider text-[#2563EB]">
                           {newsOnly ? "Open" : "News Page"}
                         </span>
                       </div>
                     </div>
-                    <div className="mt-1 text-sm font-semibold text-[#1f1f1f]">
+                    <div className="mt-1 text-sm font-semibold text-[#111827]">
                       {pretextCompact(story.headline, 140)}
                     </div>
-                    <div className="mt-1 text-[11px] leading-5 text-[#6e6258]">
+                    <div className="mt-1 text-[11px] leading-5 text-[#6B7280]">
                       {pretextCompact(story.summary || story.headline, 180)}
                     </div>
                   </div>
@@ -921,13 +919,13 @@ export function ListingsInsightsView({
       ) : null}
 
       {tab === "employers" ? (
-        <section className="rounded-2xl border border-black/8 bg-white/92 p-3 shadow-sm">
-          <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7a6b60]">Bank hiring intel</div>
-          <h2 className="mt-1 text-lg font-semibold text-[#1a1a1a]">Employers and role signals</h2>
-          <div className="mt-3 max-h-[360px] overflow-auto rounded-lg border border-black/8">
+        <section className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
+          <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Bank hiring intel</div>
+          <h2 className="mt-1 text-lg font-semibold text-[#111827]">Employers and role signals</h2>
+          <div className="mt-3 max-h-[360px] overflow-auto rounded-lg border border-[#E5E7EB]">
             <table className="min-w-full border-separate border-spacing-0 text-xs">
               <thead>
-                <tr className="bg-[#f4f0ea] text-left uppercase tracking-[0.1em] text-[#7a6b60]">
+                <tr className="bg-[#F9FAFB] text-left uppercase tracking-wider text-[#6B7280]">
                   <th className="px-2.5 py-2">Employer</th>
                   <th className="px-2.5 py-2">Jobs</th>
                   <th className="px-2.5 py-2">Focus</th>
@@ -937,7 +935,7 @@ export function ListingsInsightsView({
               <tbody>
                 {hiringEmployers.length === 0 ? (
                   <tr>
-                    <td className="px-2.5 py-2.5 text-[#6f6358]" colSpan={4}>
+                    <td className="px-2.5 py-2.5 text-[#6B7280]" colSpan={4}>
                       No hiring metadata available yet.
                     </td>
                   </tr>
@@ -958,15 +956,15 @@ export function ListingsInsightsView({
                     label: sampleRoles[roleIndex] ?? `Job listing ${roleIndex + 1}`,
                   }));
                   return (
-                    <tr key={`emp-${index}`} className={index % 2 === 0 ? "bg-white" : "bg-[#fcfaf7]"}>
-                      <td className="px-2.5 py-2 font-semibold text-[#1f1f1f]">
+                    <tr key={`emp-${index}`} className={index % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"}>
+                      <td className="px-2.5 py-2 font-semibold text-[#111827]">
                         {firstJobUrl ? (
                           <div className="space-y-0.5">
                             <a
                               href={firstJobUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-[#1f1f1f] hover:text-[#72262a] hover:underline"
+                              className="text-[#111827] hover:text-[#2563EB] hover:underline"
                             >
                               {asText(row.company, "Employer")}
                             </a>
@@ -974,7 +972,7 @@ export function ListingsInsightsView({
                               href={firstJobUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex text-[10px] font-semibold uppercase tracking-[0.08em] text-[#72262a] hover:underline"
+                              className="inline-flex text-[10px] font-semibold uppercase tracking-wider text-[#2563EB] hover:underline"
                             >
                               Open hiring page
                             </a>
@@ -983,14 +981,14 @@ export function ListingsInsightsView({
                           asText(row.company, "Employer")
                         )}
                       </td>
-                      <td className="px-2.5 py-2 text-[#2e2a26]">{pretextCount(asNumber(row.total_jobs))}</td>
-                      <td className="px-2.5 py-2 text-[#6e6258]">
+                      <td className="px-2.5 py-2 text-[#374151]">{pretextCount(asNumber(row.total_jobs))}</td>
+                      <td className="px-2.5 py-2 text-[#6B7280]">
                         {focusRows.length > 0 ? (
                           <div className="flex flex-wrap gap-1">
                             {focusRows.map((focus, focusIndex) => (
                               <span
                                 key={`focus-${index}-${focusIndex}`}
-                                className="rounded-full bg-[#f4f0ea] px-2 py-0.5 text-[10px] text-[#6d6157]"
+                                className="rounded-full bg-[#F3F4F6] px-2 py-0.5 text-[10px] text-[#6B7280]"
                               >
                                 {pretextCompact(focus, 26)}
                               </span>
@@ -1000,7 +998,7 @@ export function ListingsInsightsView({
                           "-"
                         )}
                       </td>
-                      <td className="px-2.5 py-2 text-[#6e6258]">
+                      <td className="px-2.5 py-2 text-[#6B7280]">
                         {linkedRoles.length > 0 ? (
                           <div className="flex flex-wrap gap-1.5">
                             {linkedRoles.map((role, roleIndex) => (
@@ -1009,7 +1007,7 @@ export function ListingsInsightsView({
                                 href={role.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex rounded-md border border-[#72262a]/25 bg-[#fff7f1] px-2 py-1 text-[11px] font-semibold text-[#72262a] transition hover:bg-[#f9eee5]"
+                                className="inline-flex rounded-lg border border-[#BFDBFE] bg-[#EFF6FF] px-3 py-1 text-[11px] font-semibold text-[#2563EB] transition hover:bg-[#DBEAFE]"
                               >
                                 {pretextCompact(role.label, 42)}
                               </a>
@@ -1029,16 +1027,16 @@ export function ListingsInsightsView({
       ) : null}
 
       {tab === "sources" ? (
-        <section className="rounded-2xl border border-black/8 bg-white/92 p-3 shadow-sm">
+        <section className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7a6b60]">Source links explorer</div>
-              <h2 className="mt-1 text-lg font-semibold text-[#1a1a1a]">Raw source URLs and listing links</h2>
+              <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Source links explorer</div>
+              <h2 className="mt-1 text-lg font-semibold text-[#111827]">Raw source URLs and listing links</h2>
             </div>
             <select
               value={sourceFilter}
               onChange={(event) => setSourceFilter(event.target.value)}
-              className="h-8 rounded-lg border border-black/10 bg-white px-2.5 text-xs text-[#1a1a1a] outline-none focus:border-[#72262a]/55"
+              className="h-8 rounded-lg border border-[#D1D5DB] bg-white px-2.5 text-xs text-[#111827] outline-none transition focus:border-[#2563EB]"
             >
               <option value="all">All sources</option>
               {sourceFilterOptions.map((option) => (
@@ -1049,10 +1047,10 @@ export function ListingsInsightsView({
             </select>
           </div>
 
-          <div className="mt-3 max-h-[380px] overflow-auto rounded-lg border border-black/8">
+          <div className="mt-3 max-h-[380px] overflow-auto rounded-lg border border-[#E5E7EB]">
             <table className="min-w-full border-separate border-spacing-0 text-xs">
               <thead>
-                <tr className="bg-[#f4f0ea] text-left uppercase tracking-[0.1em] text-[#7a6b60]">
+                <tr className="bg-[#F9FAFB] text-left uppercase tracking-wider text-[#6B7280]">
                   <th className="px-2.5 py-2">Source</th>
                   <th className="px-2.5 py-2">Label</th>
                   <th className="px-2.5 py-2">Type</th>
@@ -1062,27 +1060,27 @@ export function ListingsInsightsView({
               <tbody>
                 {filteredSourceLinks.length === 0 ? (
                   <tr>
-                    <td className="px-2.5 py-2.5 text-[#6f6358]" colSpan={4}>
+                    <td className="px-2.5 py-2.5 text-[#6B7280]" colSpan={4}>
                       No source links match current filters.
                     </td>
                   </tr>
                 ) : null}
                 {filteredSourceLinks.slice(0, 250).map((row, index) => (
-                  <tr key={`${row.source}-${row.url}-${index}`} className={index % 2 === 0 ? "bg-white" : "bg-[#fcfaf7]"}>
-                    <td className="px-2.5 py-2 font-semibold text-[#1f1f1f]">{row.source}</td>
+                  <tr key={`${row.source}-${row.url}-${index}`} className={index % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"}>
+                    <td className="px-2.5 py-2 font-semibold text-[#111827]">{row.source}</td>
                     <td className="px-2.5 py-2">
                       <a
                         href={row.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="block -mx-1 rounded-md px-1 py-1 transition hover:bg-[#f5efe7]"
+                        className="block -mx-1 rounded-md px-1 py-1 transition hover:bg-[#F9FAFB]"
                       >
-                        <div className="font-semibold text-[#2e2a26]">{pretextCompact(row.label, 64)}</div>
-                        <div className="mt-0.5 text-[10px] text-[#7a6d62]">{pretextCompact(row.url, 80)}</div>
+                        <div className="font-semibold text-[#374151]">{pretextCompact(row.label, 64)}</div>
+                        <div className="mt-0.5 text-[10px] text-[#6B7280]">{pretextCompact(row.url, 80)}</div>
                       </a>
                     </td>
-                    <td className="px-2.5 py-2 text-[#6d6157]">
-                      <span className="rounded-full bg-[#f4f0ea] px-2 py-0.5 text-[10px] uppercase tracking-[0.08em]">
+                    <td className="px-2.5 py-2 text-[#6B7280]">
+                      <span className="rounded-full bg-[#F3F4F6] px-2 py-0.5 text-[10px] uppercase tracking-wider">
                         {row.type}
                       </span>
                     </td>
@@ -1091,7 +1089,7 @@ export function ListingsInsightsView({
                         href={row.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex rounded-md border border-[#72262a]/25 bg-[#fff7f1] px-2 py-1 text-[11px] font-semibold text-[#72262a] transition hover:bg-[#f9eee5]"
+                        className="inline-flex rounded-lg border border-[#BFDBFE] bg-[#EFF6FF] px-3 py-1 text-[11px] font-semibold text-[#2563EB] transition hover:bg-[#DBEAFE]"
                       >
                         Open source
                       </a>

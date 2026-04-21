@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import Link from "next/link";
 import Script from "next/script";
 
-import { LogoutButton } from "@/components/LogoutButton";
+import { SidebarNav } from "@/components/SidebarNav";
+import { TopHeader } from "@/components/TopHeader";
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/server/auth";
 
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "The Disposition Desk — Newsletter Dashboard",
+  title: "United FFS — Dashboard",
   description: "UFS Weekly REO Newsletter Management System",
 };
 
@@ -25,7 +25,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className="antialiased min-h-screen text-[#1a1a1a]"
+        className="antialiased min-h-screen text-[#111827]"
       >
         <Script id="strip-extension-user-select-style" strategy="beforeInteractive">
           {`
@@ -77,65 +77,24 @@ export default async function RootLayout({
           `}
         </Script>
 
-        <nav
-          suppressHydrationWarning
-          className="sticky top-0 z-20 border-b border-[rgba(255,255,255,0.08)] bg-[rgba(26,26,26,0.92)] text-white backdrop-blur-xl shadow-[0_12px_40px_rgba(26,26,26,0.22)]"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-4">
-                <Link href="/" className="group flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-sm bg-[#72262a] text-sm font-semibold ring-1 ring-white/10 transition group-hover:bg-[#5a1e1f]">
-                    UFS
-                  </span>
-                  <div>
-                    <div className="font-display text-lg font-semibold leading-none">
-                      The Disposition Desk
-                    </div>
-                    <div className="text-xs uppercase tracking-[0.28em] text-white/45">
-                      Editorial Console
-                    </div>
-                  </div>
-                </Link>
-              </div>
-              {session ? (
-                <div className="flex items-center gap-2">
-                  <Link
-                    href="/"
-                    className="rounded-full px-4 py-2 text-sm font-medium text-white/72 transition hover:bg-white/8 hover:text-white"
-                  >
-                    Drafts
-                  </Link>
-                  <Link
-                    href="/history"
-                    className="rounded-full px-4 py-2 text-sm font-medium text-white/72 transition hover:bg-white/8 hover:text-white"
-                  >
-                    History
-                  </Link>
-                  <Link
-                    href="/data"
-                    className="rounded-full px-4 py-2 text-sm font-medium text-white/72 transition hover:bg-white/8 hover:text-white"
-                  >
-                    Data
-                  </Link>
-                  <Link
-                    href="/?tour=1"
-                    className="rounded-full px-4 py-2 text-sm font-medium text-white/72 transition hover:bg-white/8 hover:text-white"
-                  >
-                    Tour
-                  </Link>
-                  <LogoutButton />
-                </div>
-              ) : null}
+        {session ? (
+          <div className="flex min-h-screen">
+            <SidebarNav />
+            <div
+              style={{ marginLeft: "var(--sidebar-w)" }}
+              className="flex-1 flex flex-col min-h-screen"
+            >
+              <TopHeader />
+              <main suppressHydrationWarning className="flex-1 p-6 lg:p-8">
+                {children}
+              </main>
             </div>
           </div>
-        </nav>
-        <main
-          suppressHydrationWarning
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10"
-        >
-          {children}
-        </main>
+        ) : (
+          <main suppressHydrationWarning className="min-h-screen">
+            {children}
+          </main>
+        )}
       </body>
     </html>
   );
