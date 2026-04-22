@@ -13,11 +13,7 @@ function sanitizeNextPath(value: string | null): string {
 
 function UnitedLogo() {
   return (
-    <svg width="44" height="44" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="4" width="8" height="30" rx="1" fill="#C4A87A" />
-      <rect x="15" y="10" width="8" height="24" rx="1" fill="rgba(255,255,255,0.6)" />
-      <rect x="26" y="17" width="8" height="17" rx="1" fill="rgba(255,255,255,0.35)" />
-    </svg>
+    <img src="/logo.jpeg" alt="United Field Services" width={56} height={56} style={{ objectFit: "contain" }} />
   );
 }
 
@@ -69,16 +65,8 @@ export default function LoginPage() {
       <div className="grid w-full max-w-4xl overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-sm md:grid-cols-[1fr_1fr]">
         {/* Left panel */}
         <div className="bg-[#1C1C1E] p-10 text-white flex flex-col justify-between">
-          <div className="flex items-center gap-3">
+          <div className="inline-block rounded-xl bg-white p-2">
             <UnitedLogo />
-            <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">
-                Field Services
-              </div>
-              <div className="text-xl font-bold tracking-wide leading-none text-white">
-                UNITED
-              </div>
-            </div>
           </div>
 
           <div className="mt-12">

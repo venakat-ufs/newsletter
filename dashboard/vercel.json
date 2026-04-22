@@ -1,0 +1,15 @@
+{
+  "framework": "nextjs",
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "memory": 512,
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/system/status",
+      "headers": [{ "key": "Cache-Control", "value": "s-maxage=30, stale-while-revalidate=60" }]
+    }
+  ]
+}

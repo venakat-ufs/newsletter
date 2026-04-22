@@ -50,9 +50,7 @@ export const prisma =
     datasourceUrl: normalizeDatabaseUrl(getSettings().databaseUrl),
   });
 
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.__ufsPrisma = prisma;
-}
+globalForPrisma.__ufsPrisma = prisma;
 
 let initializationPromise: Promise<void> | null = null;
 

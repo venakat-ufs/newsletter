@@ -61,14 +61,7 @@ const NAV_ITEMS = [
 
 function UnitedLogo() {
   return (
-    <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Leftmost bar — tallest, darkest maroon */}
-      <rect x="4" y="4" width="8" height="30" rx="1" fill="#3D1010" />
-      {/* Middle bar — medium height, dark maroon */}
-      <rect x="15" y="10" width="8" height="24" rx="1" fill="#7A2A2A" />
-      {/* Right bar — shortest, tan/cream */}
-      <rect x="26" y="17" width="8" height="17" rx="1" fill="#C4A87A" />
-    </svg>
+    <img src="/logo.jpeg" alt="United Field Services" width={42} height={42} style={{ objectFit: "contain" }} />
   );
 }
 
@@ -86,11 +79,8 @@ export function SidebarNav() {
       className="fixed top-0 left-0 h-screen bg-white border-r border-[#E5E7EB] flex flex-col z-20"
     >
       {/* Logo */}
-      <div className="flex items-center gap-3 px-5 py-5 border-b border-[#E5E7EB]">
+      <div className="flex items-center px-4 py-4 border-b border-[#E5E7EB]">
         <UnitedLogo />
-        <span className="font-bold text-[#111827] text-lg tracking-wide leading-none">
-          UNITED
-        </span>
       </div>
 
       {/* Nav label */}
