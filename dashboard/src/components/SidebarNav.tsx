@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -61,7 +62,7 @@ const NAV_ITEMS = [
 
 function UnitedLogo() {
   return (
-    <img src="/logo.jpeg" alt="United Field Services" width={42} height={42} style={{ objectFit: "contain" }} />
+    <Image src="/logo.jpeg" alt="United Field Services" width={120} height={52} style={{ objectFit: "contain" }} />
   );
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 
@@ -13,7 +14,7 @@ function sanitizeNextPath(value: string | null): string {
 
 function UnitedLogo() {
   return (
-    <img src="/logo.jpeg" alt="United Field Services" width={56} height={56} style={{ objectFit: "contain" }} />
+    <Image src="/logo.jpeg" alt="United Field Services" width={160} height={80} style={{ objectFit: "contain" }} />
   );
 }
 
@@ -94,10 +95,6 @@ export default function LoginPage() {
           <h2 className="mt-3 text-2xl font-semibold text-[#111827]">
             Sign in
           </h2>
-          <p className="mt-2 text-sm leading-6 text-[#6B7280]">
-            Use the admin credentials from the repo root <code className="rounded bg-[#F3F4F6] px-1 py-0.5 text-xs font-mono">.env</code> file.
-          </p>
-
           <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-[#374151]">
