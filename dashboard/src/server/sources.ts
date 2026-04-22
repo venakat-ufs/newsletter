@@ -3327,12 +3327,27 @@ export async function collectAllSources(): Promise<{
     );
   }
 
+  const SOURCE_TIMEOUT_MS = 28_000;
+
   const sources = await Promise.all(
-    sourceDefinitions.map((definition) =>
-      runLoggedSourceCollection(definition.key, definition.runner, {
+    sourceDefinitions.map((definition) => {
+      const timeoutFallback: SourceResult = {
+        source: definition.key,
+        collected_at: new Date().toISOString(),
+        data: [],
+        errors: [`Source timed out after ${SOURCE_TIMEOUT_MS / 1000}s`],
+        success: false,
         optional: definition.optional,
-      }),
-    ),
+        no_signal_reason: "Collection timed out — source skipped.",
+      };
+      const collect = runLoggedSourceCollection(definition.key, definition.runner, {
+        optional: definition.optional,
+      });
+      const timeout = new Promise<SourceResult>((resolve) =>
+        setTimeout(() => resolve(timeoutFallback), SOURCE_TIMEOUT_MS),
+      );
+      return Promise.race([collect, timeout]);
+    }),
   );
 
   const rawData: Record<string, SourceResult> = {};
