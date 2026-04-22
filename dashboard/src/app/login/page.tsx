@@ -14,14 +14,21 @@ function sanitizeNextPath(value: string | null): string {
 
 function UnitedLogo() {
   return (
-    <Image src="/logo.jpeg" alt="United Field Services" width={160} height={80} style={{ objectFit: "contain" }} />
+    <Image
+      src="/logo.jpeg"
+      alt="United Field Services"
+      width={160}
+      height={80}
+      priority
+      style={{ objectFit: "contain", width: "auto", height: "auto" }}
+    />
   );
 }
 
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [username, setUsername] = useState("admin");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);

@@ -4,7 +4,7 @@
 
 **Production:** https://ufs-newsletter-ufs.vercel.app
 
-**Login:** username `admin` / password `admin123!`
+Login credentials are managed via Vercel environment variables (`AUTH_USERNAME`, `AUTH_PASSWORD`).
 
 ---
 
@@ -81,6 +81,19 @@ Make sure you're logged in as `venakat@unitedffs.com`:
 vercel whoami   # should show venakat-2995
 vercel login venakat@unitedffs.com   # if not logged in
 ```
+
+---
+
+## Release Process (Required)
+
+1. Deploy to **staging** first (separate Vercel project and Supabase DB).
+2. Run smoke checks on staging:
+   - login
+   - Step 1 pipeline run
+   - draft generate
+   - approve + schedule preview
+3. Promote the same commit SHA to production.
+4. If production health drops, rollback by redeploying the previous successful commit in Vercel.
 
 ---
 

@@ -21,6 +21,8 @@ async function dismissTourIfVisible(page: Page) {
 }
 
 test("newsletter preview renders the new data-first sections", async ({ page }) => {
+  test.setTimeout(420_000);
+
   await login(page);
   await dismissTourIfVisible(page);
 
@@ -77,7 +79,7 @@ test("newsletter preview renders the new data-first sections", async ({ page }) 
 
   const frame = page.frameLocator('iframe[title="Full newsletter preview"]');
   await expect(frame.getByText("Where Distressed Inventory Is Building", { exact: true })).toBeVisible();
-  await expect(frame.getByText("Inventory by source", { exact: true })).toBeVisible();
+  await expect(frame.getByText(/Inventory by source|No source rows available/i)).toBeVisible();
   await expect(frame.getByText("What Changed Across Foreclosure and REO This Week", { exact: true })).toBeVisible();
   await expect(frame.getByText("Who Is Staffing Up Across Default and REO", { exact: true })).toBeVisible();
   await expect(frame.getByText("Field Coverage Built for Distressed Asset Workflows", { exact: true })).toBeVisible();

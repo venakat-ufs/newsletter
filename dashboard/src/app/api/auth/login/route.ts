@@ -6,6 +6,13 @@ import {
   createSessionToken,
   validateCredentials,
 } from "@/server/auth";
+import {
+  checkLoginRateLimit,
+  clearLoginRateLimit,
+  getClientIp,
+  getLoginRateLimitKey,
+  recordFailedLogin,
+} from "@/server/login-rate-limit";
 
 export async function POST(request: Request): Promise<Response> {
   try {
@@ -16,6 +23,8 @@ export async function POST(request: Request): Promise<Response> {
 
     const username = body.username?.trim() ?? "";
     const password = body.password ?? "";
+    const ipAddress = getClientIp(request);
+    const rateLimitKey = getLoginRateLimitKey(username, ipAddress);
 
     if (!username || !password) {
       return NextResponse.json(
@@ -24,10 +33,29 @@ export async function POST(request: Request): Promise<Response> {
       );
     }
 
+    const throttle = await checkLoginRateLimit(rateLimitKey);
+    if (!throttle.allowed) {
+      return NextResponse.json(
+        {
+          detail: "Too many failed login attempts. Try again shortly.",
+          retry_after: throttle.retryAfterSeconds ?? 60,
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(throttle.retryAfterSeconds ?? 60),
+          },
+        },
+      );
+    }
+
     const valid = await validateCredentials(username, password);
     if (!valid) {
+      await recordFailedLogin(rateLimitKey);
       return NextResponse.json({ detail: "Invalid credentials." }, { status: 401 });
     }
+
+    await clearLoginRateLimit(rateLimitKey);
 
     const token = await createSessionToken(username);
     const response = NextResponse.json({ ok: true });
@@ -40,9 +68,7 @@ export async function POST(request: Request): Promise<Response> {
     });
 
     return response;
-  } catch (error) {
-    const detail =
-      error instanceof Error ? error.message : "Unable to complete login request.";
-    return NextResponse.json({ detail }, { status: 500 });
+  } catch {
+    return NextResponse.json({ detail: "Unable to complete login request." }, { status: 500 });
   }
 }

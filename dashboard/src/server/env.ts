@@ -158,7 +158,7 @@ export function getSettings(): Settings {
     appPublicUrl:
       env.APP_PUBLIC_URL ?? env.DASHBOARD_URL ?? env.API_PUBLIC_URL ?? "http://localhost:3000",
     databaseUrl: env.DATABASE_URL ?? "file:../../data/ufs-newsletter.db",
-    authUsername: env.AUTH_USERNAME ?? "admin",
+    authUsername: env.AUTH_USERNAME ?? "",
     authPassword: env.AUTH_PASSWORD ?? "",
     authSessionSecret: env.AUTH_SESSION_SECRET ?? "",
   };

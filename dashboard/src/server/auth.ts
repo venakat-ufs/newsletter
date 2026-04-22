@@ -46,14 +46,14 @@ async function signValue(value: string, secret: string): Promise<string> {
 }
 
 export function getAuthConfig(): AuthConfig {
-  const isProduction = process.env.NODE_ENV === "production";
-  const username = process.env.AUTH_USERNAME || "admin";
-  const password = process.env.AUTH_PASSWORD || (isProduction ? "" : "admin123!");
-  const sessionSecret =
-    process.env.AUTH_SESSION_SECRET || (isProduction ? "" : "dev-only-change-this-secret");
+  const username = process.env.AUTH_USERNAME ?? "";
+  const password = process.env.AUTH_PASSWORD ?? "";
+  const sessionSecret = process.env.AUTH_SESSION_SECRET ?? "";
 
-  if (!password || !sessionSecret) {
-    throw new Error("AUTH_PASSWORD and AUTH_SESSION_SECRET must be configured.");
+  if (!username || !password || !sessionSecret) {
+    throw new Error(
+      "AUTH_USERNAME, AUTH_PASSWORD, and AUTH_SESSION_SECRET must be configured.",
+    );
   }
 
   return {

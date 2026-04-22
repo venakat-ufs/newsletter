@@ -3,6 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/server/auth";
 
 function isPublicPath(pathname: string): boolean {
+  if (/\.(?:avif|gif|ico|jpe?g|png|svg|webp)$/i.test(pathname)) {
+    return true;
+  }
+
   if (
     pathname === "/login" ||
     pathname === "/favicon.ico" ||

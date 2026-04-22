@@ -7,9 +7,11 @@ import { DashboardTour } from "@/components/DashboardTour";
 import { DraftCard } from "@/components/DraftCard";
 import { TopicSourceTable } from "@/components/TopicSourceTable";
 import {
+  enqueuePipelineJob,
+  getPipelineJob,
   getSystemStatus,
   listDrafts,
-  triggerPipeline,
+  runPipelineJob,
   type Draft,
   type IntegrationStatus,
 } from "@/lib/api";
@@ -25,6 +27,12 @@ const stepStyles = [
   "border-[#E5E7EB] bg-[#F9FAFB]",
   "border-[#E5E7EB] bg-[#F9FAFB]",
 ];
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 
 export default function DraftsPage() {
   const [drafts, setDrafts] = useState<Draft[]>([]);
@@ -62,9 +70,38 @@ export default function DraftsPage() {
     try {
       setPipelineRunning(true);
       setPipelineResult(null);
-      const result = await triggerPipeline(force);
-      setPipelineResult(result.message);
-      await loadDashboard();
+
+      const job = await enqueuePipelineJob(force);
+      setPipelineResult("Step 1 started. Data pull is running in the background...");
+
+      // Fire a separate worker request so the UI doesn't wait on long-running collection.
+      void runPipelineJob(job.id).catch(() => undefined);
+
+      const startedAt = Date.now();
+      while (Date.now() - startedAt < 10 * 60 * 1000) {
+        const currentJob = await getPipelineJob(job.id);
+        if (currentJob.status === "succeeded") {
+          const message =
+            typeof currentJob.result?.message === "string"
+              ? currentJob.result.message
+              : "Pipeline complete.";
+          setPipelineResult(message);
+          await loadDashboard();
+          return;
+        }
+
+        if (currentJob.status === "failed") {
+          setPipelineResult(currentJob.error || "Pipeline failed. Check logs for details.");
+          return;
+        }
+
+        setPipelineResult("Step 1 is running... this can take a few minutes.");
+        await sleep(Math.max(2, currentJob.retryAfterSeconds || 3) * 1000);
+      }
+
+      setPipelineResult(
+        "Step 1 is still running. You can keep working; click Refresh to see updates.",
+      );
     } catch (err) {
       setPipelineResult(
         err instanceof Error ? err.message : "Pipeline failed",

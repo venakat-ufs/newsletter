@@ -2018,8 +2018,8 @@ export function mapRouteError(error: unknown): { status: number; detail: string 
     if (error.name === "BadRequestError") {
       return { status: 400, detail: error.message };
     }
-    return { status: 500, detail: error.message };
+    return { status: 500, detail: "Internal server error." };
   }
 
-  return { status: 500, detail: "Unknown error" };
+  return { status: 500, detail: "Internal server error." };
 }

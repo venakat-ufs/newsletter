@@ -289,6 +289,42 @@ export async function triggerPipeline(force = false): Promise<{
   return fetchApi(url, { method: "POST" });
 }
 
+export interface PipelineJob {
+  id: string;
+  status: "queued" | "running" | "succeeded" | "failed";
+  force: boolean;
+  requestedBy: string | null;
+  createdAt: string;
+  updatedAt: string;
+  startedAt: string | null;
+  completedAt: string | null;
+  retryAfterSeconds: number;
+  result: Record<string, unknown> | null;
+  error: string | null;
+  message?: string;
+}
+
+export async function enqueuePipelineJob(force = false): Promise<PipelineJob> {
+  const params = new URLSearchParams();
+  if (force) {
+    params.set("force", "true");
+  }
+  params.set("async", "true");
+  return fetchApi<PipelineJob>(`/api/pipeline/trigger?${params.toString()}`, {
+    method: "POST",
+  });
+}
+
+export async function getPipelineJob(jobId: string): Promise<PipelineJob> {
+  return fetchApi<PipelineJob>(`/api/pipeline/jobs/${jobId}`);
+}
+
+export async function runPipelineJob(jobId: string): Promise<PipelineJob> {
+  return fetchApi<PipelineJob>(`/api/pipeline/jobs/${jobId}/run`, {
+    method: "POST",
+  });
+}
+
 export async function scheduleNewsletter(newsletterId: number): Promise<{
   status: string;
   campaign_id: string;

@@ -62,7 +62,13 @@ const NAV_ITEMS = [
 
 function UnitedLogo() {
   return (
-    <Image src="/logo.jpeg" alt="United Field Services" width={120} height={52} style={{ objectFit: "contain" }} />
+    <Image
+      src="/logo.jpeg"
+      alt="United Field Services"
+      width={120}
+      height={52}
+      style={{ objectFit: "contain", width: "auto", height: "auto" }}
+    />
   );
 }
 

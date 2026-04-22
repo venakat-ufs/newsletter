@@ -3,7 +3,15 @@
   "functions": {
     "src/app/api/**/*.ts": {
       "memory": 512,
-      "maxDuration": 30
+      "maxDuration": 60
+    },
+    "src/app/api/pipeline/jobs/**/run/route.ts": {
+      "memory": 1024,
+      "maxDuration": 120
+    },
+    "src/app/api/pipeline/trigger/route.ts": {
+      "memory": 1024,
+      "maxDuration": 120
     }
   },
   "headers": [

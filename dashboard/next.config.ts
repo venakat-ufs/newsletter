@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const isPlaywright = Boolean(process.env.PLAYWRIGHT);
 const isDev = process.env.NODE_ENV !== "production";
@@ -16,6 +17,7 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   distDir: isPlaywright ? ".next-playwright" : isDev ? devDistDir : ".next",
+  outputFileTracingRoot: path.join(process.cwd(), ".."),
   poweredByHeader: false,
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];

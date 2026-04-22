@@ -17,6 +17,8 @@ model Newsletter {
   createdAt           String @map("created_at")
   updatedAt           String @map("updated_at")
 
+  @@index([issueDate])
+  @@index([status])
   @@map("newsletters")
 }
 
@@ -35,6 +37,8 @@ model Draft {
   createdAt     String @map("created_at")
   updatedAt     String @map("updated_at")
 
+  @@index([newsletterId])
+  @@index([status])
   @@map("drafts")
 }
 
@@ -50,6 +54,7 @@ model Article {
   msPlatformUrl String? @map("ms_platform_url")
   createdAt     String @map("created_at")
 
+  @@index([newsletterId])
   @@map("articles")
 }
 
@@ -61,5 +66,49 @@ model ApprovalLog {
   notes    String?
   timestamp String
 
+  @@index([draftId])
+  @@index([timestamp])
   @@map("approval_logs")
+}
+
+model WorkflowLog {
+  id          String @id
+  timestamp   String
+  scope       String
+  step        String
+  status      String
+  message     String
+  contextJson String? @map("context_json")
+
+  @@index([timestamp])
+  @@index([scope, step])
+  @@map("workflow_logs")
+}
+
+model PipelineJob {
+  id            String  @id
+  status        String
+  force         Boolean @default(false)
+  requestedBy   String? @map("requested_by")
+  startedAt     String? @map("started_at")
+  completedAt   String? @map("completed_at")
+  createdAt     String  @map("created_at")
+  updatedAt     String  @map("updated_at")
+  resultJson    String? @map("result_json")
+  errorDetail   String? @map("error_detail")
+  leaseExpiresAt String? @map("lease_expires_at")
+
+  @@index([status, createdAt])
+  @@map("pipeline_jobs")
+}
+
+model LoginAttempt {
+  key            String @id
+  attempts       Int    @default(0)
+  windowStartedAt String @map("window_started_at")
+  blockedUntil   String? @map("blocked_until")
+  updatedAt      String @map("updated_at")
+
+  @@index([blockedUntil])
+  @@map("login_attempts")
 }

@@ -2,6 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 
 import { resolveRepoPath } from "@/server/paths";
+import { ensureDatabaseReady, prisma } from "@/server/prisma";
 
 export interface WorkflowLogEntry {
   id: string;
@@ -25,6 +26,23 @@ function getLogDir(): string {
 const LOG_DIR = getLogDir();
 const LOG_FILE = path.join(LOG_DIR, "workflow-log.json");
 const MAX_LOG_ENTRIES = 400;
+
+function safeParseContext(value: string | null): Record<string, unknown> | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  try {
+    const parsed = JSON.parse(value) as unknown;
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      return parsed as Record<string, unknown>;
+    }
+  } catch {
+    // Ignore malformed rows from legacy writes.
+  }
+
+  return undefined;
+}
 
 let writeQueue: Promise<void> = Promise.resolve();
 
@@ -67,6 +85,24 @@ export async function appendWorkflowLog(
   };
 
   const pendingWrite = writeQueue.then(async () => {
+    try {
+      await ensureDatabaseReady();
+      await prisma.workflowLog.create({
+        data: {
+          id: logEntry.id,
+          timestamp: logEntry.timestamp,
+          scope: logEntry.scope,
+          step: logEntry.step,
+          status: logEntry.status,
+          message: logEntry.message,
+          contextJson: logEntry.context ? JSON.stringify(logEntry.context) : null,
+        },
+      });
+      return;
+    } catch {
+      // Database logging is preferred, but fallback must always work in degraded mode.
+    }
+
     const logs = await readLogFile();
     logs.unshift(logEntry);
     await fs.writeFile(LOG_FILE, JSON.stringify(logs.slice(0, MAX_LOG_ENTRIES), null, 2), "utf8");
@@ -77,6 +113,24 @@ export async function appendWorkflowLog(
 }
 
 export async function listWorkflowLogs(limit = 80): Promise<WorkflowLogEntry[]> {
-  const logs = await readLogFile();
-  return logs.slice(0, limit);
+  try {
+    await ensureDatabaseReady();
+    const rows = await prisma.workflowLog.findMany({
+      orderBy: { timestamp: "desc" },
+      take: Math.min(Math.max(limit, 1), 200),
+    });
+
+    return rows.map((row) => ({
+      id: row.id,
+      timestamp: row.timestamp,
+      scope: row.scope,
+      step: row.step,
+      status: row.status as WorkflowLogEntry["status"],
+      message: row.message,
+      context: safeParseContext(row.contextJson),
+    }));
+  } catch {
+    const logs = await readLogFile();
+    return logs.slice(0, limit);
+  }
 }
