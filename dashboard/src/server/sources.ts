@@ -3273,11 +3273,11 @@ export async function collectAllSources(): Promise<{
     { key: "zillow_research", runner: () => collectZillowResearch() },
     { key: "zillow_rapidapi", optional: true, runner: () => collectZillowRapidApi(settings) },
     { key: "hud_user", runner: () => collectHudUser() },
-    { key: "fhfa_news", runner: () => collectFhfaNews() },
-    { key: "hud_homestore", runner: () => collectHudHomeStore() },
-    { key: "bank_of_america_reo", runner: () => collectBankOfAmericaReo() },
-    { key: "homesteps", runner: () => collectHomeSteps(settings) },
-    { key: "linkedin_jobs", runner: () => collectLinkedInJobs() },
+    { key: "fhfa_news", optional: true, runner: () => collectFhfaNews() },
+    { key: "hud_homestore", optional: true, runner: () => collectHudHomeStore() },
+    { key: "bank_of_america_reo", optional: true, runner: () => collectBankOfAmericaReo() },
+    { key: "homesteps", optional: true, runner: () => collectHomeSteps(settings) },
+    { key: "linkedin_jobs", optional: true, runner: () => collectLinkedInJobs() },
     { key: "grok", runner: () => collectGrok(settings) },
     { key: "reddit", optional: true, runner: () => collectReddit(settings) },
     { key: "news_api", runner: () => collectNewsApi(settings) },
@@ -3327,7 +3327,9 @@ export async function collectAllSources(): Promise<{
     );
   }
 
-  const SOURCE_TIMEOUT_MS = 28_000;
+  // 12s per source — enough for real APIs, fast enough to not block the whole response.
+  // Web-scraping sources are marked optional so they degrade rather than fail hard.
+  const SOURCE_TIMEOUT_MS = 12_000;
 
   const sources = await Promise.all(
     sourceDefinitions.map((definition) => {
