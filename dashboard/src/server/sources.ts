@@ -1633,68 +1633,71 @@ async function collectNewsApi(settings: Settings): Promise<SourceResult> {
   const articles: Array<Record<string, unknown>> = [];
   const errors: string[] = [];
 
-  for (const query of NEWS_QUERIES) {
-    try {
-      const url = new URL("https://newsapi.org/v2/everything");
-      url.searchParams.set("q", query);
-      // No "from" date — free plan silently returns 0 for any historical date filter.
-      url.searchParams.set("sortBy", "relevancy");
-      url.searchParams.set("language", "en");
-      url.searchParams.set("pageSize", "25");
-      url.searchParams.set("searchIn", "title,description");
-      url.searchParams.set("apiKey", settings.newsApiKey);
+  // Run all queries in parallel so 4 × 8s = 8s total instead of up to 4 × 12s = 48s.
+  await Promise.all(
+    NEWS_QUERIES.map(async (query) => {
+      try {
+        const url = new URL("https://newsapi.org/v2/everything");
+        url.searchParams.set("q", query);
+        // No "from" date — free plan silently returns 0 for any historical date filter.
+        url.searchParams.set("sortBy", "relevancy");
+        url.searchParams.set("language", "en");
+        url.searchParams.set("pageSize", "25");
+        url.searchParams.set("searchIn", "title,description");
+        url.searchParams.set("apiKey", settings.newsApiKey);
 
-      const response = await fetchWithTimeout(url, { cache: "no-store" }, 12000);
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      const payload = (await response.json()) as {
-        articles?: Array<{
-          title?: string;
-          description?: string;
-          url?: string;
-          content?: string;
-          publishedAt?: string;
-          source?: { name?: string };
-        }>;
-      };
-
-      for (const article of payload.articles ?? []) {
-        const articleUrl = article.url ?? "";
-        if (!articleUrl || seenUrls.has(articleUrl)) {
-          continue;
+        const response = await fetchWithTimeout(url, { cache: "no-store" }, 8000);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
         }
 
-        if (
-          !matchesIndustrySignalText(
-            article.title,
-            article.description,
-            article.content,
-            article.source?.name,
-          )
-        ) {
-          continue;
+        const payload = (await response.json()) as {
+          articles?: Array<{
+            title?: string;
+            description?: string;
+            url?: string;
+            content?: string;
+            publishedAt?: string;
+            source?: { name?: string };
+          }>;
+        };
+
+        for (const article of payload.articles ?? []) {
+          const articleUrl = article.url ?? "";
+          if (!articleUrl || seenUrls.has(articleUrl)) {
+            continue;
+          }
+
+          if (
+            !matchesIndustrySignalText(
+              article.title,
+              article.description,
+              article.content,
+              article.source?.name,
+            )
+          ) {
+            continue;
+          }
+
+          seenUrls.add(articleUrl);
+
+          articles.push({
+            query,
+            title: article.title ?? "",
+            description: article.description ?? "",
+            source_name: article.source?.name ?? "",
+            url: articleUrl,
+            published_at: article.publishedAt ?? "",
+            content_preview: (article.content ?? "").slice(0, 500),
+          });
         }
-
-        seenUrls.add(articleUrl);
-
-        articles.push({
-          query,
-          title: article.title ?? "",
-          description: article.description ?? "",
-          source_name: article.source?.name ?? "",
-          url: articleUrl,
-          published_at: article.publishedAt ?? "",
-          content_preview: (article.content ?? "").slice(0, 500),
-        });
+      } catch (error) {
+        errors.push(
+          `News API query '${query}' failed: ${error instanceof Error ? error.message : "unknown error"}`,
+        );
       }
-    } catch (error) {
-      errors.push(
-        `News API query '${query}' failed: ${error instanceof Error ? error.message : "unknown error"}`,
-      );
-    }
-  }
+    }),
+  );
 
   if (articles.length > 0) {
     return createResult({ source: "news_api", data: articles, errors });
@@ -3218,17 +3221,19 @@ export async function collectAllSources(): Promise<{
   }> = [
     { key: "housingwire", optional: true, runner: () => collectHousingWire() },
     { key: "mortgagepoint", optional: true, runner: () => collectMortgagePoint() },
-    { key: "zillow_research", runner: () => collectZillowResearch() },
+    // Scraper sources: respond in <10s on a good Lambda, hang forever when blocked.
+    // Mark optional so Vercel IP blocks cause "degraded" not "failed".
+    { key: "zillow_research", optional: true, runner: () => collectZillowResearch() },
     { key: "zillow_rapidapi", optional: true, runner: () => collectZillowRapidApi(settings) },
-    { key: "hud_user", runner: () => collectHudUser() },
-    { key: "fhfa_news", runner: () => collectFhfaNews() },
-    { key: "hud_homestore", runner: () => collectHudHomeStore() },
-    { key: "bank_of_america_reo", runner: () => collectBankOfAmericaReo() },
-    { key: "homesteps", runner: () => collectHomeSteps(settings) },
-    { key: "linkedin_jobs", runner: () => collectLinkedInJobs() },
+    { key: "hud_user", optional: true, runner: () => collectHudUser() },
+    { key: "fhfa_news", optional: true, runner: () => collectFhfaNews() },
+    { key: "hud_homestore", optional: true, runner: () => collectHudHomeStore() },
+    { key: "bank_of_america_reo", optional: true, runner: () => collectBankOfAmericaReo() },
+    { key: "homesteps", optional: true, runner: () => collectHomeSteps(settings) },
+    { key: "linkedin_jobs", optional: true, runner: () => collectLinkedInJobs() },
     { key: "grok", optional: true, runner: () => collectGrok(settings) },
     { key: "reddit", optional: true, runner: () => collectReddit(settings) },
-    { key: "news_api", runner: () => collectNewsApi(settings) },
+    { key: "news_api", optional: true, runner: () => collectNewsApi(settings) },
   ];
 
   if (settings.homepathEnabled) {
@@ -3275,7 +3280,10 @@ export async function collectAllSources(): Promise<{
     );
   }
 
-  const SOURCE_TIMEOUT_MS = 28_000;
+  // Vercel Lambda IPs are sometimes blocked by scraping targets; respond fast or not at all.
+  // Use a short wall-clock timeout on Vercel so blocked sources fail in 10s instead of 28s,
+  // keeping total collection time well under the 120s function maxDuration.
+  const SOURCE_TIMEOUT_MS = process.env.VERCEL ? 10_000 : 28_000;
 
   const sources = await Promise.all(
     sourceDefinitions.map((definition) => {
