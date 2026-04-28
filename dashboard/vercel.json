@@ -1,7 +1,7 @@
 {
   "framework": "nextjs",
   "crons": [
-    { "path": "/api/warmup", "schedule": "*/5 * * * *" }
+    { "path": "/api/warmup", "schedule": "0 8 * * *" }
   ],
   "functions": {
     "src/app/api/**/*.ts": {
