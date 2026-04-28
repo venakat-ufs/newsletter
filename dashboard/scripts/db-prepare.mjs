@@ -3,6 +3,13 @@
  * Uses CREATE TABLE IF NOT EXISTS so it's safe to run on any database.
  * Does NOT drop or modify existing tables from other projects.
  */
+
+// Skip on Vercel builds — schema is already applied and the connection
+// pooler causes statement timeouts during the build phase.
+if (process.env.VERCEL) {
+  console.log("Vercel build detected — skipping db:prepare (schema already applied)");
+  process.exit(0);
+}
 import { readFileSync } from "fs";
 import { createRequire } from "module";
 import { resolve, dirname } from "path";
