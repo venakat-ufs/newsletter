@@ -1762,6 +1762,38 @@ async function collectZillowResearch(): Promise<SourceResult> {
   });
 }
 
+async function collectHousingWire(): Promise<SourceResult> {
+  try {
+    const response = await fetchWithTimeout(
+      "https://www.housingwire.com/feed/",
+      { headers: { Accept: "application/rss+xml,application/xml,text/xml", "User-Agent": BROWSER_USER_AGENT }, cache: "no-store" },
+      10000,
+    );
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const xml = await response.text();
+    const items = parseRssItems(xml).map((item) => ({ ...item, source_name: "HousingWire" }));
+    return createResult({ source: "housingwire", data: items.slice(0, 16), success: items.length > 0 });
+  } catch (error) {
+    return createResult({ source: "housingwire", data: [], errors: [`HousingWire RSS failed: ${error instanceof Error ? error.message : String(error)}`], success: false });
+  }
+}
+
+async function collectMortgagePoint(): Promise<SourceResult> {
+  try {
+    const response = await fetchWithTimeout(
+      "https://themortgagepoint.com/feed/",
+      { headers: { Accept: "application/rss+xml,application/xml,text/xml", "User-Agent": BROWSER_USER_AGENT }, cache: "no-store" },
+      10000,
+    );
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const xml = await response.text();
+    const items = parseRssItems(xml).map((item) => ({ ...item, source_name: "MortgagePoint" }));
+    return createResult({ source: "mortgagepoint", data: items.slice(0, 16), success: items.length > 0 });
+  } catch (error) {
+    return createResult({ source: "mortgagepoint", data: [], errors: [`MortgagePoint RSS failed: ${error instanceof Error ? error.message : String(error)}`], success: false });
+  }
+}
+
 async function collectZillowRapidApi(settings: Settings): Promise<SourceResult> {
   if (!settings.zillowRapidApiKey) {
     return createResult({
@@ -3270,17 +3302,19 @@ export async function collectAllSources(): Promise<{
     optional?: boolean;
     runner: () => Promise<SourceResult>;
   }> = [
-    { key: "zillow_research", runner: () => collectZillowResearch() },
+    { key: "housingwire", runner: () => collectHousingWire() },
+    { key: "mortgagepoint", runner: () => collectMortgagePoint() },
+    { key: "zillow_research", optional: true, runner: () => collectZillowResearch() },
     { key: "zillow_rapidapi", optional: true, runner: () => collectZillowRapidApi(settings) },
-    { key: "hud_user", runner: () => collectHudUser() },
+    { key: "hud_user", optional: true, runner: () => collectHudUser() },
     { key: "fhfa_news", optional: true, runner: () => collectFhfaNews() },
     { key: "hud_homestore", optional: true, runner: () => collectHudHomeStore() },
     { key: "bank_of_america_reo", optional: true, runner: () => collectBankOfAmericaReo() },
     { key: "homesteps", optional: true, runner: () => collectHomeSteps(settings) },
     { key: "linkedin_jobs", optional: true, runner: () => collectLinkedInJobs() },
-    { key: "grok", runner: () => collectGrok(settings) },
+    { key: "grok", optional: true, runner: () => collectGrok(settings) },
     { key: "reddit", optional: true, runner: () => collectReddit(settings) },
-    { key: "news_api", runner: () => collectNewsApi(settings) },
+    { key: "news_api", optional: true, runner: () => collectNewsApi(settings) },
   ];
 
   if (settings.homepathEnabled) {
