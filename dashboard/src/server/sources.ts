@@ -5,10 +5,10 @@ import type { SourceResult } from "@/server/types";
 const BROWSER_USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36";
 const NEWS_QUERIES = [
-  "REO foreclosure real estate",
-  "bank owned properties",
-  "mortgage default foreclosure",
-  "HUD REO disposition",
+  "foreclosure",
+  "mortgage foreclosure",
+  "bank owned real estate",
+  "HUD housing",
 ];
 const REDDIT_SEARCH_QUERIES = [
   "REO foreclosure real estate",
@@ -1629,10 +1629,6 @@ async function collectNewsApi(settings: Settings): Promise<SourceResult> {
     });
   }
 
-  // Free dev plan only returns articles from the past 24 hours; paid plans can go further.
-  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000)
-    .toISOString()
-    .slice(0, 10);
   const seenUrls = new Set<string>();
   const articles: Array<Record<string, unknown>> = [];
   const errors: string[] = [];
@@ -1641,7 +1637,7 @@ async function collectNewsApi(settings: Settings): Promise<SourceResult> {
     try {
       const url = new URL("https://newsapi.org/v2/everything");
       url.searchParams.set("q", query);
-      url.searchParams.set("from", yesterday);
+      // No "from" date — free plan silently returns 0 for any historical date filter.
       url.searchParams.set("sortBy", "relevancy");
       url.searchParams.set("language", "en");
       url.searchParams.set("pageSize", "25");
@@ -2997,7 +2993,7 @@ async function collectGrok(settings: Settings): Promise<SourceResult> {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            model: "grok-3-latest",
+            model: "grok-4-latest",
             temperature: 0.2,
             max_output_tokens: 1400,
             input: [
