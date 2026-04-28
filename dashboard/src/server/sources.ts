@@ -3222,17 +3222,17 @@ export async function collectAllSources(): Promise<{
   }> = [
     { key: "housingwire", optional: true, runner: () => collectHousingWire() },
     { key: "mortgagepoint", optional: true, runner: () => collectMortgagePoint() },
-    { key: "zillow_research", optional: true, runner: () => collectZillowResearch() },
+    { key: "zillow_research", runner: () => collectZillowResearch() },
     { key: "zillow_rapidapi", optional: true, runner: () => collectZillowRapidApi(settings) },
     { key: "hud_user", runner: () => collectHudUser() },
     { key: "fhfa_news", runner: () => collectFhfaNews() },
-    { key: "hud_homestore", optional: true, runner: () => collectHudHomeStore() },
-    { key: "bank_of_america_reo", optional: true, runner: () => collectBankOfAmericaReo() },
-    { key: "homesteps", optional: true, runner: () => collectHomeSteps(settings) },
-    { key: "linkedin_jobs", optional: true, runner: () => collectLinkedInJobs() },
-    { key: "grok", optional: true, runner: () => collectGrok(settings) },
+    { key: "hud_homestore", runner: () => collectHudHomeStore() },
+    { key: "bank_of_america_reo", runner: () => collectBankOfAmericaReo() },
+    { key: "homesteps", runner: () => collectHomeSteps(settings) },
+    { key: "linkedin_jobs", runner: () => collectLinkedInJobs() },
+    { key: "grok", runner: () => collectGrok(settings) },
     { key: "reddit", optional: true, runner: () => collectReddit(settings) },
-    { key: "news_api", optional: true, runner: () => collectNewsApi(settings) },
+    { key: "news_api", runner: () => collectNewsApi(settings) },
   ];
 
   if (settings.homepathEnabled) {
@@ -3279,11 +3279,7 @@ export async function collectAllSources(): Promise<{
     );
   }
 
-  // Vercel serverless functions have a 60s hard cap on Hobby plan, and AWS Lambda
-  // IPs are blocked by most scraping targets anyway. Use 10s on Vercel so the
-  // function stays well within the limit and has budget for AI draft generation.
-  // Locally use 25s so multi-step scrapers (HUD, BofA, HomeSteps) can complete.
-  const SOURCE_TIMEOUT_MS = process.env.VERCEL ? 10_000 : 25_000;
+  const SOURCE_TIMEOUT_MS = 28_000;
 
   const sources = await Promise.all(
     sourceDefinitions.map((definition) => {
