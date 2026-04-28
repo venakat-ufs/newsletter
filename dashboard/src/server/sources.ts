@@ -3226,7 +3226,7 @@ export async function collectAllSources(): Promise<{
     { key: "bank_of_america_reo", runner: () => collectBankOfAmericaReo() },
     { key: "homesteps", runner: () => collectHomeSteps(settings) },
     { key: "linkedin_jobs", runner: () => collectLinkedInJobs() },
-    { key: "grok", runner: () => collectGrok(settings) },
+    { key: "grok", optional: true, runner: () => collectGrok(settings) },
     { key: "reddit", optional: true, runner: () => collectReddit(settings) },
     { key: "news_api", runner: () => collectNewsApi(settings) },
   ];
