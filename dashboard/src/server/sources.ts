@@ -2705,92 +2705,9 @@ async function collectCompanyCareerJobs(): Promise<SourceResult> {
 }
 
 async function collectUsaJobsSignals(): Promise<SourceResult> {
-  const jobs: Array<Record<string, unknown>> = [];
-  const seenUrls = new Set<string>();
-
-  for (const keyword of BANK_HIRING_USAJOBS_DIRECT_KEYWORDS) {
-    if (jobs.length >= 25) {
-      break;
-    }
-
-    try {
-      const response = await fetchWithTimeout(
-        "https://www.usajobs.gov/Search/ExecuteSearch",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json; charset=utf-8",
-            "User-Agent": BROWSER_USER_AGENT,
-            Referer: "https://www.usajobs.gov/Search/Results",
-          },
-          body: JSON.stringify({
-            Keyword: keyword,
-            Page: "1",
-          }),
-          cache: "no-store",
-        },
-        8000,
-      );
-
-      if (!response.ok) {
-        continue;
-      }
-
-      const payload = (await response.json()) as {
-        Jobs?: Array<{
-          Title?: unknown;
-          Agency?: unknown;
-          Department?: unknown;
-          PositionURI?: unknown;
-          LocationName?: unknown;
-          DateDisplay?: unknown;
-        }>;
-      };
-
-      for (const rawJob of payload.Jobs ?? []) {
-        const title = firstString(rawJob.Title);
-        const company = firstString(rawJob.Agency, rawJob.Department, "USAJobs");
-        const url = firstString(rawJob.PositionURI);
-        const location = firstString(rawJob.LocationName, "United States");
-        const postedDate = firstString(rawJob.DateDisplay);
-
-        if (!title || !url || seenUrls.has(url)) {
-          continue;
-        }
-
-        if (!matchesBankHiringSignal(title, company, keyword) && !matchesBroadHiringSignal(title, company)) {
-          continue;
-        }
-
-        seenUrls.add(url);
-        jobs.push({
-          source_name: "USAJobs",
-          query: keyword,
-          query_label: "Government hiring",
-          hiring_focus: classifyBankHiringFocus(title, keyword),
-          title,
-          company,
-          location,
-          posted_date: postedDate,
-          url,
-          snippet: `${company} - ${location}`,
-        });
-      }
-    } catch {
-      continue;
-    }
-  }
-
-  if (jobs.length > 0) {
-    return createResult({
-      source: "usajobs_jobs",
-      data: jobs,
-      errors: [],
-      success: true,
-    });
-  }
-
+  // The usajobs.gov internal search endpoint requires a session cookie + CSRF token
+  // and returns 401 without them. The public API (data.usajobs.gov) requires an
+  // API key that is not currently configured. Fall back to web search directly.
   return collectWebSearchJobSignals(
     "usajobs_jobs",
     "USAJobs",
@@ -3361,9 +3278,9 @@ export async function collectAllSources(): Promise<{
     );
   }
 
-  // 12s per source — enough for real APIs, fast enough to not block the whole response.
-  // Web-scraping sources are marked optional so they degrade rather than fail hard.
-  const SOURCE_TIMEOUT_MS = 12_000;
+  // 25s per source — scrapers need time for multi-step session + state loops.
+  // All sources run in parallel so total wall time = slowest source, not the sum.
+  const SOURCE_TIMEOUT_MS = 25_000;
 
   const sources = await Promise.all(
     sourceDefinitions.map((definition) => {

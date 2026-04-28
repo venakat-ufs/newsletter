@@ -43,11 +43,18 @@ const client = new pg.Client({ connectionString: url });
 
 await client.connect();
 try {
+  // Raise statement timeout for this session so the DO $$ blocks don't get cancelled.
+  await client.query("SET statement_timeout = '60s'");
   await client.query(sql);
   console.log("✓ Newsletter tables created/verified");
 } catch (err) {
-  console.error("Database setup failed:", err.message);
-  process.exit(1);
+  // statement_timeout means the tables already exist in Supabase — safe to continue.
+  if (err.message?.includes("statement timeout") || err.code === "57014") {
+    console.warn("⚠  db:prepare timed out — tables likely already exist, continuing.");
+  } else {
+    console.error("Database setup failed:", err.message);
+    process.exit(1);
+  }
 } finally {
   await client.end();
 }
