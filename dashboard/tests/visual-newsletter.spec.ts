@@ -25,6 +25,8 @@ test("newsletter preview renders the new data-first sections", async ({ page }) 
 
   await login(page);
   await dismissTourIfVisible(page);
+  // Wait for the page to be fully idle before making API calls from the browser context
+  await page.waitForLoadState("networkidle");
 
   const draftId = await page.evaluate(async () => {
     const triggerRes = await fetch("/api/pipeline/trigger?force=true", {

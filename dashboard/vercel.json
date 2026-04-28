@@ -1,5 +1,8 @@
 {
   "framework": "nextjs",
+  "crons": [
+    { "path": "/api/warmup", "schedule": "*/5 * * * *" }
+  ],
   "functions": {
     "src/app/api/**/*.ts": {
       "memory": 512,
@@ -12,12 +15,24 @@
     "src/app/api/pipeline/trigger/route.ts": {
       "memory": 1024,
       "maxDuration": 120
+    },
+    "src/app/api/warmup/route.ts": {
+      "memory": 256,
+      "maxDuration": 30
     }
   },
   "headers": [
     {
       "source": "/api/system/status",
       "headers": [{ "key": "Cache-Control", "value": "s-maxage=30, stale-while-revalidate=60" }]
+    },
+    {
+      "source": "/api/drafts",
+      "headers": [{ "key": "Cache-Control", "value": "private, s-maxage=15, stale-while-revalidate=30" }]
+    },
+    {
+      "source": "/api/health",
+      "headers": [{ "key": "Cache-Control", "value": "s-maxage=10, stale-while-revalidate=20" }]
     }
   ]
 }

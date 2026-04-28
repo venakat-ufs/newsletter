@@ -1,15 +1,19 @@
 import { NextResponse } from "next/server";
 
-import { getHealthStatus, mapRouteError } from "@/server/workflow";
+import { prisma } from "@/server/prisma";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    return NextResponse.json(await getHealthStatus());
-  } catch (error) {
-    const mapped = mapRouteError(error);
-    return NextResponse.json({ detail: mapped.detail }, { status: mapped.status });
+    // Lightweight ping — no full table scans
+    await prisma.$queryRaw`SELECT 1`;
+    return NextResponse.json({ status: "ok", service: "ufs-newsletter" });
+  } catch {
+    return NextResponse.json(
+      { status: "degraded", service: "ufs-newsletter" },
+      { status: 200 },
+    );
   }
 }

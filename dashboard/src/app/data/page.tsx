@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+import { useEffect, useState, useCallback, useRef } from "react";
+import { getPipelineStats, type PipelineStats } from "@/lib/pipeline-stats";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -627,6 +626,140 @@ function NewsPanel({ snap, sourceName, sourceUrl }: {
   );
 }
 
+// ─── Pipeline Data Panel ──────────────────────────────────────────────────────
+
+function PipelineDataPanel({ stats, loading }: { stats: PipelineStats | null; loading: boolean }) {
+  if (loading) {
+    return (
+      <section className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
+        <SectionHeader label="CRM Lead Pipeline" title="Foreclosure Listings by State" />
+        <div className="mt-3 rounded-lg border border-dashed border-[#D1D5DB] bg-[#F9FAFB] py-8 text-center text-xs text-[#6B7280]">
+          Loading pipeline data…
+        </div>
+      </section>
+    );
+  }
+  if (!stats) return null;
+
+  const top10 = stats.rows.slice(0, 10);
+  const barValues = top10.map((r) => r.total_listings);
+  const barLabels = top10.map((r) => r.state);
+  const agentPct =
+    stats.totals.total_listings > 0
+      ? Math.round((stats.totals.with_agent / stats.totals.total_listings) * 100)
+      : 0;
+  const emailPct =
+    stats.totals.total_listings > 0
+      ? Math.round((stats.totals.with_email / stats.totals.total_listings) * 100)
+      : 0;
+
+  return (
+    <section className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
+      <SectionHeader
+        label={`CRM Lead Pipeline · Week of ${stats.week_start}`}
+        title="Foreclosure Listings by State"
+        count={stats.rows.length}
+        sub={`${stats.totals.total_listings.toLocaleString()} total tracked · ${agentPct}% agent coverage · ${emailPct}% email coverage`}
+      />
+
+      <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <StatCard
+          label="Total Listings"
+          value={stats.totals.total_listings.toLocaleString()}
+          sub="Tracked foreclosure listings"
+        />
+        <StatCard
+          label="New Leads"
+          value={`+${stats.totals.leads_inserted.toLocaleString()}`}
+          sub="Inserted into pipeline this week"
+        />
+        <StatCard
+          label="Agent Coverage"
+          value={`${agentPct}%`}
+          sub={`${stats.totals.with_agent.toLocaleString()} listings with agent`}
+        />
+        <StatCard
+          label="Email Coverage"
+          value={`${emailPct}%`}
+          sub={`${stats.totals.with_email.toLocaleString()} listings with email`}
+        />
+      </div>
+
+      <div className="mt-4 mb-3">
+        <p className="mb-1.5 text-[10px] text-[#9CA3AF]">Total Listings — Top 10 States</p>
+        <BarChart values={barValues} labels={barLabels} color="#2563EB" />
+      </div>
+
+      <div className="overflow-x-auto rounded-xl border border-[#E5E7EB]">
+        <table className="min-w-full border-separate border-spacing-0 text-xs">
+          <thead>
+            <tr className="bg-[#F9FAFB] text-left text-[10px] uppercase tracking-wider text-[#6B7280]">
+              <th className="px-3 py-2">#</th>
+              <th className="px-3 py-2">State</th>
+              <th className="px-3 py-2">Listings</th>
+              <th className="px-3 py-2">With Agent</th>
+              <th className="px-3 py-2">Agent %</th>
+              <th className="px-3 py-2">With Email</th>
+              <th className="px-3 py-2">Email %</th>
+              <th className="px-3 py-2">New Leads</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stats.rows.map((row, i) => {
+              const aPct = row.total_listings > 0 ? Math.round((row.with_agent / row.total_listings) * 100) : 0;
+              const ePct = row.total_listings > 0 ? Math.round((row.with_email / row.total_listings) * 100) : 0;
+              return (
+                <tr key={row.state} className={i % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"}>
+                  <td className="px-3 py-1.5 font-bold text-[#6B7280]">{i + 1}</td>
+                  <td className="px-3 py-1.5 font-bold text-[#111827]">{row.state}</td>
+                  <td className="px-3 py-1.5 font-semibold text-[#111827]">{row.total_listings.toLocaleString()}</td>
+                  <td className="px-3 py-1.5">{row.with_agent.toLocaleString()}</td>
+                  <td className="px-3 py-1.5">
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                        aPct >= 50
+                          ? "bg-emerald-50 text-emerald-700"
+                          : aPct >= 25
+                            ? "bg-amber-50 text-amber-700"
+                            : "bg-red-50 text-red-600"
+                      }`}
+                    >
+                      {aPct}%
+                    </span>
+                  </td>
+                  <td className="px-3 py-1.5">{row.with_email.toLocaleString()}</td>
+                  <td className="px-3 py-1.5">
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                        ePct >= 50
+                          ? "bg-emerald-50 text-emerald-700"
+                          : ePct >= 25
+                            ? "bg-amber-50 text-amber-700"
+                            : "bg-red-50 text-red-600"
+                      }`}
+                    >
+                      {ePct}%
+                    </span>
+                  </td>
+                  <td className="px-3 py-1.5">
+                    {row.leads_inserted > 0 ? (
+                      <span className="rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[10px] font-semibold text-[#2563EB]">
+                        +{row.leads_inserted.toLocaleString()}
+                      </span>
+                    ) : (
+                      <span className="text-[#9CA3AF]">—</span>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 const SOURCE_NAMES: Record<string, string> = {
@@ -652,13 +785,17 @@ export default function DataPage() {
   const [loading, setLoading] = useState(false);
   const [lastRun, setLastRun] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [pipelineStats, setPipelineStats] = useState<PipelineStats | null>(null);
+  const [pipelineLoading, setPipelineLoading] = useState(true);
+  const hasAutoCollected = useRef(false);
 
   const runCollect = useCallback(async () => {
+    if (loading) return;
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API_URL}/api/sources/collect`, { method: "POST" });
-      if (!res.ok) throw new Error(`API error ${res.status} — is FastAPI running on ${API_URL}?`);
+      const res = await fetch("/api/sources/collect", { method: "POST" });
+      if (!res.ok) throw new Error(`Data collection failed (HTTP ${res.status}). Check server logs.`);
       const json = (await res.json()) as CollectResult;
       setData(json);
       setLastRun(new Date().toLocaleTimeString());
@@ -667,9 +804,31 @@ export default function DataPage() {
     } finally {
       setLoading(false);
     }
+  }, [loading]);
+
+  useEffect(() => {
+    if (hasAutoCollected.current) return;
+    hasAutoCollected.current = true;
+    void runCollect();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => { void runCollect(); }, [runCollect]);
+  useEffect(() => {
+    const controller = new AbortController();
+    setPipelineLoading(true);
+    getPipelineStats(undefined, controller.signal)
+      .then((d) => {
+        if (!controller.signal.aborted) {
+          setPipelineStats(d);
+          setPipelineLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setPipelineLoading(false);
+      });
+    return () => controller.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const src = (key: string): SourceSnapshot | undefined =>
     data?.sources[key] as SourceSnapshot | undefined;
@@ -755,6 +914,7 @@ export default function DataPage() {
           <AuctionPortalsPanel snap={src("auction_portals")} />
           <GsaAuctionsPanel snap={src("gsa_auctions")} />
           <HomeStepsPanel snap={src("homesteps")} />
+          <PipelineDataPanel stats={pipelineStats} loading={pipelineLoading} />
 
           <section className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
             <SectionHeader

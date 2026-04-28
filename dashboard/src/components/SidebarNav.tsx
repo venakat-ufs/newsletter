@@ -67,6 +67,7 @@ function UnitedLogo() {
       alt="United Field Services"
       width={120}
       height={52}
+      priority
       style={{ objectFit: "contain", width: "auto", height: "auto" }}
     />
   );

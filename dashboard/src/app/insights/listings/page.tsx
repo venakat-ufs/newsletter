@@ -1,42 +1,36 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
-import { listDrafts, type Draft } from "@/lib/api";
+import { prisma } from "@/server/prisma";
 import { getIssueWeekLabel } from "@/lib/newsletter-intel";
 
-export default function ListingsInsightsHubPage() {
-  const [drafts, setDrafts] = useState<Draft[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export const dynamic = "force-dynamic";
 
-  useEffect(() => {
-    let cancelled = false;
-    const load = async () => {
-      try {
-        setLoading(true);
-        const data = await listDrafts();
-        if (!cancelled) {
-          setDrafts(data);
-          setError(null);
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Failed to load issues");
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    };
+export default async function ListingsInsightsHubPage() {
+  type DraftRow = { id: number; issueNumber: number; createdAt: string; status: string; newsletterId: number };
+  let drafts: DraftRow[] = [];
+  let loadError = false;
 
-    void load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  try {
+    const [draftRows, newsletterRows] = await Promise.all([
+      prisma.draft.findMany({
+        orderBy: { updatedAt: "desc" },
+        select: { id: true, createdAt: true, status: true, newsletterId: true },
+      }),
+      prisma.newsletter.findMany({
+        select: { id: true, issueNumber: true },
+      }),
+    ]);
+    const issueByNewsletterId = new Map(newsletterRows.map((n) => [n.id, n.issueNumber]));
+    drafts = draftRows.map((r) => ({
+      id: r.id,
+      issueNumber: issueByNewsletterId.get(r.newsletterId) ?? r.newsletterId,
+      createdAt: r.createdAt,
+      status: r.status,
+      newsletterId: r.newsletterId,
+    }));
+  } catch {
+    loadError = true;
+  }
 
   return (
     <div className="space-y-6">
@@ -60,9 +54,9 @@ export default function ListingsInsightsHubPage() {
         </div>
       </div>
 
-      {error ? (
+      {loadError ? (
         <div className="rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700 shadow-sm">
-          {error}
+          Failed to load issues. Please try refreshing.
         </div>
       ) : null}
 
@@ -74,19 +68,13 @@ export default function ListingsInsightsHubPage() {
           </h2>
         </div>
 
-        {loading ? (
-          <div className="px-6 py-10 text-center text-sm text-[#6B7280]">
-            Loading available issues...
-          </div>
-        ) : null}
-
-        {!loading && drafts.length === 0 ? (
+        {drafts.length === 0 && !loadError ? (
           <div className="px-6 py-10 text-center text-sm text-[#6B7280]">
             No issues found. Run the pipeline first.
           </div>
         ) : null}
 
-        {!loading && drafts.length > 0 ? (
+        {drafts.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-[#E5E7EB]">
               <thead className="bg-[#F9FAFB]">
@@ -101,10 +89,10 @@ export default function ListingsInsightsHubPage() {
                 {drafts.map((draft) => (
                   <tr key={draft.id} className="transition hover:bg-[#F9FAFB]">
                     <td className="px-6 py-4 text-sm font-semibold text-[#111827]">
-                      #{draft.issue_number ?? draft.newsletter_id}
+                      #{draft.issueNumber ?? draft.newsletterId}
                     </td>
                     <td className="px-6 py-4 text-sm text-[#6B7280]">
-                      {getIssueWeekLabel(draft.created_at)}
+                      {getIssueWeekLabel(draft.createdAt)}
                     </td>
                     <td className="px-6 py-4 text-sm text-[#6B7280]">
                       {draft.status.replaceAll("_", " ")}
@@ -112,6 +100,7 @@ export default function ListingsInsightsHubPage() {
                     <td className="px-6 py-4">
                       <Link
                         href={`/insights/listings/${draft.id}`}
+                        prefetch={true}
                         className="rounded-lg bg-[#2563EB] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#1D4ED8]"
                       >
                         Open

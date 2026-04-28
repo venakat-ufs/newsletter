@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { getDraft, type Draft } from "@/lib/api";
 import { getDraftSections, getNewsHighlights, getSourceCards } from "@/lib/newsletter-intel";
+import { getPipelineStats, type PipelineStats } from "@/lib/pipeline-stats";
 import { pretextCompact, pretextCount } from "@/lib/pretext";
 
 type ChartRow = {
@@ -24,7 +25,7 @@ type SourceLinkRow = {
 };
 
 type SortMode = "value_desc" | "delta_desc" | "name_asc";
-type ViewTab = "overview" | "listings" | "pulse" | "news" | "employers" | "sources";
+type ViewTab = "overview" | "listings" | "pulse" | "news" | "employers" | "sources" | "pipeline";
 
 const TABS: Array<{ key: ViewTab; label: string }> = [
   { key: "overview", label: "Overview" },
@@ -33,6 +34,7 @@ const TABS: Array<{ key: ViewTab; label: string }> = [
   { key: "news", label: "News" },
   { key: "employers", label: "Employers" },
   { key: "sources", label: "Sources" },
+  { key: "pipeline", label: "Pipeline" },
 ];
 
 function asNumber(value: unknown): number {
@@ -249,6 +251,8 @@ export function ListingsInsightsView({
   const [sortMode, setSortMode] = useState<SortMode>("value_desc");
   const [sourceFilter, setSourceFilter] = useState("all");
   const [tab, setTab] = useState<ViewTab>(newsOnly ? "news" : defaultTab);
+  const [pipelineStats, setPipelineStats] = useState<PipelineStats | null>(null);
+  const [pipelineLoading, setPipelineLoading] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -289,6 +293,23 @@ export function ListingsInsightsView({
       setTab(next);
     }
   }, [newsOnly, searchParams]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setPipelineLoading(true);
+    getPipelineStats(undefined, controller.signal)
+      .then((data) => {
+        if (!controller.signal.aborted) {
+          setPipelineStats(data);
+          setPipelineLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setPipelineLoading(false);
+      });
+    return () => controller.abort();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const sectionMap = useMemo(() => {
     if (!draft) {
@@ -548,11 +569,16 @@ export function ListingsInsightsView({
           </div>
         </div>
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-4">
+        <div className="mt-5 grid gap-3 grid-cols-2 sm:grid-cols-3 xl:grid-cols-5">
           <MiniCard label="Inventory signals" value={pretextCount(totalInventorySignals)} detail="Tracked listing intensity" />
           <MiniCard label="Top bank volume" value={pretextCount(totalBankSignals)} detail="Institution-level activity" />
           <MiniCard label="Stories" value={pretextCount(newsRows.length)} detail="Industry stories in this issue" />
           <MiniCard label="Source links" value={pretextCount(sourceLinkRows.length)} detail="Raw URLs + sample listings" />
+          <MiniCard
+            label="In pipeline"
+            value={pipelineStats ? pipelineStats.totals.total_listings.toLocaleString() : pipelineLoading ? "..." : "—"}
+            detail={pipelineStats ? `${pipelineStats.rows.length} states · wk ${pipelineStats.week_start}` : "Live CRM listings"}
+          />
         </div>
 
         {!newsOnly ? (
@@ -617,7 +643,7 @@ export function ListingsInsightsView({
 
       {tab === "overview" ? (
         <section className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
-          <div className="grid gap-3 lg:grid-cols-3">
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
               <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Market pulse</div>
               <h2 className="mt-1 text-base font-semibold text-[#111827]">Inventory build and geographies</h2>
@@ -666,6 +692,36 @@ export function ListingsInsightsView({
                   Employers →
                 </Link>
               </div>
+            </div>
+
+            <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
+              <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Lead pipeline</div>
+              <h2 className="mt-1 text-base font-semibold text-[#111827]">CRM listings by state</h2>
+              <div className="mt-2 text-xs text-[#6B7280]">
+                {pipelineLoading
+                  ? "Loading pipeline data…"
+                  : pipelineStats
+                    ? `${pipelineStats.totals.total_listings.toLocaleString()} listings · ${pipelineStats.rows.length} states · wk ${pipelineStats.week_start}`
+                    : "No pipeline data available."}
+              </div>
+              {pipelineStats ? (
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  <span className="rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[10px] font-semibold text-[#2563EB]">
+                    {pipelineStats.totals.leads_inserted} new leads
+                  </span>
+                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+                    {pipelineStats.totals.total_listings > 0
+                      ? `${Math.round((pipelineStats.totals.with_agent / pipelineStats.totals.total_listings) * 100)}%`
+                      : "—"} agent coverage
+                  </span>
+                </div>
+              ) : null}
+              <Link
+                href={`${insightBase}?tab=pipeline`}
+                className="mt-3 inline-flex rounded-lg border border-[#E5E7EB] bg-white px-3 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F9FAFB]"
+              >
+                Pipeline tab →
+              </Link>
             </div>
           </div>
         </section>
@@ -762,6 +818,90 @@ export function ListingsInsightsView({
               </div>
             </div>
           </section>
+
+          {pipelineStats ? (
+            <section className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
+              <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">CRM lead pipeline</div>
+              <h2 className="mt-1 text-lg font-semibold text-[#111827]">Pipeline by state</h2>
+              <p className="mt-0.5 text-[11px] text-[#9CA3AF]">
+                Week of {pipelineStats.week_start} · {pipelineStats.rows.length} states ·{" "}
+                {pipelineStats.totals.total_listings.toLocaleString()} total listings
+              </p>
+              <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                <div className="rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2.5">
+                  <div className="text-[10px] font-semibold uppercase tracking-wider text-[#6B7280]">Total listings</div>
+                  <div className="mt-0.5 text-xl font-bold text-[#111827]">{pipelineStats.totals.total_listings.toLocaleString()}</div>
+                  <div className="text-[10px] text-[#9CA3AF]">{pipelineStats.rows.length} active states</div>
+                </div>
+                <div className="rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2.5">
+                  <div className="text-[10px] font-semibold uppercase tracking-wider text-[#6B7280]">Agent coverage</div>
+                  <div className="mt-0.5 text-xl font-bold text-emerald-700">
+                    {pipelineStats.totals.total_listings > 0
+                      ? `${Math.round((pipelineStats.totals.with_agent / pipelineStats.totals.total_listings) * 100)}%`
+                      : "—"}
+                  </div>
+                  <div className="text-[10px] text-[#9CA3AF]">{pipelineStats.totals.with_agent.toLocaleString()} listings assigned</div>
+                </div>
+                <div className="rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2.5">
+                  <div className="text-[10px] font-semibold uppercase tracking-wider text-[#6B7280]">New leads</div>
+                  <div className="mt-0.5 text-xl font-bold text-[#2563EB]">+{pipelineStats.totals.leads_inserted.toLocaleString()}</div>
+                  <div className="text-[10px] text-[#9CA3AF]">inserted this week</div>
+                </div>
+              </div>
+              <div className="mt-3 overflow-auto rounded-lg border border-[#E5E7EB]">
+                <table className="min-w-full border-separate border-spacing-0 text-xs">
+                  <thead>
+                    <tr className="bg-[#F9FAFB] text-left text-[10px] uppercase tracking-wider text-[#6B7280]">
+                      <th className="px-2.5 py-2">#</th>
+                      <th className="px-2.5 py-2">State</th>
+                      <th className="px-2.5 py-2">Listings</th>
+                      <th className="px-2.5 py-2">Agent %</th>
+                      <th className="px-2.5 py-2">Email %</th>
+                      <th className="px-2.5 py-2">New Leads</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pipelineStats.rows.map((row, index) => {
+                      const aPct = row.total_listings > 0 ? Math.round((row.with_agent / row.total_listings) * 100) : 0;
+                      const ePct = row.total_listings > 0 ? Math.round((row.with_email / row.total_listings) * 100) : 0;
+                      return (
+                        <tr key={row.state} className={index % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"}>
+                          <td className="px-2.5 py-1.5 font-semibold text-[#6B7280]">{index + 1}</td>
+                          <td className="px-2.5 py-1.5 font-bold text-[#111827]">{row.state}</td>
+                          <td className="px-2.5 py-1.5 font-semibold text-[#111827]">{row.total_listings.toLocaleString()}</td>
+                          <td className="px-2.5 py-1.5">
+                            <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                              aPct >= 50 ? "bg-emerald-50 text-emerald-700" : aPct >= 25 ? "bg-amber-50 text-amber-700" : "bg-red-50 text-red-600"
+                            }`}>{aPct}%</span>
+                          </td>
+                          <td className="px-2.5 py-1.5">
+                            <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                              ePct >= 50 ? "bg-emerald-50 text-emerald-700" : ePct >= 25 ? "bg-amber-50 text-amber-700" : "bg-red-50 text-red-600"
+                            }`}>{ePct}%</span>
+                          </td>
+                          <td className="px-2.5 py-1.5">
+                            {row.leads_inserted > 0 ? (
+                              <span className="rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[10px] font-semibold text-[#2563EB]">
+                                +{row.leads_inserted}
+                              </span>
+                            ) : (
+                              <span className="text-[#9CA3AF]">—</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <Link
+                href={`${insightBase}?tab=pipeline`}
+                className="mt-3 inline-flex rounded-lg bg-[#2563EB] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#1D4ED8]"
+              >
+                Full pipeline view →
+              </Link>
+            </section>
+          ) : null}
         </>
       ) : null}
 
@@ -1023,6 +1163,147 @@ export function ListingsInsightsView({
               </tbody>
             </table>
           </div>
+        </section>
+      ) : null}
+
+      {tab === "pipeline" ? (
+        <section className="space-y-4 rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
+          <div>
+            <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Lead pipeline</div>
+            <h2 className="mt-1 text-lg font-semibold text-[#111827]">Foreclosure listings by state</h2>
+          </div>
+
+          {pipelineLoading ? (
+            <div className="rounded-lg border border-dashed border-[#D1D5DB] bg-[#F9FAFB] px-3 py-8 text-center text-xs text-[#6B7280]">
+              Loading pipeline data...
+            </div>
+          ) : !pipelineStats ? (
+            <div className="rounded-lg border border-dashed border-[#D1D5DB] bg-[#F9FAFB] px-3 py-8 text-center text-xs text-[#6B7280]">
+              No pipeline data available for this period.
+            </div>
+          ) : (
+            <>
+              <p className="text-[11px] text-[#9CA3AF]">
+                Week of {pipelineStats.week_start} · {pipelineStats.rows.length} states reporting
+              </p>
+
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <MiniCard
+                  label="Total Listings"
+                  value={pipelineStats.totals.total_listings.toLocaleString()}
+                  detail="Tracked foreclosure listings"
+                />
+                <MiniCard
+                  label="New Leads"
+                  value={pipelineStats.totals.leads_inserted.toLocaleString()}
+                  detail="Inserted into pipeline this week"
+                />
+                <MiniCard
+                  label="Agent Coverage"
+                  value={
+                    pipelineStats.totals.total_listings > 0
+                      ? `${Math.round((pipelineStats.totals.with_agent / pipelineStats.totals.total_listings) * 100)}%`
+                      : "—"
+                  }
+                  detail={`${pipelineStats.totals.with_agent.toLocaleString()} listings with agent assigned`}
+                />
+                <MiniCard
+                  label="Email Coverage"
+                  value={
+                    pipelineStats.totals.total_listings > 0
+                      ? `${Math.round((pipelineStats.totals.with_email / pipelineStats.totals.total_listings) * 100)}%`
+                      : "—"
+                  }
+                  detail={`${pipelineStats.totals.with_email.toLocaleString()} listings with email contact`}
+                />
+              </div>
+
+              <HorizontalBars
+                subtitle="Lead pipeline by state"
+                title="Top states by foreclosure listings"
+                rows={pipelineStats.rows.slice(0, 10).map((row) => ({
+                  name: row.state,
+                  value: row.total_listings,
+                  context: `${row.with_agent} with agent · ${row.leads_inserted} new leads`,
+                }))}
+              />
+
+              <div className="overflow-auto rounded-lg border border-[#E5E7EB]">
+                <table className="min-w-full border-separate border-spacing-0 text-xs">
+                  <thead>
+                    <tr className="bg-[#F9FAFB] text-left text-[10px] uppercase tracking-wider text-[#6B7280]">
+                      <th className="px-2.5 py-2">#</th>
+                      <th className="px-2.5 py-2">State</th>
+                      <th className="px-2.5 py-2">Listings</th>
+                      <th className="px-2.5 py-2">With Agent</th>
+                      <th className="px-2.5 py-2">Agent %</th>
+                      <th className="px-2.5 py-2">With Email</th>
+                      <th className="px-2.5 py-2">Email %</th>
+                      <th className="px-2.5 py-2">New Leads</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pipelineStats.rows.map((row, index) => {
+                      const agentPct =
+                        row.total_listings > 0
+                          ? Math.round((row.with_agent / row.total_listings) * 100)
+                          : 0;
+                      const emailPct =
+                        row.total_listings > 0
+                          ? Math.round((row.with_email / row.total_listings) * 100)
+                          : 0;
+                      return (
+                        <tr key={row.state} className={index % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"}>
+                          <td className="px-2.5 py-2 font-semibold text-[#6B7280]">{index + 1}</td>
+                          <td className="px-2.5 py-2 font-bold text-[#111827]">{row.state}</td>
+                          <td className="px-2.5 py-2 font-semibold text-[#111827]">
+                            {row.total_listings.toLocaleString()}
+                          </td>
+                          <td className="px-2.5 py-2 text-[#374151]">{row.with_agent.toLocaleString()}</td>
+                          <td className="px-2.5 py-2">
+                            <span
+                              className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                                agentPct >= 50
+                                  ? "bg-emerald-50 text-emerald-700"
+                                  : agentPct >= 25
+                                    ? "bg-amber-50 text-amber-700"
+                                    : "bg-red-50 text-red-600"
+                              }`}
+                            >
+                              {agentPct}%
+                            </span>
+                          </td>
+                          <td className="px-2.5 py-2 text-[#374151]">{row.with_email.toLocaleString()}</td>
+                          <td className="px-2.5 py-2">
+                            <span
+                              className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                                emailPct >= 50
+                                  ? "bg-emerald-50 text-emerald-700"
+                                  : emailPct >= 25
+                                    ? "bg-amber-50 text-amber-700"
+                                    : "bg-red-50 text-red-600"
+                              }`}
+                            >
+                              {emailPct}%
+                            </span>
+                          </td>
+                          <td className="px-2.5 py-2">
+                            {row.leads_inserted > 0 ? (
+                              <span className="rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[10px] font-semibold text-[#2563EB]">
+                                +{row.leads_inserted.toLocaleString()}
+                              </span>
+                            ) : (
+                              <span className="text-[#9CA3AF]">—</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
         </section>
       ) : null}
 

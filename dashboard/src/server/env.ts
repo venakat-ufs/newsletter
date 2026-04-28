@@ -160,7 +160,11 @@ export function getSettings(): Settings {
     databaseUrl: env.DATABASE_URL ?? "file:../../data/ufs-newsletter.db",
     authUsername: env.AUTH_USERNAME ?? "",
     authPassword: env.AUTH_PASSWORD ?? "",
-    authSessionSecret: env.AUTH_SESSION_SECRET ?? "",
+    authSessionSecret: (() => {
+      const s = env.AUTH_SESSION_SECRET ?? "";
+      if (!s) throw new Error("AUTH_SESSION_SECRET must be set to a long random string.");
+      return s;
+    })(),
   };
 
   return cachedSettings;

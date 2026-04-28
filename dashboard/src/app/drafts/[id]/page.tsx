@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 
 import { ApprovalActions } from "@/components/ApprovalActions";
@@ -24,6 +25,7 @@ import {
   getSourceCards,
   getTopicSourceRows,
 } from "@/lib/newsletter-intel";
+import { getPipelineStats, type PipelineStats } from "@/lib/pipeline-stats";
 import { pretextCompact } from "@/lib/pretext";
 
 type ViewMode = "edit" | "preview";
@@ -59,6 +61,8 @@ export default function DraftEditorPage() {
   const [sourceModeFilter, setSourceModeFilter] = useState<SourceModeFilter>("all");
   const [sourceGroupFilter, setSourceGroupFilter] = useState("all");
   const [sourceDisplayLimit, setSourceDisplayLimit] = useState<SourceDisplayLimit>("8");
+  const [pipelineStats, setPipelineStats] = useState<PipelineStats | null>(null);
+  const autoGenerateRef = useRef(false);
 
   const loadDraft = useCallback(async () => {
     if (!id) {
@@ -179,6 +183,37 @@ export default function DraftEditorPage() {
   useEffect(() => {
     loadDraft();
   }, [loadDraft]);
+
+  // Auto-trigger draft generation when no sections exist yet
+  useEffect(() => {
+    if (!loading && draft && !saving && editedSections.length === 0 && !autoGenerateRef.current) {
+      autoGenerateRef.current = true;
+      setSaving(true);
+      setMessage("Generating the newsletter draft...");
+      generateDraft(draft.newsletter_id)
+        .then(() => {
+          setMessage("Draft generated. You can edit it now.");
+          return loadDraft();
+        })
+        .catch((err: unknown) => {
+          setError(err instanceof Error ? err.message : "AI generation failed");
+        })
+        .finally(() => {
+          setSaving(false);
+        });
+    }
+  }, [loading, draft, saving, editedSections.length, loadDraft]);
+
+  // Fetch pipeline stats once on mount
+  useEffect(() => {
+    const controller = new AbortController();
+    getPipelineStats(undefined, controller.signal)
+      .then((data) => {
+        if (!controller.signal.aborted) setPipelineStats(data);
+      })
+      .catch(() => {});
+    return () => controller.abort();
+  }, []);
 
   const sourceCards = useMemo(() => (draft ? getSourceCards(draft) : []), [draft]);
   const topicRows = useMemo(() => (draft ? getTopicSourceRows(draft) : []), [draft]);
@@ -369,6 +404,30 @@ export default function DraftEditorPage() {
                 Open listings intelligence
               </button>
             </div>
+
+            {pipelineStats ? (
+              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 rounded-2xl border border-black/5 bg-[#f7f5f2] px-4 py-2.5">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#7a6b60]">Pipeline</span>
+                <span className="text-xs text-[#5f5954]">
+                  <span className="font-semibold text-[#1a1a1a]">{pipelineStats.totals.total_listings.toLocaleString()}</span> listings
+                </span>
+                <span className="text-xs text-[#5f5954]">
+                  <span className="font-semibold text-emerald-700">
+                    {pipelineStats.totals.total_listings > 0 ? `${Math.round((pipelineStats.totals.with_agent / pipelineStats.totals.total_listings) * 100)}%` : "—"}
+                  </span> agent coverage
+                </span>
+                <span className="text-xs text-[#5f5954]">
+                  <span className="font-semibold text-[#2563EB]">+{pipelineStats.totals.leads_inserted.toLocaleString()}</span> new leads
+                </span>
+                <Link
+                  href={`/insights/listings/${draft.id}?tab=pipeline`}
+                  className="ml-auto text-[10px] font-semibold text-[#7a6b60] hover:text-[#1a1a1a]"
+                >
+                  View pipeline →
+                </Link>
+              </div>
+            ) : null}
+
             <TopicSourceTable
               rows={topicRows}
               emptyMessage="No source list yet. Run Step 1 from the home page first."

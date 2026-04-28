@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+import { useEffect, useState, useCallback, useRef } from "react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -374,14 +372,16 @@ export default function ReoPage() {
   const [loading, setLoading] = useState(false);
   const [lastRun, setLastRun] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const hasAutoCollected = useRef(false);
 
   const runCollect = useCallback(async () => {
+    if (loading) return;
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API_URL}/api/sources/collect`, { method: "POST" });
+      const res = await fetch("/api/sources/collect", { method: "POST" });
       if (!res.ok)
-        throw new Error(`API error ${res.status} — is FastAPI running on ${API_URL}?`);
+        throw new Error(`Data collection failed (HTTP ${res.status}). Check server logs.`);
       const json = (await res.json()) as CollectResult;
       setData(json);
       setLastRun(new Date().toLocaleTimeString());
@@ -390,11 +390,14 @@ export default function ReoPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [loading]);
 
   useEffect(() => {
+    if (hasAutoCollected.current) return;
+    hasAutoCollected.current = true;
     void runCollect();
-  }, [runCollect]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const src = (key: string): SourceSnapshot | undefined =>
     data?.sources[key] as SourceSnapshot | undefined;

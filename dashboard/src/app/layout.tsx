@@ -22,7 +22,7 @@ export default async function RootLayout({
   const session = await verifySessionToken(cookieStore.get(AUTH_COOKIE_NAME)?.value);
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
         suppressHydrationWarning
         className="antialiased min-h-screen text-[#111827]"

@@ -56,10 +56,11 @@ test("draft dashboard pipeline flow renders and navigates", async ({ page }) => 
   await expect(
     page.getByRole("heading", { name: "Build the newsletter in 3 steps" }),
   ).toBeVisible();
+  // These headings are inside a loading-state guard — wait up to 15s for the API call to resolve
   await expect(
     page.getByRole("heading", { name: "Where the data is coming from" }),
-  ).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Current issue" })).toBeVisible();
+  ).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole("heading", { name: "Current issue" })).toBeVisible({ timeout: 15_000 });
 
   await page.getByRole("button", { name: /run step 1/i }).click();
   await expect(
