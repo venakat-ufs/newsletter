@@ -1629,7 +1629,8 @@ async function collectNewsApi(settings: Settings): Promise<SourceResult> {
     });
   }
 
-  const weekAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
+  // Free dev plan only returns articles from the past 24 hours; paid plans can go further.
+  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000)
     .toISOString()
     .slice(0, 10);
   const seenUrls = new Set<string>();
@@ -1640,7 +1641,7 @@ async function collectNewsApi(settings: Settings): Promise<SourceResult> {
     try {
       const url = new URL("https://newsapi.org/v2/everything");
       url.searchParams.set("q", query);
-      url.searchParams.set("from", weekAgo);
+      url.searchParams.set("from", yesterday);
       url.searchParams.set("sortBy", "relevancy");
       url.searchParams.set("language", "en");
       url.searchParams.set("pageSize", "25");
@@ -2996,7 +2997,7 @@ async function collectGrok(settings: Settings): Promise<SourceResult> {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            model: "grok-4.20-beta-latest-non-reasoning",
+            model: "grok-3-latest",
             temperature: 0.2,
             max_output_tokens: 1400,
             input: [
