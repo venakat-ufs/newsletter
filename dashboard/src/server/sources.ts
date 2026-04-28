@@ -3220,12 +3220,12 @@ export async function collectAllSources(): Promise<{
     optional?: boolean;
     runner: () => Promise<SourceResult>;
   }> = [
-    { key: "housingwire", runner: () => collectHousingWire() },
-    { key: "mortgagepoint", runner: () => collectMortgagePoint() },
+    { key: "housingwire", optional: true, runner: () => collectHousingWire() },
+    { key: "mortgagepoint", optional: true, runner: () => collectMortgagePoint() },
     { key: "zillow_research", optional: true, runner: () => collectZillowResearch() },
     { key: "zillow_rapidapi", optional: true, runner: () => collectZillowRapidApi(settings) },
-    { key: "hud_user", optional: true, runner: () => collectHudUser() },
-    { key: "fhfa_news", optional: true, runner: () => collectFhfaNews() },
+    { key: "hud_user", runner: () => collectHudUser() },
+    { key: "fhfa_news", runner: () => collectFhfaNews() },
     { key: "hud_homestore", optional: true, runner: () => collectHudHomeStore() },
     { key: "bank_of_america_reo", optional: true, runner: () => collectBankOfAmericaReo() },
     { key: "homesteps", optional: true, runner: () => collectHomeSteps(settings) },
@@ -3279,9 +3279,11 @@ export async function collectAllSources(): Promise<{
     );
   }
 
-  // 25s per source — scrapers need time for multi-step session + state loops.
-  // All sources run in parallel so total wall time = slowest source, not the sum.
-  const SOURCE_TIMEOUT_MS = 25_000;
+  // Vercel serverless functions have a 60s hard cap on Hobby plan, and AWS Lambda
+  // IPs are blocked by most scraping targets anyway. Use 10s on Vercel so the
+  // function stays well within the limit and has budget for AI draft generation.
+  // Locally use 25s so multi-step scrapers (HUD, BofA, HomeSteps) can complete.
+  const SOURCE_TIMEOUT_MS = process.env.VERCEL ? 10_000 : 25_000;
 
   const sources = await Promise.all(
     sourceDefinitions.map((definition) => {
