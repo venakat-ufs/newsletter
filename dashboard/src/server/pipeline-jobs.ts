@@ -1,5 +1,6 @@
 import { appendWorkflowLog } from "@/server/logs";
 import { ensureDatabaseReady, prisma } from "@/server/prisma";
+import { getSettings } from "@/server/env";
 import { runPipeline } from "@/server/workflow";
 
 const JOB_LEASE_MS = 10 * 60 * 1000;
@@ -145,8 +146,14 @@ async function tryClaimJob(jobId: string): Promise<PipelineJobSummary | null> {
 }
 
 export function startPipelineJob(jobId: string): void {
-  queueMicrotask(() => {
-    void runPipelineJob(jobId);
+  const { appPublicUrl } = getSettings();
+  // Fire a real HTTP POST so the job runs in its own serverless function (maxDuration=120),
+  // not inside the trigger function that gets killed after the 202 response is sent.
+  fetch(`${appPublicUrl}/api/pipeline/jobs/${jobId}/run`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  }).catch(() => {
+    // Best-effort; the job stays "queued" and can be retried by the UI if this fails.
   });
 }
 

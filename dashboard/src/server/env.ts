@@ -156,7 +156,10 @@ export function getSettings(): Settings {
     apiHost: env.API_HOST ?? "0.0.0.0",
     apiPort: toNumber(env.API_PORT, 3000),
     appPublicUrl:
-      env.APP_PUBLIC_URL ?? env.DASHBOARD_URL ?? env.API_PUBLIC_URL ?? "http://localhost:3000",
+      env.APP_PUBLIC_URL ??
+      env.DASHBOARD_URL ??
+      env.API_PUBLIC_URL ??
+      (env.VERCEL_URL ? `https://${env.VERCEL_URL}` : "http://localhost:3000"),
     databaseUrl: env.DATABASE_URL ?? "file:../../data/ufs-newsletter.db",
     authUsername: env.AUTH_USERNAME ?? "",
     authPassword: env.AUTH_PASSWORD ?? "",
