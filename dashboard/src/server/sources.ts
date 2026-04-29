@@ -461,7 +461,10 @@ async function runLoggedSourceCollection(
   },
 ): Promise<SourceResult> {
   const startedAt = Date.now();
-  await appendWorkflowLog({
+
+  // Fire-and-forget: do NOT await the start log — the serial DB queue was
+  // blocking all 29 parallel sources from starting their network fetches.
+  void appendWorkflowLog({
     scope: "sources",
     step: sourceKey,
     status: "info",
@@ -469,21 +472,38 @@ async function runLoggedSourceCollection(
     context: { source: sourceKey },
   });
 
+  console.log(`[source] START ${sourceKey}`);
+
   try {
     const result = await runner();
     const durationMs = Date.now() - startedAt;
     const hasWarnings = result.errors.length > 0;
     const optionalFailure = Boolean(options?.optional && !result.success);
 
-    await appendWorkflowLog({
+    const logStatus = result.success
+      ? (hasWarnings ? "warning" : "success")
+      : optionalFailure ? "warning" : "error";
+
+    const logMessage = result.success
+      ? `${sourceLogMessage(result.source)} collected ${result.data.length} items.`
+      : optionalFailure
+        ? `${sourceLogMessage(result.source)} is unavailable, but the pipeline can continue without it.`
+        : `${sourceLogMessage(result.source)} returned no usable data.`;
+
+    // Console output so failures are visible in local dev and Vercel logs.
+    if (result.success) {
+      console.log(`[source] OK   ${sourceKey} — ${result.data.length} items (${durationMs}ms)`);
+    } else {
+      const errSummary = result.errors.slice(0, 2).join(" | ");
+      console.warn(`[source] FAIL ${sourceKey} — ${errSummary} (${durationMs}ms)`);
+    }
+
+    // Fire-and-forget completion log too — don't block return.
+    void appendWorkflowLog({
       scope: "sources",
       step: sourceKey,
-      status: result.success ? (hasWarnings ? "warning" : "success") : optionalFailure ? "warning" : "error",
-      message: result.success
-        ? `${sourceLogMessage(result.source)} collected ${result.data.length} items.`
-        : optionalFailure
-          ? `${sourceLogMessage(result.source)} is unavailable, but the pipeline can continue without it.`
-          : `${sourceLogMessage(result.source)} returned no usable data.`,
+      status: logStatus,
+      message: logMessage,
       context: {
         source: result.source,
         requested_source: sourceKey,
@@ -499,8 +519,11 @@ async function runLoggedSourceCollection(
     return result;
   } catch (error) {
     const message = error instanceof Error ? error.message : "unknown error";
+    const durationMs = Date.now() - startedAt;
 
-    await appendWorkflowLog({
+    console.error(`[source] CRASH ${sourceKey} — ${message} (${durationMs}ms)`);
+
+    void appendWorkflowLog({
       scope: "sources",
       step: sourceKey,
       status: "error",
@@ -508,7 +531,7 @@ async function runLoggedSourceCollection(
       context: {
         source: sourceKey,
         error: message,
-        duration_ms: Date.now() - startedAt,
+        duration_ms: durationMs,
       },
     });
 
