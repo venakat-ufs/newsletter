@@ -62,7 +62,7 @@ export async function POST(request: Request): Promise<Response> {
     response.cookies.set(AUTH_COOKIE_NAME, token, {
       httpOnly: true,
       sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production" && process.env.COOKIE_SECURE !== "false",
       path: "/",
       maxAge: AUTH_SESSION_MAX_AGE_SECONDS,
     });
