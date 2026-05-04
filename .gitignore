@@ -16,3 +16,10 @@ coverage/
 data/*.db*
 
 .vercel
+
+# Local tooling — never commit
+.claude/settings.local.json
+.obsidian/
+graphify-out/cache/
+dashboard/graphify-out/
+.codex

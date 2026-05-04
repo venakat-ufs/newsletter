@@ -58,7 +58,19 @@
       "Bash(git restore *)",
       "Bash(git commit -m ' *)",
       "Bash(npx playwright *)",
-      "Bash(grep -v \"node_modules\\\\|//.*any\\\\|getAny\\\\|many\\\\|company\\\\|currency\\\\|fallback\\\\|binary\\\\|\\\\.d\\\\.ts\")"
+      "Bash(grep -v \"node_modules\\\\|//.*any\\\\|getAny\\\\|many\\\\|company\\\\|currency\\\\|fallback\\\\|binary\\\\|\\\\.d\\\\.ts\")",
+      "Bash(vercel --scope millenialslittledream-creators-projects project ls)",
+      "Bash(vercel --scope millenialslittledream-creators-projects deployments ufs-newsletter)",
+      "Bash(vercel --scope millenialslittledream-creators-projects ls --help)",
+      "Bash(vercel env *)",
+      "PowerShell(Get-Content \"$env:APPDATA\\\\Vercel\\\\auth.json\" -ErrorAction SilentlyContinue | ConvertFrom-Json | Select-Object -ExpandProperty token | ForEach-Object { $_.Substring\\(0,10\\) + \"...\" })",
+      "Bash(vercel --scope millenialslittledream-creators-projects ls ufs-newsletter)",
+      "Bash(curl -s http://localhost:3000/api/health)",
+      "Bash(npx kill-port *)",
+      "Bash(npx dotenv-cli -e ../.env -- npx tsx --tsconfig tsconfig.json -e ' *)",
+      "Bash(npm run *)",
+      "Bash(echo \"Dev server PID: $!\")",
+      "Bash(curl -s -X POST \"http://localhost:3000/api/pipeline/trigger\" -H \"Content-Type: application/json\" -b \"ufs_session=dummy\")"
     ]
   },
   "hooks": {
