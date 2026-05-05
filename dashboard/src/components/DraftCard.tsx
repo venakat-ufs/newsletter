@@ -33,7 +33,7 @@ export function DraftCard({ draft }: { draft: Draft }) {
             <h3 className="mt-2 text-xl font-semibold text-[#1a1a1a]">
               {getIssueWeekLabel(draft.created_at)}
             </h3>
-            <p className="mt-2 text-sm text-[#65584d]">
+            <p className="mt-2 text-sm text-[#65584d]" suppressHydrationWarning>
               Last updated {new Date(draft.updated_at).toLocaleString()}
             </p>
           </div>
