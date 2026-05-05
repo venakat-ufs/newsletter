@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/server/auth";
+import { verifySsoToken } from "@/server/sso";
+
+const SSO_COOKIE_NAME = "ufs_insights_sso";
+const SSO_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 4; // 4 hours
 
 function isPublicPath(pathname: string): boolean {
   if (/\.(?:avif|gif|ico|jpe?g|png|svg|webp)$/i.test(pathname)) {
@@ -43,6 +47,35 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
 
   if (session) {
     return NextResponse.next();
+  }
+
+  // SSO access for /insights/* — clients from clients-unitedffs portal
+  if (pathname.startsWith("/insights/")) {
+    // Check for one-time SSO token in query string
+    const ssoToken = request.nextUrl.searchParams.get("token");
+    if (ssoToken) {
+      const valid = await verifySsoToken(ssoToken);
+      if (valid) {
+        const response = NextResponse.next();
+        const isSecure =
+          process.env.NODE_ENV === "production" &&
+          process.env.COOKIE_SECURE !== "false";
+        response.cookies.set(SSO_COOKIE_NAME, "1", {
+          httpOnly: true,
+          sameSite: "lax",
+          secure: isSecure,
+          path: "/insights",
+          maxAge: SSO_COOKIE_MAX_AGE_SECONDS,
+        });
+        return response;
+      }
+    }
+
+    // Check for existing SSO session cookie (set on a previous valid token visit)
+    const ssoCookie = request.cookies.get(SSO_COOKIE_NAME)?.value;
+    if (ssoCookie === "1") {
+      return NextResponse.next();
+    }
   }
 
   if (pathname.startsWith("/api/")) {
