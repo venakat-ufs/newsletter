@@ -20,6 +20,11 @@ def normalize_database_url(url: str) -> str:
                 return f"sqlite:///{candidate}"
 
         return f"sqlite:///{candidates[0]}"
+
+    # Strip pgbouncer=true — Prisma-only param, unsupported by psycopg2/SQLAlchemy
+    if "pgbouncer=true" in url:
+        url = url.replace("?pgbouncer=true", "").replace("&pgbouncer=true", "")
+
     return url
 
 
