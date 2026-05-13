@@ -1,18 +1,20 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 import { prisma } from "@/server/prisma";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const latest = await prisma.draft.findFirst({
     orderBy: { updatedAt: "desc" },
     select: { id: true },
   });
 
+  const origin = new URL(request.url).origin;
+
   if (!latest) {
-    return NextResponse.redirect(new URL("/insights/listings", process.env.APP_PUBLIC_URL ?? "https://insights.unitedffs.com"));
+    return NextResponse.redirect(`${origin}/insights/listings`);
   }
 
-  return NextResponse.redirect(new URL(`/insights/listings/${latest.id}`, process.env.APP_PUBLIC_URL ?? "https://insights.unitedffs.com"));
+  return NextResponse.redirect(`${origin}/insights/listings/${latest.id}`);
 }
