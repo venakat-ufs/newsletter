@@ -1,6 +1,6 @@
 # UFS Insights Portal
 ## SSO Integration Guide — clients-unitedffs Team
-**v1.1 · May 2026**
+**v1.2 · May 2026**
 
 ---
 
@@ -16,7 +16,7 @@ When a client clicks "View Insights", they are taken directly into the latest is
 
 ## 1. Environment Variable
 
-Add this to your Vercel (or AWS) environment variables. Never commit it to Git or expose it in client-side code.
+Add this to your environment variables (`.env.local` for local dev, or your EC2/ECS/Elastic Beanstalk environment config for production). Never commit it to Git or expose it in client-side code.
 
 | Variable Name | Value |
 |---|---|
@@ -56,15 +56,66 @@ export function getInsightsUrl(
 
 ---
 
-## 3. Adding the View Insights Button
+## 3. NextAuth Session — Expose User ID
+
+> **Read this before implementing.** By default, NextAuth v4 JWT sessions only include `name`, `email`, and `image` on `session.user`. The `id` field is **not included** unless you add it explicitly. Without this, `session.user.id` will be `undefined` and the SSO token will be broken.
+
+Open your `authOptions` (in `app/api/auth/[...nextauth]/route.ts` or wherever it is defined) and add these callbacks if they are not already present:
+
+```ts
+// In your authOptions:
+callbacks: {
+  async jwt({ token, user }) {
+    if (user) {
+      token.id = user.id;  // persist user.id into the JWT on sign-in
+    }
+    return token;
+  },
+  async session({ session, token }) {
+    if (session.user) {
+      session.user.id = token.id as string;  // expose it on session.user
+    }
+    return session;
+  },
+},
+```
+
+If your `authOptions` already exposes `session.user.id`, skip this step.
+
+You may also need to extend the NextAuth types so TypeScript accepts `session.user.id`. Create or update `types/next-auth.d.ts`:
+
+```ts
+import 'next-auth';
+
+declare module 'next-auth' {
+  interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    };
+  }
+}
+```
+
+---
+
+## 4. Adding the View Insights Button
 
 ### Server Component (recommended)
 
 ```tsx
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getInsightsUrl } from '@/lib/insights-sso';
+import { redirect } from 'next/navigation';
 
 export default async function SomePage() {
-  const url = getInsightsUrl(currentUser.id);
+  const session = await getServerSession(authOptions);
+  if (!session?.user) redirect('/sign-in');
+
+  const url = getInsightsUrl(session.user.id);
 
   return (
     <a href={url} target="_blank" rel="noopener noreferrer">
@@ -76,13 +127,39 @@ export default async function SomePage() {
 
 ### Client Component
 
-```tsx
-'use client';
+Since `getInsightsUrl` uses a secret env var, it must run server-side. Create an API route that generates the URL and call it from the client component.
+
+**API Route:**
+
+```ts
+// app/api/insights-url/route.ts
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getInsightsUrl } from '@/lib/insights-sso';
 
-export function InsightsButton({ userId }: { userId: string }) {
+export async function GET(request: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(request.url);
+  const path = searchParams.get('path') ?? '/insights/latest';
+
+  const url = getInsightsUrl(session.user.id, path);
+  return NextResponse.json({ url });
+}
+```
+
+**Client Component:**
+
+```tsx
+'use client';
+
+export function InsightsButton({ path = '/insights/latest' }: { path?: string }) {
   async function handleClick() {
-    const res = await fetch(`/api/insights-url?userId=${userId}`);
+    const res = await fetch(`/api/insights-url?path=${encodeURIComponent(path)}`);
     const { url } = await res.json();
     window.open(url, '_blank');
   }
@@ -95,27 +172,79 @@ export function InsightsButton({ userId }: { userId: string }) {
 }
 ```
 
-> **Note for client components:** Since `getInsightsUrl` uses a secret env var, it must run server-side. Create an API route (`/api/insights-url`) that calls `getInsightsUrl` and returns the URL to the client component.
+---
 
-### API Route (for client components)
+## 5. Newsletter Deep-Link Routes (Important)
+
+> **Newsletter links must NEVER point directly to `insights.unitedffs.com`.** They must go through your own `/go/*` routes so the user's session is checked and a fresh SSO token is generated. Direct links to the portal will fail for users who don't have an active SSO session.
+
+Create these three route handlers in your Next.js app:
+
+### `/go/insights` → Latest Listings
 
 ```ts
-// app/api/insights-url/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+// app/go/insights/route.ts
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getInsightsUrl } from '@/lib/insights-sso';
 
-export async function GET(request: NextRequest) {
-  const userId = request.nextUrl.searchParams.get('userId');
-  if (!userId) return NextResponse.json({ error: 'userId required' }, { status: 400 });
-
-  const url = getInsightsUrl(userId);
-  return NextResponse.json({ url });
+export async function GET() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return NextResponse.redirect(new URL('/sign-in', process.env.NEXTAUTH_URL!));
+  }
+  return NextResponse.redirect(getInsightsUrl(session.user.id));
 }
 ```
 
+### `/go/pulse` → Latest Market Pulse
+
+```ts
+// app/go/pulse/route.ts
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { getInsightsUrl } from '@/lib/insights-sso';
+
+export async function GET() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return NextResponse.redirect(new URL('/sign-in', process.env.NEXTAUTH_URL!));
+  }
+  return NextResponse.redirect(getInsightsUrl(session.user.id, '/insights/latest/pulse'));
+}
+```
+
+### `/go/news` → Latest News
+
+```ts
+// app/go/news/route.ts
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { getInsightsUrl } from '@/lib/insights-sso';
+
+export async function GET() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return NextResponse.redirect(new URL('/sign-in', process.env.NEXTAUTH_URL!));
+  }
+  return NextResponse.redirect(getInsightsUrl(session.user.id, '/insights/latest/news'));
+}
+```
+
+**Newsletter email links should use:**
+
+| Button | URL in email |
+|---|---|
+| View Insights | `https://clients.unitedffs.com/go/insights` |
+| More Market Pulse | `https://clients.unitedffs.com/go/pulse` |
+| More News | `https://clients.unitedffs.com/go/news` |
+
 ---
 
-## 4. Available Pages
+## 6. Available Pages
 
 Pass the `path` argument to `getInsightsUrl()` to deep-link to any page.
 
@@ -130,25 +259,9 @@ Pass the `path` argument to `getInsightsUrl()` to deep-link to any page.
 
 > **Always use the `/insights/latest/*` paths** in newsletter "read more" links and buttons — they always resolve to the current issue automatically.
 
-**Example — "More Insights" button (listings):**
-```ts
-const url = getInsightsUrl(currentUser.id);
-// defaults to /insights/latest → listings
-```
-
-**Example — "More Pulse" button:**
-```ts
-const url = getInsightsUrl(currentUser.id, '/insights/latest/pulse');
-```
-
-**Example — "More News" button:**
-```ts
-const url = getInsightsUrl(currentUser.id, '/insights/latest/news');
-```
-
 ---
 
-## 5. How It Works
+## 7. How It Works
 
 ```
 1. Token Generated
@@ -169,7 +282,7 @@ const url = getInsightsUrl(currentUser.id, '/insights/latest/news');
 
 ---
 
-## 6. Token Behaviour
+## 8. Token Behaviour
 
 - Tokens are valid for **5 minutes** from generation
 - Tokens are **not single-use** — within the 5-minute window the same token can be reused (e.g. multiple tabs)
@@ -178,7 +291,7 @@ const url = getInsightsUrl(currentUser.id, '/insights/latest/news');
 
 ---
 
-## 7. What You Do NOT Need
+## 9. What You Do NOT Need
 
 - API key
 - Backend / server-side API calls to UFS
@@ -188,15 +301,18 @@ const url = getInsightsUrl(currentUser.id, '/insights/latest/news');
 
 ---
 
-## 8. Quick Checklist
+## 10. Quick Checklist
 
-- [ ] Add `INSIGHTS_SSO_SECRET` to Vercel environment variables
-- [ ] Create `lib/insights-sso.ts` with the utility function
-- [ ] Add the View Insights button using server component or API route pattern
-- [ ] Test: click the button and confirm you land on the latest issue without a login prompt
+- [ ] Add `INSIGHTS_SSO_SECRET` to your environment variables (`.env.local` / EC2 / ECS)
+- [ ] Verify `session.user.id` is exposed in your NextAuth `authOptions` callbacks (Step 3)
+- [ ] Create `lib/insights-sso.ts` with the utility function (Step 2)
+- [ ] Add the View Insights button using server component or API route pattern (Step 4)
+- [ ] Create `/go/insights`, `/go/pulse`, `/go/news` route handlers (Step 5)
+- [ ] Point newsletter email links to your `/go/*` routes — never directly to insights.unitedffs.com
+- [ ] Smoke test: click the button, confirm you land on the latest issue without a login prompt
 
 ---
 
 *United Field Services — Internal Use Only*
 *Questions? Reach out to the backend/infra team.*
-*v1.1 · May 2026*
+*v1.2 · May 2026*
