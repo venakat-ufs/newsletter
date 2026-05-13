@@ -56,10 +56,14 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     if (ssoToken) {
       const valid = await verifySsoToken(ssoToken);
       if (valid) {
-        const response = NextResponse.next();
+        // Redirect to the same URL without the token so the cookie is guaranteed
+        // to be set before any subsequent route handler redirects fire.
+        const cleanUrl = new URL(request.url);
+        cleanUrl.searchParams.delete("token");
         const isSecure =
           process.env.NODE_ENV === "production" &&
           process.env.COOKIE_SECURE !== "false";
+        const response = NextResponse.redirect(cleanUrl);
         response.cookies.set(SSO_COOKIE_NAME, "1", {
           httpOnly: true,
           sameSite: "lax",
