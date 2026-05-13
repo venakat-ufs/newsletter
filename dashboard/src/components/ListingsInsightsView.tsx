@@ -25,16 +25,15 @@ type SourceLinkRow = {
 };
 
 type SortMode = "value_desc" | "delta_desc" | "name_asc";
-type ViewTab = "overview" | "listings" | "pulse" | "news" | "employers" | "sources" | "pipeline";
+type ViewTab = "listings" | "pulse" | "news" | "employers" | "sources" | "pipeline";
 
-const TABS: Array<{ key: ViewTab; label: string }> = [
-  { key: "overview", label: "Overview" },
-  { key: "listings", label: "Listings" },
-  { key: "pulse", label: "Pulse" },
-  { key: "news", label: "News" },
-  { key: "employers", label: "Employers" },
-  { key: "sources", label: "Sources" },
-  { key: "pipeline", label: "Pipeline" },
+const TABS: Array<{ key: ViewTab; label: string; icon: string; description: string }> = [
+  { key: "listings", label: "Listings", icon: "🏠", description: "Active REO listings by bank and county" },
+  { key: "pulse", label: "Pulse", icon: "📊", description: "Market trends and inventory signals" },
+  { key: "news", label: "News", icon: "📰", description: "Industry headlines from this issue" },
+  { key: "employers", label: "Employers", icon: "💼", description: "Hiring activity across servicers" },
+  { key: "sources", label: "Sources", icon: "🔗", description: "Raw data links and collection sources" },
+  { key: "pipeline", label: "Lead Pipeline", icon: "📋", description: "CRM listings by state from this week" },
 ];
 
 function asNumber(value: unknown): number {
@@ -231,7 +230,7 @@ export function ListingsInsightsView({
   draftId,
   backHref,
   backLabel,
-  defaultTab = "overview",
+  defaultTab = "listings",
   newsOnly = false,
 }: {
   draftId: number;
@@ -250,7 +249,7 @@ export function ListingsInsightsView({
   const [topN, setTopN] = useState(6);
   const [sortMode, setSortMode] = useState<SortMode>("value_desc");
   const [sourceFilter, setSourceFilter] = useState("all");
-  const [tab, setTab] = useState<ViewTab>(newsOnly ? "news" : defaultTab);
+  const [tab, setTab] = useState<ViewTab>(newsOnly ? "news" : (defaultTab ?? "listings"));
   const [pipelineStats, setPipelineStats] = useState<PipelineStats | null>(null);
   const [pipelineLoading, setPipelineLoading] = useState(false);
 
@@ -582,19 +581,23 @@ export function ListingsInsightsView({
         </div>
 
         {!newsOnly ? (
-          <div className="mt-5 flex flex-wrap gap-1.5">
+          <div className="mt-5 grid gap-3 grid-cols-2 sm:grid-cols-3 xl:grid-cols-6">
             {TABS.map((item) => (
               <button
                 key={item.key}
                 type="button"
                 onClick={() => setTab(item.key)}
-                className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
+                className={`rounded-xl border p-4 text-left transition hover:-translate-y-0.5 hover:shadow-md ${
                   tab === item.key
-                    ? "bg-[#2563EB] text-white"
-                    : "border border-[#E5E7EB] bg-white text-[#374151] hover:bg-[#F9FAFB]"
+                    ? "border-[#2563EB] bg-[#EFF6FF] shadow-sm"
+                    : "border-[#E5E7EB] bg-white hover:bg-[#F9FAFB]"
                 }`}
               >
-                {item.label}
+                <div className="text-2xl">{item.icon}</div>
+                <div className={`mt-2 text-sm font-semibold ${tab === item.key ? "text-[#2563EB]" : "text-[#111827]"}`}>
+                  {item.label}
+                </div>
+                <div className="mt-1 text-xs leading-4 text-[#6B7280]">{item.description}</div>
               </button>
             ))}
           </div>
@@ -640,92 +643,6 @@ export function ListingsInsightsView({
           ) : null}
         </div>
       </section>
-
-      {tab === "overview" ? (
-        <section className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
-              <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Market pulse</div>
-              <h2 className="mt-1 text-base font-semibold text-[#111827]">Inventory build and geographies</h2>
-              <div className="mt-2 text-xs text-[#6B7280]">
-                {marketPulseStats.length > 0
-                  ? `${marketPulseStats.length} metrics · ${marketPulseGeos.length} active geographies`
-                  : "No market pulse metadata in this issue yet."}
-              </div>
-              <Link
-                href={`${insightBase}?tab=pulse`}
-                className="mt-3 inline-flex rounded-lg border border-[#E5E7EB] bg-white px-3 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F9FAFB]"
-              >
-                More Pulse →
-              </Link>
-            </div>
-            <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
-              <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Top banks + hot markets</div>
-              <h2 className="mt-1 text-base font-semibold text-[#111827]">Servicer movement and county ranking</h2>
-              <div className="mt-2 text-xs text-[#6B7280]">
-                {`${topBanksRows.length} institutions · ${hotMarketRows.length} ranked markets`}
-              </div>
-              <Link
-                href={`${insightBase}?tab=listings`}
-                className="mt-3 inline-flex rounded-lg border border-[#E5E7EB] bg-white px-3 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F9FAFB]"
-              >
-                More Listings →
-              </Link>
-            </div>
-            <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
-              <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Industry + hiring intel</div>
-              <h2 className="mt-1 text-base font-semibold text-[#111827]">Headlines and employer signals</h2>
-              <div className="mt-2 text-xs text-[#6B7280]">
-                {`${newsRows.length} stories · ${hiringEmployers.length} employers`}
-              </div>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <Link
-                  href={`/insights/news/${draft.id}`}
-                  className="inline-flex rounded-lg border border-[#E5E7EB] bg-white px-3 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F9FAFB]"
-                >
-                  News Page →
-                </Link>
-                <Link
-                  href={`${insightBase}?tab=employers`}
-                  className="inline-flex rounded-lg border border-[#E5E7EB] bg-white px-3 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F9FAFB]"
-                >
-                  Employers →
-                </Link>
-              </div>
-            </div>
-
-            <div className="rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] p-4">
-              <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Lead pipeline</div>
-              <h2 className="mt-1 text-base font-semibold text-[#111827]">CRM listings by state</h2>
-              <div className="mt-2 text-xs text-[#6B7280]">
-                {pipelineLoading
-                  ? "Loading pipeline data…"
-                  : pipelineStats
-                    ? `${pipelineStats.totals.total_listings.toLocaleString()} listings · ${pipelineStats.rows.length} states · wk ${pipelineStats.week_start}`
-                    : "No pipeline data available."}
-              </div>
-              {pipelineStats ? (
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  <span className="rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[10px] font-semibold text-[#2563EB]">
-                    {pipelineStats.totals.leads_inserted} new leads
-                  </span>
-                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
-                    {pipelineStats.totals.total_listings > 0
-                      ? `${Math.round((pipelineStats.totals.with_agent / pipelineStats.totals.total_listings) * 100)}%`
-                      : "—"} agent coverage
-                  </span>
-                </div>
-              ) : null}
-              <Link
-                href={`${insightBase}?tab=pipeline`}
-                className="mt-3 inline-flex rounded-lg border border-[#E5E7EB] bg-white px-3 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F9FAFB]"
-              >
-                Pipeline tab →
-              </Link>
-            </div>
-          </div>
-        </section>
-      ) : null}
 
       {tab === "listings" ? (
         <>
@@ -819,89 +736,6 @@ export function ListingsInsightsView({
             </div>
           </section>
 
-          {pipelineStats ? (
-            <section className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
-              <div className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">CRM lead pipeline</div>
-              <h2 className="mt-1 text-lg font-semibold text-[#111827]">Pipeline by state</h2>
-              <p className="mt-0.5 text-[11px] text-[#9CA3AF]">
-                Week of {pipelineStats.week_start} · {pipelineStats.rows.length} states ·{" "}
-                {pipelineStats.totals.total_listings.toLocaleString()} total listings
-              </p>
-              <div className="mt-3 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2.5">
-                  <div className="text-[10px] font-semibold uppercase tracking-wider text-[#6B7280]">Total listings</div>
-                  <div className="mt-0.5 text-xl font-bold text-[#111827]">{pipelineStats.totals.total_listings.toLocaleString()}</div>
-                  <div className="text-[10px] text-[#9CA3AF]">{pipelineStats.rows.length} active states</div>
-                </div>
-                <div className="rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2.5">
-                  <div className="text-[10px] font-semibold uppercase tracking-wider text-[#6B7280]">Agent coverage</div>
-                  <div className="mt-0.5 text-xl font-bold text-emerald-700">
-                    {pipelineStats.totals.total_listings > 0
-                      ? `${Math.round((pipelineStats.totals.with_agent / pipelineStats.totals.total_listings) * 100)}%`
-                      : "—"}
-                  </div>
-                  <div className="text-[10px] text-[#9CA3AF]">{pipelineStats.totals.with_agent.toLocaleString()} listings assigned</div>
-                </div>
-                <div className="rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2.5">
-                  <div className="text-[10px] font-semibold uppercase tracking-wider text-[#6B7280]">New leads</div>
-                  <div className="mt-0.5 text-xl font-bold text-[#2563EB]">+{pipelineStats.totals.leads_inserted.toLocaleString()}</div>
-                  <div className="text-[10px] text-[#9CA3AF]">inserted this week</div>
-                </div>
-              </div>
-              <div className="mt-3 overflow-auto rounded-lg border border-[#E5E7EB]">
-                <table className="min-w-full border-separate border-spacing-0 text-xs">
-                  <thead>
-                    <tr className="bg-[#F9FAFB] text-left text-[10px] uppercase tracking-wider text-[#6B7280]">
-                      <th className="px-2.5 py-2">#</th>
-                      <th className="px-2.5 py-2">State</th>
-                      <th className="px-2.5 py-2">Listings</th>
-                      <th className="px-2.5 py-2">Agent %</th>
-                      <th className="px-2.5 py-2">Email %</th>
-                      <th className="px-2.5 py-2">New Leads</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {pipelineStats.rows.map((row, index) => {
-                      const aPct = row.total_listings > 0 ? Math.round((row.with_agent / row.total_listings) * 100) : 0;
-                      const ePct = row.total_listings > 0 ? Math.round((row.with_email / row.total_listings) * 100) : 0;
-                      return (
-                        <tr key={row.state} className={index % 2 === 0 ? "bg-white" : "bg-[#F9FAFB]"}>
-                          <td className="px-2.5 py-1.5 font-semibold text-[#6B7280]">{index + 1}</td>
-                          <td className="px-2.5 py-1.5 font-bold text-[#111827]">{row.state}</td>
-                          <td className="px-2.5 py-1.5 font-semibold text-[#111827]">{row.total_listings.toLocaleString()}</td>
-                          <td className="px-2.5 py-1.5">
-                            <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
-                              aPct >= 50 ? "bg-emerald-50 text-emerald-700" : aPct >= 25 ? "bg-amber-50 text-amber-700" : "bg-red-50 text-red-600"
-                            }`}>{aPct}%</span>
-                          </td>
-                          <td className="px-2.5 py-1.5">
-                            <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
-                              ePct >= 50 ? "bg-emerald-50 text-emerald-700" : ePct >= 25 ? "bg-amber-50 text-amber-700" : "bg-red-50 text-red-600"
-                            }`}>{ePct}%</span>
-                          </td>
-                          <td className="px-2.5 py-1.5">
-                            {row.leads_inserted > 0 ? (
-                              <span className="rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[10px] font-semibold text-[#2563EB]">
-                                +{row.leads_inserted}
-                              </span>
-                            ) : (
-                              <span className="text-[#9CA3AF]">—</span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-              <Link
-                href={`${insightBase}?tab=pipeline`}
-                className="mt-3 inline-flex rounded-lg bg-[#2563EB] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#1D4ED8]"
-              >
-                Full pipeline view →
-              </Link>
-            </section>
-          ) : null}
         </>
       ) : null}
 
