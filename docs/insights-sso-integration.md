@@ -121,21 +121,29 @@ Pass the `path` argument to `getInsightsUrl()` to deep-link to any page.
 
 | Page | Path | Notes |
 |---|---|---|
-| Latest Issue **(default)** | `/insights/latest` | Always opens the most recent issue — use this |
-| All Issues | `/insights/listings` | Index of all issues |
+| Latest Issue — Listings **(default)** | `/insights/latest` | Always opens the most recent issue listings |
+| Latest Issue — Market Pulse | `/insights/latest/pulse` | Always opens the most recent issue pulse section |
+| Latest Issue — News | `/insights/latest/news` | Always opens the most recent issue news section |
 | Listings Analytics | `/insights/listings/[draftId]` | Per-issue listing stats |
 | News Analytics | `/insights/news/[draftId]` | Per-issue news performance |
 | Market Pulse | `/insights/pulse/[draftId]` | Per-issue market pulse data |
 
-**Example — always open latest issue (recommended default):**
+> **Always use the `/insights/latest/*` paths** in newsletter "read more" links and buttons — they always resolve to the current issue automatically.
+
+**Example — "More Insights" button (listings):**
 ```ts
 const url = getInsightsUrl(currentUser.id);
-// defaults to /insights/latest
+// defaults to /insights/latest → listings
 ```
 
-**Example — link to a specific issue:**
+**Example — "More Pulse" button:**
 ```ts
-const url = getInsightsUrl(currentUser.id, '/insights/listings/42');
+const url = getInsightsUrl(currentUser.id, '/insights/latest/pulse');
+```
+
+**Example — "More News" button:**
+```ts
+const url = getInsightsUrl(currentUser.id, '/insights/latest/news');
 ```
 
 ---
