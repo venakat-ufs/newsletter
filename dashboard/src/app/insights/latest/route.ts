@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     select: { id: true },
   });
 
-  const origin = new URL(request.url).origin;
+  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? new URL(request.url).origin;
 
   if (!latest) {
     return NextResponse.redirect(`${origin}/insights/listings`);
