@@ -68,7 +68,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
           httpOnly: true,
           sameSite: "lax",
           secure: isSecure,
-          path: "/insights",
+          path: "/",
           maxAge: SSO_COOKIE_MAX_AGE_SECONDS,
         });
         return response;
@@ -83,6 +83,11 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   }
 
   if (pathname.startsWith("/api/")) {
+    // Allow SSO cookie holders to access API routes needed by insights pages
+    const ssoCookie = request.cookies.get(SSO_COOKIE_NAME)?.value;
+    if (ssoCookie === "1") {
+      return NextResponse.next();
+    }
     return NextResponse.json({ detail: "Authentication required." }, { status: 401 });
   }
 
