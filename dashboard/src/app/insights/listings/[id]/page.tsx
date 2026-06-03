@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { Suspense } from "react";
 
 import { ListingsInsightsView } from "@/components/ListingsInsightsView";
@@ -8,6 +9,9 @@ export default async function ListingsInsightsIssuePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const cookieStore = await cookies();
+  const isSSO = cookieStore.get("ufs_insights_sso")?.value === "1";
+
   return (
     <Suspense
       fallback={
@@ -20,6 +24,7 @@ export default async function ListingsInsightsIssuePage({
         draftId={Number(id)}
         backHref="/insights/listings"
         backLabel="Back to insights hub"
+        isSSO={isSSO}
       />
     </Suspense>
   );

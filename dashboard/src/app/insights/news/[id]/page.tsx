@@ -1,15 +1,16 @@
-"use client";
-
-import { use } from "react";
+import { cookies } from "next/headers";
 
 import { ListingsInsightsView } from "@/components/ListingsInsightsView";
 
-export default function NewsInsightsIssuePage({
+export default async function NewsInsightsIssuePage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = use(params);
+  const { id } = await params;
+  const cookieStore = await cookies();
+  const isSSO = cookieStore.get("ufs_insights_sso")?.value === "1";
+
   return (
     <ListingsInsightsView
       draftId={Number(id)}
@@ -17,6 +18,7 @@ export default function NewsInsightsIssuePage({
       backLabel="Back to insights hub"
       defaultTab="news"
       newsOnly
+      isSSO={isSSO}
     />
   );
 }

@@ -232,12 +232,14 @@ export function ListingsInsightsView({
   backLabel,
   defaultTab = "listings",
   newsOnly = false,
+  isSSO = false,
 }: {
   draftId: number;
   backHref: string;
   backLabel: string;
   defaultTab?: ViewTab;
   newsOnly?: boolean;
+  isSSO?: boolean;
 }) {
   const searchParams = useSearchParams();
 
@@ -552,20 +554,22 @@ export function ListingsInsightsView({
             <h1 className="mt-2 text-2xl font-semibold text-[#111827]">{pageTitle}</h1>
             <p className="mt-1 text-sm text-[#6B7280]">{pageSubtitle}</p>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Link
-              href={`/drafts/${draft.id}`}
-              className="rounded-lg bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#1D4ED8]"
-            >
-              Open editor
-            </Link>
-            <Link
-              href={backHref}
-              className="rounded-lg border border-[#E5E7EB] bg-white px-4 py-2 text-sm font-medium text-[#374151] transition hover:bg-[#F9FAFB]"
-            >
-              {backLabel}
-            </Link>
-          </div>
+          {!isSSO && (
+            <div className="flex flex-wrap items-center gap-2">
+              <Link
+                href={`/drafts/${draft.id}`}
+                className="rounded-lg bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#1D4ED8]"
+              >
+                Open editor
+              </Link>
+              <Link
+                href={backHref}
+                className="rounded-lg border border-[#E5E7EB] bg-white px-4 py-2 text-sm font-medium text-[#374151] transition hover:bg-[#F9FAFB]"
+              >
+                {backLabel}
+              </Link>
+            </div>
+          )}
         </div>
 
         <div className="mt-5 grid gap-3 grid-cols-2 sm:grid-cols-3 xl:grid-cols-5">
