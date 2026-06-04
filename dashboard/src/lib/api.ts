@@ -246,8 +246,9 @@ export async function listDrafts(status?: string): Promise<Draft[]> {
   return asArray(drafts).map((draft) => normalizeDraft(draft));
 }
 
-export async function getDraft(id: number): Promise<Draft> {
-  return normalizeDraft(await fetchApi<unknown>(`/api/drafts/${id}`));
+export async function getDraft(id: number, insightsOnly = false): Promise<Draft> {
+  const path = insightsOnly ? `/api/drafts/${id}/insights` : `/api/drafts/${id}`;
+  return normalizeDraft(await fetchApi<unknown>(path));
 }
 
 export async function updateDraft(

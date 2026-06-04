@@ -261,7 +261,7 @@ export function ListingsInsightsView({
     const load = async () => {
       try {
         setLoading(true);
-        const data = await getDraft(draftId);
+        const data = await getDraft(draftId, true);
         if (!cancelled) {
           setDraft(data);
           setError(null);

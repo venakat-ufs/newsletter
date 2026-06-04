@@ -42,7 +42,7 @@ export async function getPipelineStats(
 
     const resp = await fetch(`${PIPELINE_URL}/rest/v1/state_stats_weekly?${params}`, {
       headers: { apikey: PIPELINE_ANON_KEY },
-      cache: "no-store",
+      next: { revalidate: 3600 },
       signal,
     });
     if (!resp.ok) return null;
