@@ -1,7 +1,4 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { listNewsletters, type Newsletter } from "@/lib/api";
+import { listNewsletters } from "@/server/workflow";
 
 const statusColors: Record<string, string> = {
   draft: "bg-yellow-100 text-yellow-700",
@@ -11,31 +8,15 @@ const statusColors: Record<string, string> = {
   failed: "bg-red-100 text-red-700",
 };
 
-export default function HistoryPage() {
-  const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export const dynamic = "force-dynamic";
+
+export default async function HistoryPage() {
+  const newsletters = await listNewsletters().catch(() => []);
 
   const statusCounts = newsletters.reduce<Record<string, number>>((acc, nl) => {
     acc[nl.status] = (acc[nl.status] || 0) + 1;
     return acc;
   }, {});
-
-  useEffect(() => {
-    async function load() {
-      try {
-        const data = await listNewsletters();
-        setNewsletters(data);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to load newsletters"
-        );
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
-  }, []);
 
   return (
     <div className="space-y-6">
@@ -71,21 +52,9 @@ export default function HistoryPage() {
         </div>
       </div>
 
-      {error && (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700 shadow-sm">
-          {error}
-        </div>
-      )}
-
-      {loading ? (
-        <div className="rounded-xl border border-[#E5E7EB] bg-white py-16 text-center text-sm text-[#6B7280] shadow-sm">
-          Loading history...
-        </div>
-      ) : newsletters.length === 0 ? (
+      {newsletters.length === 0 ? (
         <div className="rounded-xl border border-dashed border-[#D1D5DB] bg-white py-16 text-center shadow-sm">
-          <p className="text-lg font-semibold text-[#111827]">
-            No newsletters yet.
-          </p>
+          <p className="text-lg font-semibold text-[#111827]">No newsletters yet.</p>
         </div>
       ) : (
         <div className="overflow-hidden rounded-xl border border-[#E5E7EB] bg-white shadow-sm">
@@ -93,35 +62,21 @@ export default function HistoryPage() {
             <table className="min-w-full divide-y divide-[#E5E7EB]">
               <thead className="bg-[#F9FAFB]">
                 <tr>
-                  <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-[#6B7280]">
-                    Issue
-                  </th>
-                  <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-[#6B7280]">
-                    Date
-                  </th>
-                  <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-[#6B7280]">
-                    Status
-                  </th>
-                  <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-[#6B7280]">
-                    Campaign ID
-                  </th>
+                  <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Issue</th>
+                  <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Date</th>
+                  <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Status</th>
+                  <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Campaign ID</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#E5E7EB]">
                 {newsletters.map((nl) => (
                   <tr key={nl.id} className="transition hover:bg-[#F9FAFB]">
-                    <td className="px-6 py-4 text-sm font-semibold text-[#111827]">
-                      #{nl.issue_number}
-                    </td>
+                    <td className="px-6 py-4 text-sm font-semibold text-[#111827]">#{nl.issue_number}</td>
                     <td className="px-6 py-4 text-sm text-[#6B7280]">
                       {new Date(nl.issue_date).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4">
-                      <span
-                        className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
-                          statusColors[nl.status] || "bg-gray-100 text-gray-700"
-                        }`}
-                      >
+                      <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${statusColors[nl.status] || "bg-gray-100 text-gray-700"}`}>
                         {nl.status}
                       </span>
                     </td>

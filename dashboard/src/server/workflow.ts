@@ -8,6 +8,7 @@ import {
   scheduleCampaign,
 } from "@/server/mailchimp";
 import { readDatabase, withDatabase, nextId } from "@/server/store";
+import { prisma, ensureDatabaseReady } from "@/server/prisma";
 import { collectAllSources } from "@/server/sources";
 import type {
   ApprovalAction,
@@ -1464,22 +1465,77 @@ export async function runPipeline(force = false): Promise<Record<string, unknown
   }
 }
 
-export async function listDrafts(status?: DraftStatus): Promise<Array<Record<string, unknown>>> {
-  const db = await readDatabase();
-  return db.drafts
-    .filter((draft) => (status ? draft.status === status : true))
-    .sort((left, right) => right.updated_at.localeCompare(left.updated_at))
-    .map((draft) => serializeDraft(draft, db));
+export async function listDrafts(status?: DraftStatus, limit?: number): Promise<Array<Record<string, unknown>>> {
+  await ensureDatabaseReady();
+  const [drafts, newsletters] = await Promise.all([
+    prisma.draft.findMany({
+      where: status ? { status } : undefined,
+      orderBy: { updatedAt: "desc" },
+      take: limit,
+      select: {
+        id: true,
+        newsletterId: true,
+        aiDraft: true,
+        humanEdits: true,
+        status: true,
+        reviewerEmail: true,
+        reviewedAt: true,
+        sourcesUsed: true,
+        sourcesWarning: true,
+        sourcesFailed: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    }),
+    prisma.newsletter.findMany({ select: { id: true, issueNumber: true } }),
+  ]);
+  const newsletterMap = new Map(newsletters.map((n) => [n.id, n.issueNumber]));
+  return drafts.map((draft) => ({
+    id: draft.id,
+    newsletter_id: draft.newsletterId,
+    issue_number: newsletterMap.get(draft.newsletterId) ?? draft.newsletterId,
+    raw_data: {},
+    ai_draft: JSON.parse(draft.aiDraft as string),
+    human_edits: draft.humanEdits ? JSON.parse(draft.humanEdits as string) : null,
+    status: draft.status,
+    reviewer_email: draft.reviewerEmail,
+    reviewed_at: draft.reviewedAt,
+    sources_used: draft.sourcesUsed ? JSON.parse(draft.sourcesUsed as string) : null,
+    sources_warning: draft.sourcesWarning ? JSON.parse(draft.sourcesWarning as string) : null,
+    sources_failed: draft.sourcesFailed ? JSON.parse(draft.sourcesFailed as string) : null,
+    created_at: draft.createdAt,
+    updated_at: draft.updatedAt,
+  }));
 }
 
 export async function getDraft(draftId: number): Promise<Record<string, unknown>> {
-  const db = await readDatabase();
-  const draft = db.drafts.find((item) => item.id === draftId);
+  await ensureDatabaseReady();
+  const draft = await prisma.draft.findUnique({
+    where: { id: draftId },
+  });
   if (!draft) {
     notFound("Draft not found");
   }
-
-  return serializeDraft(draft, db);
+  const newsletter = await prisma.newsletter.findUnique({
+    where: { id: draft.newsletterId },
+    select: { issueNumber: true },
+  });
+  return {
+    id: draft.id,
+    newsletter_id: draft.newsletterId,
+    issue_number: newsletter?.issueNumber ?? draft.newsletterId,
+    raw_data: JSON.parse(draft.rawData as string),
+    ai_draft: JSON.parse(draft.aiDraft as string),
+    human_edits: draft.humanEdits ? JSON.parse(draft.humanEdits as string) : null,
+    status: draft.status,
+    reviewer_email: draft.reviewerEmail,
+    reviewed_at: draft.reviewedAt,
+    sources_used: draft.sourcesUsed ? JSON.parse(draft.sourcesUsed as string) : null,
+    sources_warning: draft.sourcesWarning ? JSON.parse(draft.sourcesWarning as string) : null,
+    sources_failed: draft.sourcesFailed ? JSON.parse(draft.sourcesFailed as string) : null,
+    created_at: draft.createdAt,
+    updated_at: draft.updatedAt,
+  };
 }
 
 export async function updateDraft(
@@ -1818,8 +1874,19 @@ export async function getPublicArticleMarkup(articleId: number): Promise<string>
 }
 
 export async function listNewsletters(): Promise<NewsletterRecord[]> {
-  const db = await readDatabase();
-  return [...db.newsletters].sort((left, right) => right.issue_date.localeCompare(left.issue_date));
+  await ensureDatabaseReady();
+  const newsletters = await prisma.newsletter.findMany({
+    orderBy: { issueDate: "desc" },
+  });
+  return newsletters.map((n) => ({
+    id: n.id,
+    issue_number: n.issueNumber,
+    issue_date: n.issueDate,
+    status: n.status as NewsletterRecord["status"],
+    mailchimp_campaign_id: n.mailchimpCampaignId ?? null,
+    created_at: n.createdAt,
+    updated_at: n.updatedAt,
+  }));
 }
 
 export async function scheduleNewsletterSend(

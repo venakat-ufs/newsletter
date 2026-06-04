@@ -60,7 +60,7 @@ export async function getSystemStatus(): Promise<{
   integrations: IntegrationStatus[];
 }> {
   const settings = getSettings();
-  const recentLogs = await listWorkflowLogs(120);
+  const recentLogs = await listWorkflowLogs(30);
 
   const integrations = [
       {

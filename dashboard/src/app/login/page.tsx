@@ -59,8 +59,7 @@ export default function LoginPage() {
       }
 
       const nextPath = sanitizeNextPath(searchParams.get("next"));
-      router.replace(nextPath);
-      router.refresh();
+      window.location.href = nextPath;
     } catch {
       setError("Sign-in failed.");
     } finally {

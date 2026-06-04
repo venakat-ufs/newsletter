@@ -56,7 +56,6 @@ export async function POST(request: Request): Promise<Response> {
     }
 
     await clearLoginRateLimit(rateLimitKey);
-
     const token = await createSessionToken(username);
     const response = NextResponse.json({ ok: true });
     response.cookies.set(AUTH_COOKIE_NAME, token, {

@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export default async function DraftsPage() {
   const [drafts, statusData] = await Promise.all([
-    listDrafts().catch(() => []),
+    listDrafts(undefined, 10).catch(() => []),
     getSystemStatus().catch(() => ({ integrations: [] })),
   ]);
 
