@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 
 import { ListingsInsightsView } from "@/components/ListingsInsightsView";
+import { fetchDraftForInsights } from "@/server/draft-insights";
 
 export default async function NewsInsightsIssuePage({
   params,
@@ -8,7 +9,10 @@ export default async function NewsInsightsIssuePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const cookieStore = await cookies();
+  const [cookieStore, initialDraft] = await Promise.all([
+    cookies(),
+    fetchDraftForInsights(Number(id)),
+  ]);
   const isSSO = cookieStore.get("ufs_insights_sso")?.value === "1";
 
   return (
@@ -19,6 +23,7 @@ export default async function NewsInsightsIssuePage({
       defaultTab="news"
       newsOnly
       isSSO={isSSO}
+      initialDraft={initialDraft ?? undefined}
     />
   );
 }

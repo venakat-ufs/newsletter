@@ -233,6 +233,7 @@ export function ListingsInsightsView({
   defaultTab = "listings",
   newsOnly = false,
   isSSO = false,
+  initialDraft,
 }: {
   draftId: number;
   backHref: string;
@@ -240,11 +241,12 @@ export function ListingsInsightsView({
   defaultTab?: ViewTab;
   newsOnly?: boolean;
   isSSO?: boolean;
+  initialDraft?: Draft;
 }) {
   const searchParams = useSearchParams();
 
-  const [draft, setDraft] = useState<Draft | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [draft, setDraft] = useState<Draft | null>(initialDraft ?? null);
+  const [loading, setLoading] = useState(!initialDraft);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [minValue, setMinValue] = useState(0);
@@ -256,6 +258,7 @@ export function ListingsInsightsView({
   const [pipelineLoading, setPipelineLoading] = useState(false);
 
   useEffect(() => {
+    if (initialDraft) return;
     let cancelled = false;
 
     const load = async () => {
@@ -282,7 +285,7 @@ export function ListingsInsightsView({
     return () => {
       cancelled = true;
     };
-  }, [draftId]);
+  }, [draftId, initialDraft]);
 
   useEffect(() => {
     if (newsOnly) {
