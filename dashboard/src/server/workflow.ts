@@ -1003,32 +1003,120 @@ function buildMarketPulseMetadata(
   };
 }
 
+// Entertainment / tabloid outlets that match "foreclosure" on celebrity stories
+// but are not real REO/mortgage industry news.
+const ENTERTAINMENT_SOURCE_PATTERNS = [
+  "entertainment",
+  "radaronline",
+  "radar online",
+  "tmz",
+  "page six",
+  "pagesix",
+  "eonline",
+  "e! news",
+  "hollywood",
+  "us weekly",
+  "usmagazine",
+  "extra",
+  "people.com",
+  "the blast",
+  "perez",
+];
+// Real industry / market sources to rank first.
+const PRIORITY_NEWS_PATTERNS = [
+  "housingwire",
+  "mortgagepoint",
+  "mortgage point",
+  "zillow",
+  "fhfa",
+  "hud",
+  "freddie",
+  "fannie",
+  "federal reserve",
+  "ds news",
+  "dsnews",
+  "reuters",
+  "bloomberg",
+  "cnbc",
+  "wall street",
+];
+
+function isEntertainmentSource(source: string, title: string): boolean {
+  const haystack = `${source} ${title}`.toLowerCase();
+  return ENTERTAINMENT_SOURCE_PATTERNS.some((pattern) => haystack.includes(pattern));
+}
+
+function newsSourceRank(source: string): number {
+  const normalized = source.toLowerCase();
+  return PRIORITY_NEWS_PATTERNS.some((pattern) => normalized.includes(pattern)) ? 0 : 1;
+}
+
+const MAX_NEWS_STORIES = 15;
+
 function buildIndustryNewsMetadata(rawSections: RawSectionSnapshot): Record<string, unknown> {
   const items = safeRecords(rawSections.industry_news?.data);
   const seen = new Set<string>();
-  const stories = items
-    .filter((item) => {
-      const title = textValue(item.title);
-      const url = textValue(item.url);
-      const source = textValue(item.source_name, item.feed);
-      if (!title || !url || !source) {
-        return false;
+
+  // Keep valid, non-tabloid, deduped items.
+  const valid = items.filter((item) => {
+    const title = textValue(item.title);
+    const url = textValue(item.url);
+    const source = textValue(item.source_name, item.feed);
+    if (!title || !url || !source) {
+      return false;
+    }
+    if (isEntertainmentSource(source, title)) {
+      return false;
+    }
+    const key = `${title.toLowerCase()}|${url.toLowerCase()}`;
+    if (seen.has(key)) {
+      return false;
+    }
+    seen.add(key);
+    return true;
+  });
+
+  // Group by source, then round-robin interleave so every source (News API,
+  // HousingWire, MortgagePoint, Zillow, FHFA, ...) is represented in the mix —
+  // priority industry sources lead each round.
+  const bySource = new Map<string, Array<Record<string, unknown>>>();
+  for (const item of valid) {
+    const source = textValue(item.source_name, item.feed);
+    if (!bySource.has(source)) {
+      bySource.set(source, []);
+    }
+    bySource.get(source)!.push(item);
+  }
+
+  const sourceOrder = [...bySource.keys()].sort(
+    (left, right) => newsSourceRank(left) - newsSourceRank(right),
+  );
+
+  const interleaved: Array<Record<string, unknown>> = [];
+  let round = 0;
+  let addedThisRound = true;
+  while (addedThisRound && interleaved.length < MAX_NEWS_STORIES) {
+    addedThisRound = false;
+    for (const source of sourceOrder) {
+      const bucket = bySource.get(source)!;
+      if (bucket[round]) {
+        interleaved.push(bucket[round]);
+        addedThisRound = true;
+        if (interleaved.length >= MAX_NEWS_STORIES) {
+          break;
+        }
       }
-      const key = `${title.toLowerCase()}|${url.toLowerCase()}`;
-      if (seen.has(key)) {
-        return false;
-      }
-      seen.add(key);
-      return true;
-    })
-    .slice(0, 6)
-    .map((item) => ({
-      title: textValue(item.title),
-      source: textValue(item.source_name, item.feed),
-      published_at: textValue(item.published_at),
-      url: textValue(item.url),
-      detail: textValue(item.description, item.content_preview),
-    }));
+    }
+    round += 1;
+  }
+
+  const stories = interleaved.map((item) => ({
+    title: textValue(item.title),
+    source: textValue(item.source_name, item.feed),
+    published_at: textValue(item.published_at),
+    url: textValue(item.url),
+    detail: textValue(item.description, item.content_preview),
+  }));
 
   const sourceCounts = new Map<string, number>();
   for (const item of items) {

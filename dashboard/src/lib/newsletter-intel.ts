@@ -788,6 +788,32 @@ export function getMarketHighlights(draft: Draft): MarketHighlight[] {
 }
 
 export function getNewsHighlights(draft: Draft): NewsHighlight[] {
+  // Prefer the already-built industry_news section metadata. It lives in
+  // ai_draft (always present, even in the lean insights view where raw_data is
+  // stripped), and is the canonical, deduped story list.
+  const newsSection = getDraftSections(draft).find(
+    (section) => section.section_type === "industry_news",
+  );
+  const metaStories = safeArray<Record<string, unknown>>(
+    (newsSection?.metadata as Record<string, unknown> | undefined)?.stories,
+  );
+  if (metaStories.length > 0) {
+    const asStr = (value: unknown): string => (typeof value === "string" ? value : "");
+    return metaStories
+      .map((story) => {
+        const url = asStr(story.url);
+        return {
+          source: asStr(story.source) || "Industry",
+          date: asStr(story.published_at),
+          headline: asStr(story.title),
+          summary: asStr(story.detail).slice(0, 220),
+          ...(url ? { url } : {}),
+        };
+      })
+      .filter((story) => story.headline);
+  }
+
+  // Fallback: scan raw_data sources directly (used when metadata isn't built yet).
   const sources = getSources(draft.raw_data);
   const items: NewsHighlight[] = [];
   const seen = new Set<string>();
@@ -796,6 +822,8 @@ export function getNewsHighlights(draft: Draft): NewsHighlight[] {
     "zillow_research",
     "hud_user",
     "fhfa_news",
+    "housingwire",
+    "mortgagepoint",
     "reddit",
     "grok",
   ]);

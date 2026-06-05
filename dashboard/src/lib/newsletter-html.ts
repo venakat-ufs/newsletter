@@ -471,9 +471,10 @@ function renderMarketPulseSection(article: NewsletterHtmlArticle): string | null
 function renderIndustryNewsSection(article: NewsletterHtmlArticle): string | null {
   const stories = safeRows(article.metadata?.stories);
   const sourceRows = safeRows(article.metadata?.source_rows);
-  const validStories = stories.filter(
-    (story) => textValue(story.title) && textValue(story.source),
-  );
+  // The email stays concise (top 6); the insights News tab shows the full set.
+  const validStories = stories
+    .filter((story) => textValue(story.title) && textValue(story.source))
+    .slice(0, 6);
   const validSourceRows = sourceRows.filter((row) => textValue(row.source));
   const ctaLabel = textValue(article.metadata?.cta_label, "Read More \u2192");
   const ctaUrl = normalizeNavigationUrl(

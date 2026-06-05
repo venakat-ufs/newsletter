@@ -4,6 +4,7 @@ import { prisma, ensureDatabaseReady } from "@/server/prisma";
 const DRAFT_SELECT = {
   id: true,
   newsletterId: true,
+  rawData: true,
   aiDraft: true,
   humanEdits: true,
   status: true,
@@ -19,6 +20,7 @@ const DRAFT_SELECT = {
 type DraftRow = {
   id: number;
   newsletterId: number;
+  rawData: string;
   aiDraft: string;
   humanEdits: string | null;
   status: string;
@@ -37,11 +39,18 @@ function mapDraftRow(draft: DraftRow, issueNumber: number | null): Draft {
     ? (JSON.parse(draft.humanEdits) as Record<string, unknown>)
     : null;
 
+  let rawData: Record<string, unknown> = {};
+  try {
+    rawData = draft.rawData ? (JSON.parse(draft.rawData) as Record<string, unknown>) : {};
+  } catch {
+    rawData = {};
+  }
+
   return {
     id: draft.id,
     newsletter_id: draft.newsletterId,
     issue_number: issueNumber ?? draft.newsletterId,
-    raw_data: {},
+    raw_data: rawData,
     ai_draft: {
       sections: Array.isArray(aiDraft.sections) ? aiDraft.sections : [],
       errors: Array.isArray(aiDraft.errors) ? aiDraft.errors : [],
