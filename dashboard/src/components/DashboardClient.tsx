@@ -8,6 +8,7 @@ import { DraftCard } from "@/components/DraftCard";
 import { TopicSourceTable } from "@/components/TopicSourceTable";
 import {
   enqueuePipelineJob,
+  getDraft,
   getPipelineJob,
   getSystemStatus,
   listDrafts,
@@ -61,6 +62,14 @@ export function DashboardClient({ initialDrafts, initialIntegrations }: Dashboar
         listDrafts(),
         getSystemStatus(),
       ]);
+      // The list is lean (no raw_data); hydrate the latest issue so the source
+      // map and SOURCES count have the data they need.
+      if (draftData[0]) {
+        const latestFull = await getDraft(draftData[0].id).catch(() => null);
+        if (latestFull) {
+          draftData[0] = latestFull;
+        }
+      }
       setDrafts(draftData);
       setIntegrations(statusData.integrations);
       setError(null);
