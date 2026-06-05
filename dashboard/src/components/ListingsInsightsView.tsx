@@ -63,6 +63,25 @@ function safeRecords(value: unknown): Array<Record<string, unknown>> {
   return Array.isArray(value) ? value.filter(isRecord) : [];
 }
 
+// Marketplaces / aggregators that are NOT banks — excluded from the Top Banks column.
+const MARKETPLACE_NAMES = [
+  "auction.com",
+  "hubzu",
+  "xome",
+  "realtor.com",
+  "redfin",
+  "attom",
+  "ice mortgage",
+  "reox",
+  "zillow",
+  "trulia",
+];
+
+function isMarketplaceName(name: string): boolean {
+  const normalized = name.trim().toLowerCase();
+  return MARKETPLACE_NAMES.some((marketplace) => normalized.includes(marketplace));
+}
+
 function parseTab(value: string | null): ViewTab | null {
   if (!value) {
     return null;
@@ -135,25 +154,15 @@ function DeltaTag({
   value?: number | null;
   status?: string;
 }) {
-  if (status === "insufficient_data") {
-    return <span className="text-[10px] font-semibold text-[#9CA3AF]">Insufficient data</span>;
+  // Only render a delta badge when there is a real non-zero change.
+  // No "Insufficient data" / "No change" noise.
+  if (value === null || value === undefined || Number.isNaN(value) || value === 0) {
+    return null;
   }
 
-  if (status === "unchanged") {
-    return <span className="text-[10px] font-semibold text-[#6b7280]">No change</span>;
-  }
-
-  if (value === null || value === undefined || Number.isNaN(value)) {
-    return <span className="text-[10px] font-semibold text-[#9CA3AF]">Insufficient data</span>;
-  }
-
-  const tone = value > 0 ? "text-emerald-700" : value < 0 ? "text-rose-700" : "text-[#9CA3AF]";
-  const arrow = value > 0 ? "↑" : value < 0 ? "↓" : "→";
+  const tone = value > 0 ? "text-emerald-700" : "text-rose-700";
+  const arrow = value > 0 ? "↑" : "↓";
   const sign = value > 0 ? "+" : "";
-
-  if (value === 0) {
-    return <span className="text-[10px] font-semibold text-[#6b7280]">No change</span>;
-  }
 
   return <span className={`text-[10px] font-semibold ${tone}`}>{`${arrow} ${sign}${value}%`}</span>;
 }
@@ -162,10 +171,14 @@ function HorizontalBars({
   title,
   subtitle,
   rows,
+  rowLabel = "Name",
+  valueLabel = "Count",
 }: {
   title: string;
   subtitle: string;
   rows: ChartRow[];
+  rowLabel?: string;
+  valueLabel?: string;
 }) {
   const maxValue = rows.reduce((max, row) => Math.max(max, row.value), 0) || 1;
 
@@ -175,6 +188,12 @@ function HorizontalBars({
         {subtitle}
       </div>
       <h2 className="mt-1.5 text-base font-semibold text-[#111827]">{title}</h2>
+      {rows.length > 0 ? (
+        <div className="mt-3 flex items-center justify-between border-b border-[#F3F4F6] pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-[#9CA3AF]">
+          <span>{rowLabel}</span>
+          <span>{valueLabel}</span>
+        </div>
+      ) : null}
       <div className="mt-3 max-h-[260px] space-y-2.5 overflow-y-auto pr-1">
         {rows.length === 0 ? (
           <div className="rounded-lg border border-dashed border-[#D1D5DB] bg-[#F9FAFB] px-3 py-2 text-xs text-[#6B7280]">
@@ -337,20 +356,23 @@ export function ListingsInsightsView({
     const rows = safeRecords(sectionMap.get("top_banks")?.rows);
 
     if (rows.length > 0) {
-      return rows.map((row) => ({
-        name: asText(row.name, "Institution"),
-        value: asNumber(row.count),
-        delta:
-          row.wow_delta_pct === null || row.wow_delta_pct === undefined
-            ? null
-            : asNumber(row.wow_delta_pct),
-        deltaStatus: asText(row.wow_delta_status),
-        context: asText(row.top_state, "National"),
-      }));
+      return rows
+        .map((row) => ({
+          name: asText(row.name, "Institution"),
+          value: asNumber(row.count),
+          delta:
+            row.wow_delta_pct === null || row.wow_delta_pct === undefined
+              ? null
+              : asNumber(row.wow_delta_pct),
+          deltaStatus: asText(row.wow_delta_status),
+          context: asText(row.top_state, "National"),
+        }))
+        .filter((row) => !isMarketplaceName(row.name));
     }
 
     return sourceCards
       .filter((source) => source.groupLabel === "Official Inventory")
+      .filter((source) => !isMarketplaceName(source.label))
       .map((source) => ({
         name: source.label,
         value: source.itemCount,
@@ -360,6 +382,22 @@ export function ListingsInsightsView({
   }, [sectionMap, sourceCards]);
 
   const hotMarketRows = useMemo<ChartRow[]>(() => {
+    // Prefer live Lead Pipeline state data when available — these are the states
+    // we are actively pulling leads from this week.
+    if (pipelineStats && pipelineStats.rows.length > 0) {
+      return [...pipelineStats.rows]
+        .sort((left, right) => (right.total_listings || 0) - (left.total_listings || 0))
+        .map((row) => ({
+          name: row.state,
+          value: row.total_listings || 0,
+          delta: null,
+          context:
+            row.leads_inserted > 0
+              ? `${row.leads_inserted.toLocaleString()} leads · ${row.with_agent.toLocaleString()} with agent`
+              : `${row.with_agent.toLocaleString()} with agent`,
+        }));
+    }
+
     const rows = safeRecords(sectionMap.get("hot_markets")?.rows);
 
     return rows.map((row) => ({
@@ -372,7 +410,7 @@ export function ListingsInsightsView({
       deltaStatus: asText(row.wow_delta_status),
       context: asText(row.metro, "Active market"),
     }));
-  }, [sectionMap]);
+  }, [sectionMap, pipelineStats]);
 
   const inventorySourceRows = useMemo<ChartRow[]>(() => {
     const sourceRows = safeRecords(sectionMap.get("market_pulse")?.source_cards);
@@ -548,6 +586,17 @@ export function ListingsInsightsView({
     ? "Full-page industry news coverage for this issue."
     : "Single source of truth for this issue. Newsletter sections and deep pages read from this data.";
 
+  const capturedAt = draft.updated_at || draft.created_at;
+  const capturedLabel = capturedAt ? toDateLabel(capturedAt) : "";
+  const windowStartLabel = (() => {
+    const parsed = Date.parse(capturedAt);
+    if (Number.isNaN(parsed)) return "";
+    return new Date(parsed - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  })();
+  const pipelineWeekLabel = pipelineStats?.week_start
+    ? toDateLabel(pipelineStats.week_start)
+    : "";
+
   return (
     <div className="space-y-6">
       <section className="rounded-xl border border-[#E5E7EB] bg-white p-6 shadow-sm">
@@ -556,6 +605,23 @@ export function ListingsInsightsView({
             <p className="text-xs font-semibold uppercase tracking-wider text-[#6B7280]">Issue Intelligence Center</p>
             <h1 className="mt-2 text-2xl font-semibold text-[#111827]">{pageTitle}</h1>
             <p className="mt-1 text-sm text-[#6B7280]">{pageSubtitle}</p>
+            {capturedLabel ? (
+              <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[#6B7280]">
+                <span className="inline-flex items-center rounded-full bg-[#EFF6FF] px-2.5 py-1 font-medium text-[#1D4ED8]">
+                  Listings captured: {capturedLabel}
+                </span>
+                {windowStartLabel ? (
+                  <span className="inline-flex items-center rounded-full bg-[#F9FAFB] px-2.5 py-1 font-medium text-[#374151]">
+                    News &amp; social: {windowStartLabel} → {capturedLabel} (7-day window)
+                  </span>
+                ) : null}
+                {pipelineWeekLabel ? (
+                  <span className="inline-flex items-center rounded-full bg-[#F9FAFB] px-2.5 py-1 font-medium text-[#374151]">
+                    Lead pipeline week: {pipelineWeekLabel}
+                  </span>
+                ) : null}
+              </div>
+            ) : null}
           </div>
           {!isSSO && (
             <div className="flex flex-wrap items-center gap-2">
@@ -654,9 +720,27 @@ export function ListingsInsightsView({
       {tab === "listings" ? (
         <>
           <div className="grid gap-3 xl:grid-cols-3">
-            <HorizontalBars subtitle="Top Banks Listing" title="Servicer / Bank movement" rows={filteredTopBanks} />
-            <HorizontalBars subtitle="Hot Markets" title="County-level activity" rows={filteredHotMarkets} />
-            <HorizontalBars subtitle="Source Network" title="Inventory source intensity" rows={filteredInventory} />
+            <HorizontalBars
+              subtitle="Top Banks Listing"
+              title="Servicer / Bank movement"
+              rows={filteredTopBanks}
+              rowLabel="Servicer / Bank"
+              valueLabel="Listings"
+            />
+            <HorizontalBars
+              subtitle={pipelineStats && pipelineStats.rows.length > 0 ? "Lead Pipeline" : "Hot Markets"}
+              title={pipelineStats && pipelineStats.rows.length > 0 ? "State-level activity" : "County-level activity"}
+              rows={filteredHotMarkets}
+              rowLabel={pipelineStats && pipelineStats.rows.length > 0 ? "State" : "Market"}
+              valueLabel="Listings"
+            />
+            <HorizontalBars
+              subtitle="Source Network"
+              title="Inventory source intensity"
+              rows={filteredInventory}
+              rowLabel="Source"
+              valueLabel="Signals"
+            />
           </div>
 
           <section className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
@@ -672,7 +756,6 @@ export function ListingsInsightsView({
                       <th className="px-2.5 py-2">Servicer / Bank</th>
                       <th className="px-2.5 py-2">Listings</th>
                       <th className="px-2.5 py-2">State</th>
-                      <th className="px-2.5 py-2">WoW</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -682,7 +765,6 @@ export function ListingsInsightsView({
                         <td className="px-2.5 py-2 font-semibold text-[#111827]">{row.name}</td>
                         <td className="px-2.5 py-2 text-[#374151]">{pretextCount(row.value)}</td>
                         <td className="px-2.5 py-2 text-[#6B7280]">{row.context ?? "National"}</td>
-                        <td className="px-2.5 py-2"><DeltaTag value={row.delta} status={row.deltaStatus} /></td>
                       </tr>
                     ))}
                   </tbody>
@@ -697,7 +779,6 @@ export function ListingsInsightsView({
                       <th className="px-2.5 py-2">Market</th>
                       <th className="px-2.5 py-2">Metro</th>
                       <th className="px-2.5 py-2">Active</th>
-                      <th className="px-2.5 py-2">WoW</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -707,7 +788,6 @@ export function ListingsInsightsView({
                         <td className="px-2.5 py-2 font-semibold text-[#111827]">{row.name}</td>
                         <td className="px-2.5 py-2 text-[#6B7280]">{row.context ?? "Market"}</td>
                         <td className="px-2.5 py-2 text-[#374151]">{pretextCount(row.value)}</td>
-                        <td className="px-2.5 py-2"><DeltaTag value={row.delta} status={row.deltaStatus} /></td>
                       </tr>
                     ))}
                   </tbody>

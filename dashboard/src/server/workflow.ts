@@ -313,23 +313,28 @@ function aggregateForSections(
     });
   }
 
+  // isBank: true => actual bank / servicer / GSE (belongs in Top Banks column).
+  // isBank: false => marketplace / aggregator (inventory source only, NOT a bank).
   const freeListingSources = [
-    { key: "auction_com", institution: "Auction.com" },
-    { key: "hubzu", institution: "Hubzu" },
-    { key: "xome", institution: "Xome" },
-    { key: "attom_data", institution: "ATTOM Data" },
-    { key: "ice_mortgage_tech", institution: "ICE Mortgage Tech" },
-    { key: "reox_directory", institution: "REOX Directory" },
-    { key: "realtor_foreclosure", institution: "Realtor.com" },
-    { key: "redfin_foreclosure", institution: "Redfin" },
-    { key: "wells_fargo_reo", institution: "Wells Fargo" },
-    { key: "chase_reo", institution: "Chase" },
-    { key: "us_bank_reo", institution: "US Bank" },
-    { key: "mr_cooper_reo", institution: "Mr. Cooper" },
-    { key: "phh_mortgage_reo", institution: "PHH Mortgage" },
-    { key: "newrez_shellpoint_reo", institution: "NewRez / Shellpoint" },
-    { key: "selene_finance_reo", institution: "Selene Finance" },
-    { key: "carrington_reo", institution: "Carrington Mortgage" },
+    { key: "auction_com", institution: "Auction.com", isBank: false },
+    { key: "hubzu", institution: "Hubzu", isBank: false },
+    { key: "xome", institution: "Xome", isBank: false },
+    { key: "attom_data", institution: "ATTOM Data", isBank: false },
+    { key: "ice_mortgage_tech", institution: "ICE Mortgage Tech", isBank: false },
+    { key: "reox_directory", institution: "REOX Directory", isBank: false },
+    { key: "realtor_foreclosure", institution: "Realtor.com", isBank: false },
+    { key: "redfin_foreclosure", institution: "Redfin", isBank: false },
+    { key: "wells_fargo_reo", institution: "Wells Fargo", isBank: true },
+    { key: "chase_reo", institution: "Chase", isBank: true },
+    { key: "us_bank_reo", institution: "US Bank", isBank: true },
+    { key: "mr_cooper_reo", institution: "Mr. Cooper", isBank: true },
+    { key: "phh_mortgage_reo", institution: "PHH Mortgage", isBank: true },
+    { key: "newrez_shellpoint_reo", institution: "NewRez / Shellpoint", isBank: true },
+    { key: "selene_finance_reo", institution: "Selene Finance", isBank: true },
+    { key: "carrington_reo", institution: "Carrington Mortgage", isBank: true },
+    // VA REO — VRM Properties is the VA's official REO disposition vendor,
+    // so it belongs alongside HUD as a government-agency institution.
+    { key: "vrm_va_reo", institution: "VA (VRM Properties)", isBank: true },
   ];
 
   for (const lane of freeListingSources) {
@@ -353,13 +358,17 @@ function aggregateForSections(
       markets: sourceData,
       sample_listings: sampleListings,
     });
-    sections.top_banks.data.push({
-      source: lane.key,
-      institution: lane.institution,
-      listing_signal_count: listingSignals,
-      state_count: sourceData.length,
-      sample_listings: sampleListings,
-    });
+    // Only real banks/servicers/GSEs belong in the Top Banks column.
+    // Marketplaces (Auction.com, Xome, Realtor.com, etc.) remain inventory sources only.
+    if (lane.isBank) {
+      sections.top_banks.data.push({
+        source: lane.key,
+        institution: lane.institution,
+        listing_signal_count: listingSignals,
+        state_count: sourceData.length,
+        sample_listings: sampleListings,
+      });
+    }
     sections.hot_markets.data.push({
       source: lane.key,
       markets: sourceData,
@@ -377,6 +386,16 @@ function aggregateForSections(
         .slice(0, 5)
         .map((item) => (typeof item.title === "string" ? item.title : "")),
     });
+  }
+
+  // Industry-news RSS feeds (HousingWire, MortgagePoint). These work from any
+  // server, unlike NewsAPI's free plan which only allows localhost — so they
+  // keep the news section populated in production.
+  for (const feedKey of ["housingwire", "mortgagepoint"]) {
+    const feedData = getSourceData(rawData, [feedKey]);
+    if (feedData.length > 0) {
+      sections.industry_news.data.push(...feedData);
+    }
   }
 
   const zillowResearchData = getSourceData(rawData, ["zillow_research"]);
@@ -703,15 +722,10 @@ function sourceRowsByInstitution(rawSources: RawSourceSnapshot): Array<Record<st
     });
   }
 
+  // Banks / servicers / agencies only — this feeds the Top Banks column.
+  // Marketplaces (Auction.com, Xome, Realtor.com, etc.) are intentionally
+  // excluded; they belong in the inventory / source-network view, not here.
   const freeListingInstitutionRows = [
-    { key: "auction_com", name: "Auction.com" },
-    { key: "hubzu", name: "Hubzu" },
-    { key: "xome", name: "Xome" },
-    { key: "attom_data", name: "ATTOM Data" },
-    { key: "ice_mortgage_tech", name: "ICE Mortgage Tech" },
-    { key: "reox_directory", name: "REOX Directory" },
-    { key: "realtor_foreclosure", name: "Realtor.com" },
-    { key: "redfin_foreclosure", name: "Redfin" },
     { key: "wells_fargo_reo", name: "Wells Fargo" },
     { key: "chase_reo", name: "Chase" },
     { key: "us_bank_reo", name: "US Bank" },
@@ -720,6 +734,8 @@ function sourceRowsByInstitution(rawSources: RawSourceSnapshot): Array<Record<st
     { key: "newrez_shellpoint_reo", name: "NewRez / Shellpoint" },
     { key: "selene_finance_reo", name: "Selene Finance" },
     { key: "carrington_reo", name: "Carrington Mortgage" },
+    // VA REO — VRM Properties is the VA's official REO disposition vendor.
+    { key: "vrm_va_reo", name: "VA (VRM Properties)" },
   ];
 
   for (const lane of freeListingInstitutionRows) {
