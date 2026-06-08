@@ -33,6 +33,87 @@ type DraftRow = {
   updatedAt: string;
 };
 
+// Fields the insights view actually reads off each raw source item
+// (source cards / counts / source links). Everything else — full article
+// bodies, summaries, nested payloads — is dropped to keep the page light.
+const ITEM_KEEP_FIELDS = [
+  "type",
+  "url",
+  "title",
+  "name",
+  "search_url",
+  "market_url",
+  "address",
+  "state",
+  "metro",
+  "total_listings",
+  "listing_signal_count",
+  "city_count",
+  "count",
+];
+
+function slimItem(item: unknown): unknown {
+  if (!item || typeof item !== "object" || Array.isArray(item)) {
+    return item;
+  }
+  const record = item as Record<string, unknown>;
+  const out: Record<string, unknown> = {};
+  for (const field of ITEM_KEEP_FIELDS) {
+    if (record[field] !== undefined) {
+      out[field] = record[field];
+    }
+  }
+  if (Array.isArray(record.sample_listings)) {
+    out.sample_listings = (record.sample_listings as unknown[]).slice(0, 5).map((listing) => {
+      const l = (listing ?? {}) as Record<string, unknown>;
+      return { url: l.url, title: l.title, address: l.address };
+    });
+  }
+  return out;
+}
+
+// Slim raw_data for the insights view: keep source structure + counts + links,
+// drop heavy text. Item counts are preserved (we map, not cap) so source counts
+// stay accurate. The full raw_data remains untouched in the database.
+function slimRawData(rawData: Record<string, unknown>): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+
+  const sources = rawData.sources;
+  if (sources && typeof sources === "object") {
+    const slimSources: Record<string, unknown> = {};
+    for (const [key, src] of Object.entries(sources as Record<string, unknown>)) {
+      if (!src || typeof src !== "object") {
+        slimSources[key] = src;
+        continue;
+      }
+      const s = src as Record<string, unknown>;
+      slimSources[key] = {
+        source: s.source,
+        success: s.success,
+        errors: s.errors,
+        collected_at: s.collected_at,
+        no_signal_reason: s.no_signal_reason,
+        data: Array.isArray(s.data) ? (s.data as unknown[]).map(slimItem) : s.data,
+      };
+    }
+    result.sources = slimSources;
+  }
+
+  // Sections: keep only the description (used by the topic-source map); drop
+  // the duplicated heavy data arrays.
+  const sections = rawData.sections;
+  if (sections && typeof sections === "object") {
+    const slimSections: Record<string, unknown> = {};
+    for (const [key, sec] of Object.entries(sections as Record<string, unknown>)) {
+      const section = (sec ?? {}) as Record<string, unknown>;
+      slimSections[key] = { description: section.description };
+    }
+    result.sections = slimSections;
+  }
+
+  return result;
+}
+
 function mapDraftRow(draft: DraftRow, issueNumber: number | null): Draft {
   const aiDraft = JSON.parse(draft.aiDraft) as Record<string, unknown>;
   const humanEdits = draft.humanEdits
@@ -41,7 +122,8 @@ function mapDraftRow(draft: DraftRow, issueNumber: number | null): Draft {
 
   let rawData: Record<string, unknown> = {};
   try {
-    rawData = draft.rawData ? (JSON.parse(draft.rawData) as Record<string, unknown>) : {};
+    const parsed = draft.rawData ? (JSON.parse(draft.rawData) as Record<string, unknown>) : {};
+    rawData = slimRawData(parsed);
   } catch {
     rawData = {};
   }
