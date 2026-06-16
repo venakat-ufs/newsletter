@@ -1763,15 +1763,15 @@ export async function generateDraftForNewsletter(
       (draft.raw_data.sections as RawSectionSnapshot | undefined) ?? {};
     const previousSources = previousRawSourcesForNewsletter(snapshot, newsletterId);
     const historicalSources = historicalRawSourcesForNewsletter(snapshot, newsletterId, 6);
-    const baseUrl =
-      options?.baseUrl && /^https?:\/\//i.test(options.baseUrl)
-        ? options.baseUrl.replace(/\/$/, "")
-        : publicBaseUrl();
+    // Newsletter buttons must route through the client portal's SSO entry
+    // routes (/go/*), never directly to the insights portal. The portal checks
+    // the client's login, then silently signs them into insights.
+    const portalUrl = getSettings().clientPortalUrl.replace(/\/$/, "");
     const insightsUrls = {
-      listings: `${baseUrl}/insights/listings/${draft.id}?tab=listings`,
-      pulse: `${baseUrl}/insights/listings/${draft.id}?tab=pulse`,
-      news: `${baseUrl}/insights/news/${draft.id}`,
-      hiring: `${baseUrl}/insights/listings/${draft.id}?tab=employers`,
+      listings: `${portalUrl}/go/insights`,
+      pulse: `${portalUrl}/go/pulse`,
+      news: `${portalUrl}/go/news`,
+      hiring: `${portalUrl}/go/insights`,
     };
     const aiSections = decorateDraftSections(
       getSections(aiDraft),

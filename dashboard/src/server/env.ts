@@ -33,6 +33,7 @@ export interface Settings {
   apiHost: string;
   apiPort: number;
   appPublicUrl: string;
+  clientPortalUrl: string;
   databaseUrl: string;
   authUsername: string;
   authPassword: string;
@@ -160,6 +161,9 @@ export function getSettings(): Settings {
       env.DASHBOARD_URL ??
       env.API_PUBLIC_URL ??
       (env.VERCEL_URL ? `https://${env.VERCEL_URL}` : "http://localhost:3000"),
+    // Where newsletter "read more" buttons send clients — the client portal's
+    // SSO entry routes (/go/*), NOT the insights portal directly.
+    clientPortalUrl: env.CLIENT_PORTAL_URL ?? "https://clients.unitedffs.com",
     databaseUrl: env.DATABASE_URL ?? "file:../../data/ufs-newsletter.db",
     authUsername: env.AUTH_USERNAME ?? "",
     authPassword: env.AUTH_PASSWORD ?? "",
