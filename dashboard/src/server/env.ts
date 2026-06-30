@@ -21,6 +21,7 @@ export interface Settings {
   mailchimpApiKey: string;
   mailchimpServerPrefix: string;
   mailchimpListId: string;
+  mailchimpListIdProspect: string;
   mailchimpTemplateId: string;
   mailchimpOnHold: boolean;
   smtpHost: string;
@@ -145,6 +146,7 @@ export function getSettings(): Settings {
     mailchimpApiKey: env.MAILCHIMP_API_KEY ?? "",
     mailchimpServerPrefix: env.MAILCHIMP_SERVER_PREFIX ?? "",
     mailchimpListId: env.MAILCHIMP_LIST_ID ?? "",
+    mailchimpListIdProspect: env.MAILCHIMP_LIST_ID_PROSPECT ?? "",
     mailchimpTemplateId: env.MAILCHIMP_TEMPLATE_ID ?? "",
     mailchimpOnHold: toBoolean(env.MAILCHIMP_ON_HOLD, true),
     smtpHost: env.SMTP_HOST ?? "",

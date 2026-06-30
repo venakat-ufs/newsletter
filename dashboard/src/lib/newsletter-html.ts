@@ -15,6 +15,15 @@ export interface NewsletterHtmlArticle {
   metadata?: Record<string, unknown> | null;
 }
 
+// ---- Portal design tokens ----
+const FONT = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif";
+const BLUE = "#2563EB";
+const INK = "#111827";
+const BODY = "#475569";
+const MUTED = "#64748B";
+const BORDER = "#E5E7EB";
+const TILE_BG = "#F8FAFC";
+
 function escapeHtml(value: string): string {
   return value
     .replaceAll("&", "&amp;")
@@ -38,26 +47,11 @@ function formatIssueWeek(issueDate: string): string {
   const end = new Date(start);
   end.setUTCDate(start.getUTCDate() + 6);
 
-  const startMonth = start.toLocaleDateString("en-US", {
-    month: "long",
-    timeZone: "UTC",
-  });
-  const endMonth = end.toLocaleDateString("en-US", {
-    month: "long",
-    timeZone: "UTC",
-  });
-  const startDay = start.toLocaleDateString("en-US", {
-    day: "numeric",
-    timeZone: "UTC",
-  });
-  const endDay = end.toLocaleDateString("en-US", {
-    day: "numeric",
-    timeZone: "UTC",
-  });
-  const year = end.toLocaleDateString("en-US", {
-    year: "numeric",
-    timeZone: "UTC",
-  });
+  const startMonth = start.toLocaleDateString("en-US", { month: "long", timeZone: "UTC" });
+  const endMonth = end.toLocaleDateString("en-US", { month: "long", timeZone: "UTC" });
+  const startDay = start.toLocaleDateString("en-US", { day: "numeric", timeZone: "UTC" });
+  const endDay = end.toLocaleDateString("en-US", { day: "numeric", timeZone: "UTC" });
+  const year = end.toLocaleDateString("en-US", { year: "numeric", timeZone: "UTC" });
 
   return startMonth === endMonth
     ? `Week of ${startMonth} ${startDay}-${endDay}, ${year}`
@@ -77,7 +71,6 @@ function excerptText(value: string, limit: number): string {
   if (normalized.length <= limit) {
     return normalized;
   }
-
   return `${normalized.slice(0, limit).trimEnd()}...`;
 }
 
@@ -102,15 +95,12 @@ function extractBulletPoints(article: NewsletterHtmlArticle, limit = 4): string[
     if (!normalized || seen.has(normalized.toLowerCase())) {
       continue;
     }
-
     seen.add(normalized.toLowerCase());
     bullets.push(normalized);
-
     if (bullets.length >= limit) {
       break;
     }
   }
-
   return bullets;
 }
 
@@ -134,51 +124,7 @@ function extractStatSnippets(article: NewsletterHtmlArticle, limit = 4): string[
       break;
     }
   }
-
   return results;
-}
-
-function renderStatPills(stats: string[]): string {
-  if (stats.length === 0) {
-    return "";
-  }
-
-  return `
-    <div style="display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 18px;">
-      ${stats
-        .map(
-          (stat) => `
-            <span style="display:inline-block;padding:8px 12px;background:#f3e7e8;border:1px solid #e3c8cb;border-radius:999px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:bold;line-height:1.4;color:#72262a;">
-              ${escapeHtml(stat)}
-            </span>
-          `,
-        )
-        .join("")}
-    </div>
-  `;
-}
-
-function renderBulletList(points: string[]): string {
-  if (points.length === 0) {
-    return "";
-  }
-
-  return `
-    <div style="margin-top:12px;">
-      <div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;color:#8a8480;margin-bottom:10px;">
-        Key takeaways
-      </div>
-      <ul style="margin:0;padding-left:18px;font-family:'DM Sans',Arial,sans-serif;font-size:13px;line-height:1.8;color:#3a3a3a;">
-        ${points
-          .map(
-            (point) => `
-              <li style="margin:0 0 10px;">${escapeHtml(point)}</li>
-            `,
-          )
-          .join("")}
-      </ul>
-    </div>
-  `;
 }
 
 function safeRows(value: unknown): Array<Record<string, unknown>> {
@@ -190,7 +136,6 @@ function numericValue(...values: unknown[]): number | null {
     if (typeof value === "number" && Number.isFinite(value)) {
       return value;
     }
-
     if (typeof value === "string" && value.trim()) {
       const parsed = Number.parseFloat(value.replaceAll(",", ""));
       if (Number.isFinite(parsed)) {
@@ -198,7 +143,6 @@ function numericValue(...values: unknown[]): number | null {
       }
     }
   }
-
   return null;
 }
 
@@ -208,7 +152,6 @@ function textValue(...values: unknown[]): string {
       return value.trim();
     }
   }
-
   return "";
 }
 
@@ -216,7 +159,6 @@ function normalizeNavigationUrl(url: string): string {
   if (!url || url === "#") {
     return url;
   }
-
   try {
     const parsed = new URL(url);
     if (parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1") {
@@ -228,42 +170,100 @@ function normalizeNavigationUrl(url: string): string {
   }
 }
 
+// ---- Portal building blocks ----
+
+function cardOpen(): string {
+  return `<div style="background:#ffffff;border:1px solid ${BORDER};border-radius:16px;padding:24px 22px;margin:0 0 16px;">`;
+}
+
+function sectionHeader(eyebrow: string, headline: string, accent: string = BLUE): string {
+  const eyebrowColor = accent === INK ? MUTED : BLUE;
+  return `
+    <div style="border-left:3px solid ${accent};padding-left:14px;margin-bottom:16px;">
+      <div style="font-family:${FONT};font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:${eyebrowColor};margin-bottom:3px;">${escapeHtml(eyebrow)}</div>
+      <div style="font-family:${FONT};font-size:18px;font-weight:700;color:${INK};">${escapeHtml(headline)}</div>
+    </div>`;
+}
+
+function renderIntro(article: NewsletterHtmlArticle): string {
+  if (!article.teaser.trim()) {
+    return "";
+  }
+  return `<p style="font-family:${FONT};font-size:14px;line-height:1.7;color:${BODY};margin:0 0 18px;">${escapeHtml(article.teaser)}</p>`;
+}
+
 function renderDeltaBadge(delta: number | null, status = ""): string {
-  if (status === "insufficient_data") {
-    return `<span style="font-family:'DM Sans',Arial,sans-serif;font-size:13px;font-weight:700;color:#8c8175;">Insufficient data</span>`;
+  // Only a real, non-zero change earns a pill. No "insufficient data" / "no change" noise.
+  if (
+    delta === null ||
+    Number.isNaN(delta) ||
+    delta === 0 ||
+    status === "insufficient_data" ||
+    status === "unchanged"
+  ) {
+    return "";
   }
-
-  if (status === "unchanged") {
-    return `<span style="font-family:'DM Sans',Arial,sans-serif;font-size:13px;font-weight:700;color:#6b7280;">No change</span>`;
-  }
-
-  if (delta === null || Number.isNaN(delta)) {
-    return `<span style="font-family:'DM Sans',Arial,sans-serif;font-size:13px;font-weight:700;color:#8c8175;">Insufficient data</span>`;
-  }
-
-  if (delta === 0) {
-    return `<span style="font-family:'DM Sans',Arial,sans-serif;font-size:13px;font-weight:700;color:#6b7280;">No change</span>`;
-  }
-
-  const tone = delta > 0 ? "#0f7a37" : "#9b2c24";
-  const arrow = delta > 0 ? "\u2191" : "\u2193";
-  const sign = delta > 0 ? "+" : "";
-
-  return `<span style="font-family:'DM Sans',Arial,sans-serif;font-size:16px;font-weight:700;color:${tone};">${arrow} ${sign}${delta}%</span>`;
+  const up = delta > 0;
+  const bg = up ? "#DCFCE7" : "#FEE2E2";
+  const fg = up ? "#15803D" : "#B91C1C";
+  const arrow = up ? "↑" : "↓";
+  const sign = up ? "+" : "";
+  return `<span style="display:inline-block;padding:3px 9px;background:${bg};border-radius:999px;font-family:${FONT};font-size:11px;font-weight:600;color:${fg};">${arrow} ${sign}${delta}%</span>`;
 }
 
 function renderSectionCta(label: string, url: string): string {
   if (!url || url === "#") {
     return "";
   }
-
   return `
-    <div style="margin-top:18px;">
-      <a href="${escapeHtml(url)}" target="_top" style="display:inline-block;background:#1a1a1a;color:#ffffff;font-family:'DM Sans',Arial,sans-serif;font-size:14px;font-weight:700;letter-spacing:0.4px;padding:12px 20px;text-decoration:none;border-radius:2px;">
-        ${escapeHtml(label)}
-      </a>
-    </div>
-  `;
+    <table cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;">
+      <tr><td style="background:${BLUE};border-radius:8px;">
+        <a href="${escapeHtml(url)}" target="_top" style="display:inline-block;padding:11px 22px;font-family:${FONT};font-size:13px;font-weight:600;color:#ffffff;text-decoration:none;">${escapeHtml(label)}</a>
+      </td></tr>
+    </table>`;
+}
+
+// Stat tiles rendered 2-per-row so they fit narrow mobile screens AND desktop
+// (4 cards => 2x2). Each row's cells share height; no media query needed.
+function renderStatCards(cards: Array<Record<string, unknown>>): string {
+  if (cards.length === 0) {
+    return "";
+  }
+  const pairs: Array<Array<Record<string, unknown>>> = [];
+  for (let i = 0; i < cards.length; i += 2) {
+    pairs.push(cards.slice(i, i + 2));
+  }
+  const cell = (card: Record<string, unknown>) => `
+    <td width="50%" style="background:${TILE_BG};border:1px solid ${BORDER};border-radius:10px;padding:14px;vertical-align:top;">
+      <div style="font-family:${FONT};font-size:22px;font-weight:800;color:${INK};line-height:1;">${escapeHtml((numericValue(card.value) ?? 0).toLocaleString("en-US"))}</div>
+      <div style="font-family:${FONT};font-size:11px;font-weight:600;color:${BLUE};margin-top:6px;">${escapeHtml(textValue(card.label, "Metric"))}</div>
+      ${textValue(card.detail) ? `<div style="font-family:${FONT};font-size:11px;line-height:1.5;color:${MUTED};margin-top:3px;">${escapeHtml(textValue(card.detail))}</div>` : ""}
+    </td>`;
+  return `
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;border-spacing:8px;margin:0 0 6px;">
+      ${pairs
+        .map(
+          (pair) => `<tr>${pair.map(cell).join("")}${pair.length === 1 ? `<td width="50%" style="border:0;"></td>` : ""}</tr>`,
+        )
+        .join("")}
+    </table>`;
+}
+
+function renderSourcePills(rows: Array<Record<string, unknown>>): string {
+  if (rows.length === 0) {
+    return "";
+  }
+  return `
+    <div style="margin:0 0 16px;">
+      ${rows
+        .map(
+          (row) => `
+            <span style="display:inline-block;margin:0 6px 6px 0;padding:5px 11px;background:${TILE_BG};border:1px solid ${BORDER};border-radius:999px;font-family:${FONT};font-size:11px;font-weight:600;color:${MUTED};">
+              ${escapeHtml(textValue(row.source, row.focus))}: ${escapeHtml(String(numericValue(row.count) ?? 0))}
+            </span>`,
+        )
+        .join("")}
+    </div>`;
 }
 
 function renderTopBanksSection(article: NewsletterHtmlArticle): string | null {
@@ -271,53 +271,35 @@ function renderTopBanksSection(article: NewsletterHtmlArticle): string | null {
   if (rows.length === 0) {
     return null;
   }
-
   const headline = textValue(article.metadata?.headline, article.title, "Who's Moving This Week");
   const eyebrow = textValue(article.metadata?.eyebrow, "Top Banks Listing");
-  const ctaLabel = textValue(article.metadata?.cta_label, "Full Bank Rankings \u2192");
-  const ctaUrl = normalizeNavigationUrl(
-    textValue(article.metadata?.cta_url, "/insights/listings?tab=listings"),
-  );
+  const ctaLabel = textValue(article.metadata?.cta_label, "Full Bank Rankings →");
+  const ctaUrl = normalizeNavigationUrl(textValue(article.metadata?.cta_url, "/insights/listings?tab=listings"));
 
   return `
-    <div style="padding:34px 26px 22px;background:#f2eee8;border-bottom:1px solid #e3ddd6;">
-      <div style="font-family:'DM Sans',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#72262a;margin-bottom:10px;border-left:4px solid #1a1a1a;padding-left:12px;">
-        ${escapeHtml(eyebrow)}
-      </div>
-      <div style="font-family:'Playfair Display',Georgia,serif;font-size:30px;font-weight:700;line-height:1.15;color:#09111f;margin-bottom:18px;">
-        ${escapeHtml(headline)}
-      </div>
-      <table style="width:100%;border-collapse:collapse;background:#ffffff;">
-        <thead>
-          <tr style="background:#1a1a1a;color:#ffffff;">
-            <th style="padding:16px 18px;text-align:left;font-family:'DM Sans',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">Servicer / Bank</th>
-            <th style="padding:16px 18px;text-align:left;font-family:'DM Sans',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">New Listings</th>
-            <th style="padding:16px 18px;text-align:left;font-family:'DM Sans',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">Top State</th>
-            <th style="padding:16px 18px;text-align:left;font-family:'DM Sans',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">WoW Δ</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows
-            .map(
-              (row, index) => `
-                <tr style="background:${index % 2 === 0 ? "#f6f2ed" : "#ffffff"};">
-                  <td style="padding:16px 18px;font-family:'DM Sans',Arial,sans-serif;font-size:16px;font-weight:700;color:#09111f;">${escapeHtml(textValue(row.name, "Institution"))}</td>
-                  <td style="padding:16px 18px;font-family:'DM Sans',Arial,sans-serif;font-size:15px;color:#09111f;">${escapeHtml((numericValue(row.count) ?? 0).toLocaleString("en-US"))}</td>
-                  <td style="padding:16px 18px;font-family:'DM Sans',Arial,sans-serif;font-size:15px;color:#374151;">${escapeHtml(textValue(row.top_state, "National"))}</td>
-                  <td style="padding:16px 18px;">${renderDeltaBadge(numericValue(row.wow_delta_pct), textValue(row.wow_delta_status))}</td>
-                </tr>
-              `,
-            )
-            .join("")}
-        </tbody>
+    ${cardOpen()}
+      ${sectionHeader(eyebrow, headline, INK)}
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid ${BORDER};border-radius:10px;overflow:hidden;table-layout:fixed;">
+        <tr style="background:${TILE_BG};">
+          <td style="width:42%;padding:10px 8px 10px 12px;font-family:${FONT};font-size:10px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:${MUTED};">Servicer / Bank</td>
+          <td style="width:18%;padding:10px 6px;font-family:${FONT};font-size:10px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:${MUTED};">Listings</td>
+          <td style="width:22%;padding:10px 6px;font-family:${FONT};font-size:10px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:${MUTED};">State</td>
+          <td style="width:18%;padding:10px 8px 10px 6px;font-family:${FONT};font-size:10px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:${MUTED};">WoW</td>
+        </tr>
+        ${rows
+          .map(
+            (row) => `
+              <tr style="background:#ffffff;">
+                <td style="padding:11px 8px 11px 12px;border-top:1px solid #F1F5F9;font-family:${FONT};font-size:13px;font-weight:600;color:${INK};">${escapeHtml(textValue(row.name, "Institution"))}</td>
+                <td style="padding:11px 6px;border-top:1px solid #F1F5F9;font-family:${FONT};font-size:13px;color:${BODY};">${escapeHtml((numericValue(row.count) ?? 0).toLocaleString("en-US"))}</td>
+                <td style="padding:11px 6px;border-top:1px solid #F1F5F9;font-family:${FONT};font-size:13px;color:${BODY};">${escapeHtml(textValue(row.top_state, "National"))}</td>
+                <td style="padding:11px 8px 11px 6px;border-top:1px solid #F1F5F9;">${renderDeltaBadge(numericValue(row.wow_delta_pct), textValue(row.wow_delta_status))}</td>
+              </tr>`,
+          )
+          .join("")}
       </table>
-      <div style="margin-top:22px;">
-        <a href="${escapeHtml(ctaUrl)}" style="display:inline-block;background:#1a1a1a;color:#ffffff;font-family:'DM Sans',Arial,sans-serif;font-size:14px;font-weight:700;letter-spacing:0.4px;padding:14px 22px;text-decoration:none;border-radius:2px;">
-          ${escapeHtml(ctaLabel)}
-        </a>
-      </div>
-    </div>
-  `;
+      ${renderSectionCta(ctaLabel, ctaUrl)}
+    </div>`;
 }
 
 function renderHotMarketsSection(article: NewsletterHtmlArticle): string | null {
@@ -325,117 +307,61 @@ function renderHotMarketsSection(article: NewsletterHtmlArticle): string | null 
   if (rows.length === 0) {
     return null;
   }
-
-  const headline = textValue(article.metadata?.headline, article.title, "Top 5 Counties This Week");
+  const headline = textValue(article.metadata?.headline, article.title, "Top Counties This Week");
   const eyebrow = textValue(article.metadata?.eyebrow, "Hot Markets");
-  const ctaLabel = textValue(article.metadata?.cta_label, "More Listings \u2192");
-  const ctaUrl = normalizeNavigationUrl(
-    textValue(article.metadata?.cta_url, "/insights/listings?tab=listings"),
-  );
+  const ctaLabel = textValue(article.metadata?.cta_label, "More Listings →");
+  const ctaUrl = normalizeNavigationUrl(textValue(article.metadata?.cta_url, "/insights/listings?tab=listings"));
 
   return `
-    <div style="padding:34px 26px 24px;background:#f2eee8;border-bottom:1px solid #e3ddd6;">
-      <div style="font-family:'DM Sans',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#72262a;margin-bottom:10px;border-left:4px solid #72262a;padding-left:12px;">
-        ${escapeHtml(eyebrow)}
-      </div>
-      <div style="font-family:'Playfair Display',Georgia,serif;font-size:30px;font-weight:700;line-height:1.15;color:#09111f;margin-bottom:20px;">
-        ${escapeHtml(headline)}
-      </div>
+    ${cardOpen()}
+      ${sectionHeader(eyebrow, headline, BLUE)}
       ${rows
         .map(
-          (row) => `
-            <div style="display:flex;align-items:center;gap:18px;background:#ffffff;border-radius:4px;padding:18px 20px;margin-bottom:12px;">
-              <div style="width:26px;font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#72262a;text-align:center;">
-                ${escapeHtml(String(numericValue(row.rank) ?? ""))}
-              </div>
-              <div style="flex:1 1 auto;">
-                <div style="font-family:'DM Sans',Arial,sans-serif;font-size:16px;font-weight:700;color:#09111f;">
-                  ${escapeHtml(textValue(row.name, "Market"))}
-                </div>
-                <div style="font-family:'DM Sans',Arial,sans-serif;font-size:14px;color:#7a6b60;margin-top:2px;">
-                  ${escapeHtml(textValue(row.metro, "Active market"))} · ${escapeHtml((numericValue(row.count) ?? 0).toLocaleString("en-US"))} active REO listings
-                </div>
-              </div>
-              <div style="white-space:nowrap;">
-                ${renderDeltaBadge(numericValue(row.wow_delta_pct), textValue(row.wow_delta_status))}
-              </div>
-            </div>
-          `,
+          (row, index) => `
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${TILE_BG};border:1px solid ${BORDER};border-radius:10px;margin:0 0 10px;">
+              <tr>
+                <td width="44" style="padding:14px 0 14px 16px;vertical-align:middle;font-family:${FONT};font-size:18px;font-weight:800;color:${index < 2 ? BLUE : MUTED};">${escapeHtml(String(numericValue(row.rank) ?? index + 1))}</td>
+                <td style="padding:14px;vertical-align:middle;">
+                  <div style="font-family:${FONT};font-size:14px;font-weight:600;color:${INK};">${escapeHtml(textValue(row.name, "Market"))}</div>
+                  <div style="font-family:${FONT};font-size:12px;color:${MUTED};margin-top:2px;">${escapeHtml(textValue(row.metro, "Active market"))} · ${escapeHtml((numericValue(row.count) ?? 0).toLocaleString("en-US"))} active REO</div>
+                </td>
+                <td style="padding:14px 16px;text-align:right;vertical-align:middle;white-space:nowrap;">${renderDeltaBadge(numericValue(row.wow_delta_pct), textValue(row.wow_delta_status))}</td>
+              </tr>
+            </table>`,
         )
         .join("")}
       ${renderSectionCta(ctaLabel, ctaUrl)}
-    </div>
-  `;
-}
-
-function renderSectionIntro(article: NewsletterHtmlArticle): string {
-  return `
-    <div style="font-family:'DM Sans',Arial,sans-serif;font-size:13px;line-height:1.7;color:#5f5348;margin:0 0 16px;">
-      ${escapeHtml(article.teaser)}
-    </div>
-  `;
+    </div>`;
 }
 
 function renderMarketPulseSection(article: NewsletterHtmlArticle): string | null {
   const statCards = safeRows(article.metadata?.stat_cards);
   const sourceCards = safeRows(article.metadata?.source_cards);
   const geographyRows = safeRows(article.metadata?.geography_rows);
-  const ctaLabel = textValue(article.metadata?.cta_label, "More Pulse \u2192");
-  const ctaUrl = normalizeNavigationUrl(
-    textValue(article.metadata?.cta_url, "/insights/listings?tab=pulse"),
-  );
+  const ctaLabel = textValue(article.metadata?.cta_label, "More Market Pulse →");
+  const ctaUrl = normalizeNavigationUrl(textValue(article.metadata?.cta_url, "/insights/listings?tab=pulse"));
+  const headline = textValue(article.metadata?.headline, article.title, "Where Distressed Inventory Is Building");
+  const eyebrow = textValue(article.metadata?.eyebrow, "Market Pulse");
 
   return `
-    <div style="padding:34px 26px 24px;background:#f7f5f2;border-bottom:1px solid #e3ddd6;">
-      <div style="font-family:'DM Sans',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#72262a;margin-bottom:10px;border-left:4px solid #72262a;padding-left:12px;">
-        ${escapeHtml(textValue(article.metadata?.eyebrow, "Market Pulse"))}
-      </div>
-      <div style="font-family:'Playfair Display',Georgia,serif;font-size:30px;font-weight:700;line-height:1.15;color:#09111f;margin-bottom:14px;">
-        ${escapeHtml(textValue(article.metadata?.headline, article.title, "Where Distressed Inventory Is Building"))}
-      </div>
-      ${renderSectionIntro(article)}
-      ${
-        statCards.length > 0
-          ? `<table style="width:100%;border-collapse:separate;border-spacing:10px 0;margin:8px 0 18px;">
-              <tr>
-                ${statCards
-                  .map(
-                    (card) => `
-                      <td style="background:#ffffff;border:1px solid #e3ddd6;border-top:3px solid #72262a;padding:14px 12px;vertical-align:top;">
-                        <div style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:700;color:#09111f;line-height:1;">
-                          ${escapeHtml((numericValue(card.value) ?? 0).toLocaleString("en-US"))}
-                        </div>
-                        <div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#72262a;margin-top:8px;">
-                          ${escapeHtml(textValue(card.label, "Metric"))}
-                        </div>
-                        <div style="font-family:'DM Sans',Arial,sans-serif;font-size:11px;line-height:1.6;color:#6d5b49;margin-top:4px;">
-                          ${escapeHtml(textValue(card.detail))}
-                        </div>
-                      </td>
-                    `,
-                  )
-                  .join("")}
-              </tr>
-            </table>`
-          : ""
-      }
+    ${cardOpen()}
+      ${sectionHeader(eyebrow, headline, BLUE)}
+      ${renderIntro(article)}
+      ${renderStatCards(statCards)}
       ${
         sourceCards.length > 0
-          ? `<div style="margin-top:4px;margin-bottom:18px;">
-              <div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#8a8480;margin-bottom:10px;">
-                Inventory by source
-              </div>
+          ? `<div style="margin-top:16px;">
+              <div style="font-family:${FONT};font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:${MUTED};margin-bottom:10px;">Inventory by source</div>
               ${sourceCards
                 .map(
                   (card) => `
-                    <div style="display:flex;justify-content:space-between;gap:14px;background:#ffffff;border-radius:4px;padding:12px 14px;margin-bottom:10px;border:1px solid #ebe5de;">
-                      <div>
-                        <div style="font-family:'DM Sans',Arial,sans-serif;font-size:15px;font-weight:700;color:#09111f;">${escapeHtml(textValue(card.source, "Source"))}</div>
-                        <div style="font-family:'DM Sans',Arial,sans-serif;font-size:12px;color:#7a6b60;margin-top:2px;">${escapeHtml(textValue(card.detail, "Current activity"))}</div>
-                      </div>
-                      <div style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:700;color:#72262a;white-space:nowrap;">${escapeHtml((numericValue(card.value) ?? 0).toLocaleString("en-US"))}</div>
-                    </div>
-                  `,
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${TILE_BG};border:1px solid ${BORDER};border-radius:10px;margin:0 0 8px;"><tr>
+                      <td style="padding:12px 14px;">
+                        <div style="font-family:${FONT};font-size:14px;font-weight:600;color:${INK};">${escapeHtml(textValue(card.source, "Source"))}</div>
+                        <div style="font-family:${FONT};font-size:12px;color:${MUTED};margin-top:2px;">${escapeHtml(textValue(card.detail, "Current activity"))}</div>
+                      </td>
+                      <td style="padding:12px 14px;text-align:right;font-family:${FONT};font-size:20px;font-weight:800;color:${BLUE};white-space:nowrap;">${escapeHtml((numericValue(card.value) ?? 0).toLocaleString("en-US"))}</td>
+                    </tr></table>`,
                 )
                 .join("")}
             </div>`
@@ -443,20 +369,17 @@ function renderMarketPulseSection(article: NewsletterHtmlArticle): string | null
       }
       ${
         geographyRows.length > 0
-          ? `<div style="margin-top:6px;">
-              <div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#8a8480;margin-bottom:10px;">
-                Most active geographies
-              </div>
-              <table style="width:100%;border-collapse:collapse;background:#ffffff;">
+          ? `<div style="margin-top:16px;">
+              <div style="font-family:${FONT};font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:${MUTED};margin-bottom:10px;">Most active geographies</div>
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid ${BORDER};border-radius:10px;overflow:hidden;">
                 ${geographyRows
                   .map(
-                    (row, index) => `
-                      <tr style="background:${index % 2 === 0 ? "#ffffff" : "#fbf9f6"};">
-                        <td style="padding:12px 14px;font-family:'DM Sans',Arial,sans-serif;font-size:15px;font-weight:700;color:#09111f;">${escapeHtml(textValue(row.label, "Market"))}</td>
-                        <td style="padding:12px 14px;font-family:'DM Sans',Arial,sans-serif;font-size:13px;color:#7a6b60;">${escapeHtml(textValue(row.sublabel, "Inventory source"))}</td>
-                        <td style="padding:12px 14px;font-family:'Playfair Display',Georgia,serif;font-size:21px;font-weight:700;color:#72262a;text-align:right;">${escapeHtml((numericValue(row.value) ?? 0).toLocaleString("en-US"))}</td>
-                      </tr>
-                    `,
+                    (row) => `
+                      <tr style="background:#ffffff;">
+                        <td style="padding:12px 14px;border-top:1px solid #F1F5F9;font-family:${FONT};font-size:14px;font-weight:600;color:${INK};">${escapeHtml(textValue(row.label, "Market"))}</td>
+                        <td style="padding:12px 14px;border-top:1px solid #F1F5F9;font-family:${FONT};font-size:13px;color:${MUTED};">${escapeHtml(textValue(row.sublabel, "Inventory source"))}</td>
+                        <td style="padding:12px 14px;border-top:1px solid #F1F5F9;text-align:right;font-family:${FONT};font-size:18px;font-weight:800;color:${BLUE};">${escapeHtml((numericValue(row.value) ?? 0).toLocaleString("en-US"))}</td>
+                      </tr>`,
                   )
                   .join("")}
               </table>
@@ -464,8 +387,7 @@ function renderMarketPulseSection(article: NewsletterHtmlArticle): string | null
           : ""
       }
       ${renderSectionCta(ctaLabel, ctaUrl)}
-    </div>
-  `;
+    </div>`;
 }
 
 function renderIndustryNewsSection(article: NewsletterHtmlArticle): string | null {
@@ -476,233 +398,163 @@ function renderIndustryNewsSection(article: NewsletterHtmlArticle): string | nul
     .filter((story) => textValue(story.title) && textValue(story.source))
     .slice(0, 6);
   const validSourceRows = sourceRows.filter((row) => textValue(row.source));
-  const ctaLabel = textValue(article.metadata?.cta_label, "Read More \u2192");
-  const ctaUrl = normalizeNavigationUrl(
-    textValue(article.metadata?.cta_url, "/insights/news"),
-  );
+  const ctaLabel = textValue(article.metadata?.cta_label, "Read More →");
+  const ctaUrl = normalizeNavigationUrl(textValue(article.metadata?.cta_url, "/insights/news"));
   if (validStories.length === 0) {
     return null;
   }
+  const headline = textValue(article.metadata?.headline, article.title, "What Changed Across Foreclosure and REO This Week");
+  const eyebrow = textValue(article.metadata?.eyebrow, "Industry News");
 
   return `
-    <div style="padding:34px 26px 24px;background:#ffffff;border-bottom:1px solid #e3ddd6;">
-      <div style="font-family:'DM Sans',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#72262a;margin-bottom:10px;border-left:4px solid #1a1a1a;padding-left:12px;">
-        ${escapeHtml(textValue(article.metadata?.eyebrow, "Industry News"))}
-      </div>
-      <div style="font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:700;line-height:1.15;color:#09111f;margin-bottom:14px;">
-        ${escapeHtml(textValue(article.metadata?.headline, article.title, "What Changed Across Foreclosure and REO This Week"))}
-      </div>
-      ${renderSectionIntro(article)}
-      ${
-        validSourceRows.length > 0
-          ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;">
-              ${validSourceRows
-                .map(
-                  (row) => `
-                    <span style="display:inline-block;padding:8px 12px;background:#f3e7e8;border:1px solid #e3c8cb;border-radius:999px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:700;color:#72262a;">
-                      ${escapeHtml(textValue(row.source))}: ${escapeHtml(String(numericValue(row.count) ?? 0))}
-                    </span>
-                  `,
-                )
-                .join("")}
-            </div>`
-          : ""
-      }
+    ${cardOpen()}
+      ${sectionHeader(eyebrow, headline, INK)}
+      ${renderIntro(article)}
+      ${renderSourcePills(validSourceRows)}
       ${validStories
         .map(
           (story, index) => `
-            <a href="${escapeHtml(ctaUrl)}" target="_top" style="display:block;background:${index === 0 ? "#f7f5f2" : "#ffffff"};border:${index === 0 ? "1px solid #e3ddd6" : "1px solid #ebe5de"};padding:14px 16px;margin-bottom:12px;border-radius:4px;text-decoration:none;">
-              <div style="font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#72262a;margin-bottom:6px;">
-                ${escapeHtml(textValue(story.source))}${textValue(story.published_at) ? ` · ${escapeHtml(textValue(story.published_at))}` : ""} · OPEN
-              </div>
-              <div style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;line-height:1.3;color:#09111f;margin-bottom:8px;">
-                ${escapeHtml(textValue(story.title))}
-              </div>
-              <div style="font-family:'DM Sans',Arial,sans-serif;font-size:13px;line-height:1.7;color:#5f5348;">
-                ${escapeHtml(excerptText(textValue(story.detail, article.teaser), 180))}
-              </div>
-            </a>
-          `,
+            <a href="${escapeHtml(ctaUrl)}" target="_top" style="display:block;text-decoration:none;padding:0 0 16px;margin:0 0 16px;${index < validStories.length - 1 ? `border-bottom:1px solid #F1F5F9;` : ""}">
+              <span style="font-family:${FONT};font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:${BLUE};">${escapeHtml(textValue(story.source))}${textValue(story.published_at) ? ` · ${escapeHtml(textValue(story.published_at))}` : ""}</span>
+              <div style="font-family:${FONT};font-size:16px;font-weight:700;line-height:1.35;color:${INK};margin:5px 0 6px;">${escapeHtml(textValue(story.title))}</div>
+              <div style="font-family:${FONT};font-size:13px;line-height:1.65;color:${MUTED};">${escapeHtml(excerptText(textValue(story.detail, article.teaser), 180))}</div>
+            </a>`,
         )
         .join("")}
       ${renderSectionCta(ctaLabel, ctaUrl)}
-    </div>
-  `;
+    </div>`;
 }
 
 function renderHiringSection(article: NewsletterHtmlArticle): string | null {
   const employers = safeRows(article.metadata?.employers);
   const focusRows = safeRows(article.metadata?.focus_rows);
-  const ctaLabel = textValue(article.metadata?.cta_label, "Open Employers Hub \u2192");
-  const ctaUrl = normalizeNavigationUrl(
-    textValue(article.metadata?.cta_url, "/insights/listings?tab=employers"),
-  );
+  const ctaLabel = textValue(article.metadata?.cta_label, "Open Employers Hub →");
+  const ctaUrl = normalizeNavigationUrl(textValue(article.metadata?.cta_url, "/insights/listings?tab=employers"));
   if (employers.length === 0) {
     return null;
   }
+  const headline = textValue(article.metadata?.headline, article.title, "Who Is Staffing Up Across Default and REO");
+  const eyebrow = textValue(article.metadata?.eyebrow, "Bank Hiring Intel");
 
   return `
-    <div style="padding:34px 26px 24px;background:#f7f5f2;border-bottom:1px solid #e3ddd6;">
-      <div style="font-family:'DM Sans',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#72262a;margin-bottom:10px;border-left:4px solid #72262a;padding-left:12px;">
-        ${escapeHtml(textValue(article.metadata?.eyebrow, "Bank Hiring Intel"))}
-      </div>
-      <div style="font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:700;line-height:1.15;color:#09111f;margin-bottom:14px;">
-        ${escapeHtml(textValue(article.metadata?.headline, article.title, "Who Is Staffing Up Across Default and REO"))}
-      </div>
-      ${renderSectionIntro(article)}
-      <table style="width:100%;border-collapse:separate;border-spacing:10px 0;margin:8px 0 18px;">
-        <tr>
-          <td style="background:#ffffff;border:1px solid #e3ddd6;border-top:3px solid #1a1a1a;padding:14px 12px;text-align:center;">
-            <div style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:700;color:#09111f;">${escapeHtml((numericValue(article.metadata?.total_jobs) ?? 0).toLocaleString("en-US"))}</div>
-            <div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#72262a;margin-top:8px;">Open roles tracked</div>
-          </td>
-          <td style="background:#ffffff;border:1px solid #e3ddd6;border-top:3px solid #72262a;padding:14px 12px;text-align:center;">
-            <div style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:700;color:#09111f;">${escapeHtml((numericValue(article.metadata?.employer_count) ?? employers.length).toLocaleString("en-US"))}</div>
-            <div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#72262a;margin-top:8px;">Active employers</div>
-          </td>
-        </tr>
-      </table>
-      ${
-        focusRows.length > 0
-          ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;">
-              ${focusRows
-                .map(
-                  (row) => `
-                    <span style="display:inline-block;padding:8px 12px;background:#ffffff;border:1px solid #e3ddd6;border-radius:999px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:700;color:#72262a;">
-                      ${escapeHtml(textValue(row.focus, "Hiring focus"))}: ${escapeHtml(String(numericValue(row.count) ?? 0))}
-                    </span>
-                  `,
-                )
-                .join("")}
-            </div>`
-          : ""
-      }
+    ${cardOpen()}
+      ${sectionHeader(eyebrow, headline, BLUE)}
+      ${renderIntro(article)}
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px;"><tr>
+        <td width="50%" style="padding-right:10px;vertical-align:top;">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${TILE_BG};border:1px solid ${BORDER};border-radius:10px;"><tr><td style="padding:14px;text-align:center;">
+            <div style="font-family:${FONT};font-size:22px;font-weight:800;color:${INK};">${escapeHtml((numericValue(article.metadata?.total_jobs) ?? 0).toLocaleString("en-US"))}</div>
+            <div style="font-family:${FONT};font-size:11px;font-weight:600;color:${BLUE};margin-top:6px;">Open roles tracked</div>
+          </td></tr></table>
+        </td>
+        <td width="50%" style="vertical-align:top;">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${TILE_BG};border:1px solid ${BORDER};border-radius:10px;"><tr><td style="padding:14px;text-align:center;">
+            <div style="font-family:${FONT};font-size:22px;font-weight:800;color:${INK};">${escapeHtml((numericValue(article.metadata?.employer_count) ?? employers.length).toLocaleString("en-US"))}</div>
+            <div style="font-family:${FONT};font-size:11px;font-weight:600;color:${BLUE};margin-top:6px;">Active employers</div>
+          </td></tr></table>
+        </td>
+      </tr></table>
+      ${renderSourcePills(focusRows)}
       ${employers
         .map(
-          (employer, index) => `
-            <div style="display:flex;justify-content:space-between;gap:14px;background:${index % 2 === 0 ? "#ffffff" : "#fbf9f6"};border:1px solid #ebe5de;padding:14px 16px;margin-bottom:10px;border-radius:4px;">
-              <div style="flex:1 1 auto;">
-                <div style="font-family:'DM Sans',Arial,sans-serif;font-size:16px;font-weight:700;color:#09111f;">${escapeHtml(textValue(employer.company, "Employer"))}</div>
-                <div style="font-family:'DM Sans',Arial,sans-serif;font-size:13px;line-height:1.6;color:#6d5b49;margin-top:4px;">
-                  ${escapeHtml(textValue(...safeRows(employer.sample_roles).map((item) => textValue(item)), "Role mix not available"))}
-                </div>
-                <div style="font-family:'DM Sans',Arial,sans-serif;font-size:12px;line-height:1.6;color:#8a7a6c;margin-top:4px;">
-                  ${escapeHtml(textValue(...safeRows(employer.locations).map((item) => textValue(item)), "Location not listed"))}
-                </div>
-              </div>
-              <div style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:700;color:#72262a;white-space:nowrap;">${escapeHtml(String(numericValue(employer.total_jobs) ?? 0))}</div>
-            </div>
-          `,
+          (employer) => `
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${TILE_BG};border:1px solid ${BORDER};border-radius:10px;margin:0 0 8px;"><tr>
+              <td style="padding:14px 16px;">
+                <div style="font-family:${FONT};font-size:15px;font-weight:600;color:${INK};">${escapeHtml(textValue(employer.company, "Employer"))}</div>
+                <div style="font-family:${FONT};font-size:13px;line-height:1.6;color:${BODY};margin-top:4px;">${escapeHtml(textValue(...safeRows(employer.sample_roles).map((item) => textValue(item)), "Role mix not available"))}</div>
+                <div style="font-family:${FONT};font-size:12px;line-height:1.6;color:${MUTED};margin-top:4px;">${escapeHtml(textValue(...safeRows(employer.locations).map((item) => textValue(item)), "Location not listed"))}</div>
+              </td>
+              <td style="padding:14px 16px;text-align:right;font-family:${FONT};font-size:20px;font-weight:800;color:${BLUE};white-space:nowrap;">${escapeHtml(String(numericValue(employer.total_jobs) ?? 0))}</td>
+            </tr></table>`,
         )
         .join("")}
       ${renderSectionCta(ctaLabel, ctaUrl)}
-    </div>
-  `;
+    </div>`;
 }
 
 function renderSpotlightSection(article: NewsletterHtmlArticle): string | null {
   const bullets = safeRows(article.metadata?.bullets);
-  const ctaLabel = textValue(article.metadata?.cta_label, "Log In and Update Your Profile");
+  const ctaLabel = textValue(article.metadata?.cta_label, "Set Up Your Account →");
   const ctaUrl = textValue(article.metadata?.cta_url, article.ms_platform_url, "#");
+  const headline = textValue(article.metadata?.headline, article.title, "One Platform. Every Field Service.");
+  const eyebrow = textValue(article.metadata?.eyebrow, "UFS Spotlight");
 
   return `
-    <div style="padding:34px 26px 24px;background:#1a1a1a;border-bottom:1px solid #2c2c2c;">
-      <div style="font-family:'DM Sans',Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#d6a2a8;margin-bottom:10px;border-left:4px solid #72262a;padding-left:12px;">
-        ${escapeHtml(textValue(article.metadata?.eyebrow, "UFS Spotlight"))}
-      </div>
-      <div style="font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:700;line-height:1.15;color:#ffffff;margin-bottom:14px;">
-        ${escapeHtml(textValue(article.metadata?.headline, article.title, "Field Coverage Built for Distressed Asset Workflows"))}
-      </div>
-      <div style="font-family:'DM Sans',Arial,sans-serif;font-size:14px;line-height:1.8;color:rgba(255,255,255,0.78);margin-bottom:16px;">
-        ${escapeHtml(article.teaser)}
-      </div>
+    <div style="background:#2563EB;background-image:linear-gradient(135deg,#2563EB 0%,#3B82F6 100%);border-radius:16px;padding:30px;margin:0 0 16px;">
+      <div style="font-family:${FONT};font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#BFDBFE;margin-bottom:10px;">${escapeHtml(eyebrow)}</div>
+      <div style="font-family:${FONT};font-size:20px;font-weight:700;line-height:1.3;color:#ffffff;margin-bottom:12px;">${escapeHtml(headline)}</div>
+      <div style="font-family:${FONT};font-size:14px;line-height:1.7;color:rgba(255,255,255,0.82);margin-bottom:16px;">${escapeHtml(article.teaser)}</div>
       ${
         bullets.length > 0
-          ? `<ul style="margin:0 0 20px;padding-left:18px;font-family:'DM Sans',Arial,sans-serif;font-size:13px;line-height:1.9;color:rgba(255,255,255,0.76);">
-              ${bullets
-                .map(
-                  (bullet) => `
-                    <li style="margin:0 0 10px;">${escapeHtml(textValue(bullet, "UFS service support"))}</li>
-                  `,
-                )
-                .join("")}
+          ? `<ul style="margin:0 0 18px;padding-left:18px;font-family:${FONT};font-size:13px;line-height:1.9;color:rgba(255,255,255,0.85);">
+              ${bullets.map((bullet) => `<li style="margin:0 0 8px;">${escapeHtml(textValue(bullet, "UFS service support"))}</li>`).join("")}
             </ul>`
           : ""
       }
-      <div style="font-family:'DM Sans',Arial,sans-serif;font-size:13px;line-height:1.8;color:rgba(255,255,255,0.68);margin-bottom:18px;">
-        ${escapeHtml(excerptText(article.body, 320))}
-      </div>
-      <a href="${escapeHtml(ctaUrl)}" style="display:inline-block;background:#72262a;color:#ffffff;font-family:'DM Sans',Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:0.4px;padding:14px 24px;text-decoration:none;border-radius:2px;">
-        ${escapeHtml(ctaLabel)}
-      </a>
-    </div>
-  `;
+      ${
+        article.body.trim()
+          ? `<div style="font-family:${FONT};font-size:13px;line-height:1.7;color:rgba(255,255,255,0.72);margin-bottom:20px;">${escapeHtml(excerptText(article.body, 280))}</div>`
+          : ""
+      }
+      <table cellpadding="0" cellspacing="0" border="0"><tr><td style="background:#ffffff;border-radius:8px;">
+        <a href="${escapeHtml(ctaUrl)}" target="_top" style="display:inline-block;padding:13px 26px;font-family:${FONT};font-size:13px;font-weight:700;color:#1E3A8A;text-decoration:none;">${escapeHtml(ctaLabel)}</a>
+      </td></tr></table>
+    </div>`;
 }
 
 function renderSectionBlock(article: NewsletterHtmlArticle, index: number): string {
   if (article.section_type === "market_pulse") {
     const block = renderMarketPulseSection(article);
-    if (block) {
-      return block;
-    }
+    if (block) return block;
   }
-
   if (article.section_type === "top_banks") {
     const block = renderTopBanksSection(article);
-    if (block) {
-      return block;
-    }
+    if (block) return block;
   }
-
   if (article.section_type === "hot_markets") {
     const block = renderHotMarketsSection(article);
-    if (block) {
-      return block;
-    }
+    if (block) return block;
   }
-
   if (article.section_type === "industry_news") {
     const block = renderIndustryNewsSection(article);
-    if (block) {
-      return block;
-    }
+    if (block) return block;
   }
-
   if (article.section_type === "bank_hiring_intel") {
     const block = renderHiringSection(article);
-    if (block) {
-      return block;
-    }
+    if (block) return block;
   }
-
   if (article.section_type === "ufs_spotlight") {
     const block = renderSpotlightSection(article);
-    if (block) {
-      return block;
-    }
+    if (block) return block;
   }
 
+  // Generic fallback card
   const stats = extractStatSnippets(article, 3);
   const bullets = extractBulletPoints(article, 4);
 
   return `
-    <div style="padding:32px 36px;border-bottom:1px solid #eaeaea;${index % 2 === 1 ? "background:#f7f5f2;" : "background:#ffffff;"}">
-      <div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;color:#72262a;margin-bottom:8px;">
-        Section ${index + 2} · ${escapeHtml(sectionLabel(article.section_type))}
-      </div>
-      <div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:bold;line-height:1.35;color:#1a1a1a;margin-bottom:12px;">
-        ${escapeHtml(article.title)}
-      </div>
-      <div style="font-family:'DM Sans',Arial,sans-serif;font-size:13px;line-height:1.7;color:#555;margin-bottom:16px;">
-        ${escapeHtml(article.teaser)}
-      </div>
-      ${renderStatPills(stats)}
-      ${renderBulletList(bullets)}
-      <div style="font-family:'DM Sans',Arial,sans-serif;font-size:13px;line-height:1.8;color:#444;margin-top:14px;">
-        ${escapeHtml(excerptText(article.body, 520))}
-      </div>
-    </div>
-  `;
+    ${cardOpen()}
+      ${sectionHeader(sectionLabel(article.section_type), article.title, INK)}
+      ${renderIntro(article)}
+      ${
+        stats.length > 0
+          ? `<div style="margin:0 0 14px;">${stats
+              .map(
+                (stat) =>
+                  `<span style="display:inline-block;margin:0 6px 6px 0;padding:6px 11px;background:${TILE_BG};border:1px solid ${BORDER};border-radius:999px;font-family:${FONT};font-size:11px;font-weight:600;color:${BODY};">${escapeHtml(stat)}</span>`,
+              )
+              .join("")}</div>`
+          : ""
+      }
+      ${
+        bullets.length > 0
+          ? `<ul style="margin:0 0 14px;padding-left:18px;font-family:${FONT};font-size:13px;line-height:1.8;color:${BODY};">
+              ${bullets.map((point) => `<li style="margin:0 0 8px;">${escapeHtml(point)}</li>`).join("")}
+            </ul>`
+          : ""
+      }
+      <div style="font-family:${FONT};font-size:13px;line-height:1.75;color:${BODY};">${escapeHtml(excerptText(article.body, 520))}</div>
+    </div>`;
 }
 
 export function buildNewsletterHtml(
@@ -712,140 +564,65 @@ export function buildNewsletterHtml(
   const leadArticle = articles[0];
   const secondaryArticles = articles.slice(1);
   const issueWeek = formatIssueWeek(newsletter.issue_date);
-  const articleCount = articles.length;
-  const audienceCount = new Set(articles.map((article) => article.audience_tag).filter(Boolean)).size;
-  const categoryCount = new Set(articles.map((article) => article.section_type)).size;
-  const leadStats = leadArticle ? extractStatSnippets(leadArticle, 4) : [];
-  const leadBullets = leadArticle ? extractBulletPoints(leadArticle, 4) : [];
+  const leadStats = leadArticle ? extractStatSnippets(leadArticle, 3) : [];
   const leadDetailBlock = leadArticle ? renderSectionBlock(leadArticle, -1) : "";
-
-  const sectionBlocks = secondaryArticles
-    .map((article, index) => renderSectionBlock(article, index))
-    .join("");
+  const sectionBlocks = secondaryArticles.map((article, index) => renderSectionBlock(article, index)).join("");
 
   return `
-    <div style="margin:0;background:#f0ede8;padding:24px 12px;color:#1a1a1a;">
-      <div style="max-width:680px;margin:0 auto;background:#ffffff;">
-        <div style="background:#1a1a1a;">
-          <div style="padding:20px 36px 0 36px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-            <div>
-              <div style="font-family:'DM Sans',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:4px;">United Field Services</div>
-              <div style="font-family:'Playfair Display',Georgia,serif;font-size:34px;font-weight:bold;color:#ffffff;line-height:1;">The Disposition Desk</div>
-            </div>
-            <div style="text-align:right;font-family:'DM Sans',Arial,sans-serif;">
-              <div style="font-size:11px;color:rgba(255,255,255,0.72);text-transform:uppercase;letter-spacing:1.5px;">${escapeHtml(issueWeek)}</div>
-              <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:3px;">Issue #${newsletter.issue_number} · REO market intelligence</div>
-            </div>
-          </div>
-          <div style="background:#72262a;height:4px;margin-top:16px;"></div>
-          <div style="background:#2c2c2c;padding:10px 36px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;text-transform:uppercase;">Foreclosure · REO · Servicer activity · Market watch</div>
-        </div>
+    <div style="margin:0;background:#F1F5F9;padding:28px 16px;font-family:${FONT};color:${INK};">
+      <div style="max-width:600px;margin:0 auto;">
 
-        <div style="background:#72262a;padding:12px 36px;display:flex;align-items:center;justify-content:center;gap:14px;">
-          <div style="font-family:'Playfair Display',Georgia,serif;font-size:42px;font-weight:bold;color:#ffffff;line-height:1;">${articleCount}</div>
-          <div style="font-family:'DM Sans',Arial,sans-serif;">
-            <div style="font-size:13px;font-weight:bold;color:#ffffff;text-transform:uppercase;letter-spacing:0.5px;">Sections packaged for this issue</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.72);margin-top:2px;">${categoryCount} editorial lanes · ${audienceCount} audience segments</div>
+        <!-- Header card -->
+        <div style="background:#ffffff;border:1px solid ${BORDER};border-radius:16px;padding:24px 30px;margin:0 0 16px;">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="vertical-align:middle;font-family:${FONT};font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:${BLUE};">United Field Services</td>
+              <td style="vertical-align:middle;text-align:right;font-family:${FONT};font-size:12px;color:${MUTED};">Issue #${newsletter.issue_number}<br><span style="color:#9CA3AF;">${escapeHtml(issueWeek)}</span></td>
+            </tr>
+          </table>
+          <div style="margin-top:16px;">
+            <h1 style="font-family:${FONT};font-size:24px;font-weight:800;color:${INK};margin:0;letter-spacing:-0.02em;">The Disposition Desk</h1>
+            <p style="font-family:${FONT};font-size:13px;color:${MUTED};margin:4px 0 0;font-weight:500;">Your weekly REO &amp; foreclosure market brief</p>
           </div>
         </div>
 
-        <div style="background:#1a1a1a;padding:28px 36px 32px;">
-          <div style="display:inline-block;background:#72262a;color:#ffffff;font-family:'DM Sans',Arial,sans-serif;font-size:9px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;margin-bottom:14px;">
-            This Week&#39;s Lead Story
-          </div>
-          <div style="font-family:'Playfair Display',Georgia,serif;font-size:24px;line-height:1.35;font-weight:bold;color:#ffffff;margin-bottom:12px;">
+        <!-- Blue gradient hero (lead story) -->
+        <div style="background:#3B82F6;background-image:linear-gradient(135deg,#3B82F6 0%,#60A5FA 100%);border-radius:16px;padding:28px 30px;margin:0 0 16px;">
+          <div style="font-family:${FONT};font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#DBEAFE;margin-bottom:8px;">This Week's Lead Story</div>
+          <div style="font-family:${FONT};font-size:20px;font-weight:700;line-height:1.3;color:#ffffff;margin-bottom:10px;">
             ${escapeHtml(leadArticle?.title ?? `Issue #${newsletter.issue_number} editorial brief`)}
           </div>
-          <div style="font-family:'DM Sans',Arial,sans-serif;font-size:14px;color:#ffffff;line-height:1.8;margin-bottom:14px;">
+          <div style="font-family:${FONT};font-size:14px;line-height:1.7;color:rgba(255,255,255,0.88);">
             ${escapeHtml(leadArticle?.teaser ?? "The lead story summary will appear here after the draft is generated.")}
           </div>
-          ${leadStats.length > 0 ? `
-            <div style="display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 18px;">
-              ${leadStats
-                .map(
-                  (stat) => `
-                    <span style="display:inline-block;padding:8px 12px;background:#2c2c2c;border:1px solid rgba(255,255,255,0.1);border-radius:999px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:bold;line-height:1.4;color:#f7f5f2;">
-                      ${escapeHtml(stat)}
-                    </span>
-                  `,
-                )
-                .join("")}
-            </div>
-          ` : ""}
-          ${leadBullets.length > 0 ? `
-            <div style="margin:12px 0 16px;">
-              <div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;color:#72262a;margin-bottom:10px;">
-                Quick brief
-              </div>
-              <ul style="margin:0;padding-left:18px;font-family:'DM Sans',Arial,sans-serif;font-size:13px;line-height:1.9;color:rgba(255,255,255,0.78);">
-                ${leadBullets
+          ${
+            leadStats.length > 0
+              ? `<div style="margin-top:16px;">${leadStats
                   .map(
-                    (point) => `
-                      <li style="margin:0 0 10px;">${escapeHtml(point)}</li>
-                    `,
+                    (stat) =>
+                      `<span style="display:inline-block;margin:0 6px 6px 0;padding:6px 11px;background:rgba(255,255,255,0.18);border-radius:999px;font-family:${FONT};font-size:11px;font-weight:600;color:#ffffff;">${escapeHtml(stat)}</span>`,
                   )
-                  .join("")}
-              </ul>
-            </div>
-          ` : ""}
-          <div style="font-family:'DM Sans',Arial,sans-serif;font-size:13px;color:rgba(255,255,255,0.72);line-height:1.75;">
-            ${escapeHtml(
-              leadArticle?.body
-                ? excerptText(leadArticle.body, 280)
-                : "This issue is assembled from the latest source pulls and editorial review in the Disposition Desk workflow.",
-            )}
-          </div>
+                  .join("")}</div>`
+              : ""
+          }
         </div>
 
         ${leadDetailBlock}
-
-        <div style="padding:32px 36px;border-bottom:1px solid #eaeaea;">
-          <div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:#72262a;margin-bottom:8px;">Editorial Metrics</div>
-          <table style="width:100%;border-collapse:separate;border-spacing:12px 0;">
-            <tr>
-              <td style="background:#f7f5f2;border:1px solid #e8e4df;border-top:3px solid #1a1a1a;padding:14px 12px;text-align:center;">
-                <div style="font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:bold;color:#1a1a1a;line-height:1;">${articleCount}</div>
-                <div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;color:#666;text-transform:uppercase;letter-spacing:0.5px;margin-top:6px;">Published sections</div>
-              </td>
-              <td style="background:#f3e7e8;border:1px solid #e3c8cb;border-top:3px solid #72262a;padding:14px 12px;text-align:center;">
-                <div style="font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:bold;color:#72262a;line-height:1;">${categoryCount}</div>
-                <div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;color:#666;text-transform:uppercase;letter-spacing:0.5px;margin-top:6px;">Editorial lanes</div>
-              </td>
-              <td style="background:#f7f5f2;border:1px solid #e8e4df;border-top:3px solid #1a1a1a;padding:14px 12px;text-align:center;">
-                <div style="font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:bold;color:#1a1a1a;line-height:1;">${audienceCount}</div>
-                <div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;color:#666;text-transform:uppercase;letter-spacing:0.5px;margin-top:6px;">Audience tags</div>
-              </td>
-            </tr>
-          </table>
-        </div>
-
         ${sectionBlocks}
 
-        <div style="background:#1a1a1a;padding:32px 36px;text-align:center;">
-          <div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#72262a;margin-bottom:12px;">UFS Agent Opportunity</div>
-          <div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:bold;color:#ffffff;margin-bottom:12px;line-height:1.35;">
-            The issue is ready to move from editorial review into delivery.
-          </div>
-          <div style="font-family:'DM Sans',Arial,sans-serif;font-size:13px;color:rgba(255,255,255,0.72);line-height:1.7;max-width:480px;margin:0 auto 20px;">
-            This edition was assembled inside the Disposition Desk workflow. Approved issues are published to article pages first, then scheduled to the active Mailchimp audience.
-          </div>
-          <a href="https://clients.unitedffs.com/register/client" style="display:inline-block;background:#72262a;color:#ffffff;font-family:'DM Sans',Arial,sans-serif;font-size:13px;font-weight:bold;letter-spacing:0.5px;padding:14px 32px;text-decoration:none;text-transform:uppercase;">
-            Log In and Update Your Profile
-          </a>
+        <!-- Footer -->
+        <div style="padding:8px 30px 0;text-align:center;">
+          <p style="font-family:${FONT};font-size:11px;color:#94A3B8;margin:0 0 10px;line-height:1.7;">
+            <a href="https://clients.unitedffs.com" style="color:${MUTED};text-decoration:none;font-weight:500;">Client Portal</a>
+            &nbsp;·&nbsp;
+            <a href="https://unitedffs.com/help-center-for-clients/" style="color:${MUTED};text-decoration:none;font-weight:500;">Help Center</a>
+            &nbsp;·&nbsp;
+            <a href="https://clients.unitedffs.com/register/client" style="color:${MUTED};text-decoration:none;font-weight:500;">Register</a>
+          </p>
+          <p style="font-family:${FONT};font-size:11px;color:#94A3B8;margin:0 0 4px;">United Field Services · Published weekly for registered REO agents &amp; partners</p>
+          <p style="font-family:${FONT};font-size:10px;color:#CBD5E1;margin:0;">© ${new Date(newsletter.issue_date).getUTCFullYear() || 2026} United Field Services. All rights reserved.</p>
         </div>
 
-        <div style="background:#2c2c2c;padding:24px 36px;">
-          <div style="font-family:'Playfair Display',Georgia,serif;font-size:16px;color:#ffffff;font-weight:bold;margin-bottom:8px;">United Field Services</div>
-          <div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;color:rgba(255,255,255,0.56);line-height:1.7;margin-bottom:12px;">
-            The Disposition Desk is published weekly for registered REO agents and partners. This newsletter is for informational purposes only and should be reviewed before distribution.
-          </div>
-          <div style="height:1px;background:rgba(255,255,255,0.12);margin:14px 0;"></div>
-          <div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;color:rgba(255,255,255,0.56);">
-            <a href="https://unitedffs.com" style="color:#ffffff;text-decoration:none;margin-right:12px;">United Field Services</a>
-            <a href="https://clients.unitedffs.com/register/client" style="color:#ffffff;text-decoration:none;margin-right:12px;">Register</a>
-            <a href="https://unitedffs.com/help-center-for-clients/" style="color:#ffffff;text-decoration:none;">Help Center</a>
-          </div>
-        </div>
       </div>
     </div>
   `;
@@ -917,7 +694,6 @@ export function buildPreviewNewsletterHtmlFromSections(
     previewArticles,
   );
 
-  // Keep preview links navigating the top-level app instead of inside the iframe.
   const baseTag = baseOrigin
     ? `<base href="${escapeHtml(`${baseOrigin}/`)}" target="_top">`
     : '<base target="_top">';

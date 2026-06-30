@@ -54,6 +54,40 @@ function nextTuesdayAt9Utc(): string {
   return next.toISOString();
 }
 
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// When a campaign is created via the API, Mailchimp computes the recipient
+// count asynchronously. Calling /actions/send before that finishes returns
+// "Your Campaign is not ready to send. recipients not ready". Poll the campaign
+// until the recipient count is populated (or we run out of attempts).
+async function waitForRecipientsReady(
+  baseUrl: string,
+  headers: HeadersInit,
+  campaignId: string,
+  attempts = 8,
+): Promise<number> {
+  let lastCount = 0;
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    const response = await fetch(
+      `${baseUrl}/campaigns/${campaignId}?fields=recipients.recipient_count,status`,
+      { headers, cache: "no-store" },
+    );
+    if (response.ok) {
+      const payload = (await response.json()) as {
+        recipients?: { recipient_count?: number };
+      };
+      lastCount = payload.recipients?.recipient_count ?? 0;
+      if (lastCount > 0) {
+        return lastCount;
+      }
+    }
+    await delay(1500);
+  }
+  return lastCount;
+}
+
 export function buildHtmlContent(
   newsletter: NewsletterRecord,
   articles: ArticleRecord[],
@@ -78,8 +112,10 @@ export async function scheduleCampaign(
   newsletter: NewsletterRecord,
   articles: ArticleRecord[],
   sections?: DraftSection[],
+  listId?: string,
 ): Promise<string> {
   const settings = requireMailchimpSettings();
+  const targetListId = listId || settings.mailchimpListId;
   const baseUrl = `https://${settings.mailchimpServerPrefix}.api.mailchimp.com/3.0`;
   const headers = mailchimpHeaders(settings.mailchimpApiKey);
 
@@ -92,7 +128,7 @@ export async function scheduleCampaign(
       newsletter_id: newsletter.id,
       issue_number: newsletter.issue_number,
       article_count: articles.length,
-      audience_id: settings.mailchimpListId,
+      audience_id: targetListId,
     },
   });
 
@@ -101,7 +137,7 @@ export async function scheduleCampaign(
     headers,
     body: JSON.stringify({
       type: "regular",
-      recipients: { list_id: settings.mailchimpListId },
+      recipients: { list_id: targetListId },
       settings: {
         subject_line: `The Disposition Desk - Issue #${newsletter.issue_number}`,
         from_name: "United Field Services",
@@ -182,34 +218,67 @@ export async function scheduleCampaign(
     },
   });
 
-  const scheduleResponse = await fetch(`${baseUrl}/campaigns/${campaignId}/actions/schedule`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({ schedule_time: nextTuesdayAt9Utc() }),
+  // Mailchimp computes the recipient list asynchronously after a campaign is
+  // created. Wait for it to be ready before sending, otherwise /actions/send
+  // returns "Your Campaign is not ready to send. recipients not ready".
+  const recipientCount = await waitForRecipientsReady(baseUrl, headers, campaignId);
+  await appendWorkflowLog({
+    scope: "delivery",
+    step: "mailchimp.recipients_ready",
+    status: recipientCount > 0 ? "info" : "warning",
+    message:
+      recipientCount > 0
+        ? `Recipient list ready (${recipientCount}).`
+        : "Recipient list still showing 0 after polling; attempting send anyway.",
+    context: {
+      newsletter_id: newsletter.id,
+      issue_number: newsletter.issue_number,
+      campaign_id: campaignId,
+      recipient_count: recipientCount,
+    },
   });
 
-  if (!scheduleResponse.ok) {
-    const detail = await scheduleResponse.text();
+  // Send immediately on approval. (Scheduling can be re-introduced later via
+  // the /actions/schedule endpoint + nextTuesdayAt9Utc helper below.)
+  // Retry on the transient "recipients not ready" error.
+  let sendResponse: Response | null = null;
+  let sendDetail = "";
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    sendResponse = await fetch(`${baseUrl}/campaigns/${campaignId}/actions/send`, {
+      method: "POST",
+      headers,
+    });
+    if (sendResponse.ok) {
+      break;
+    }
+    sendDetail = await sendResponse.text();
+    if (!sendDetail.includes("recipients not ready") || attempt === 3) {
+      break;
+    }
+    await delay(2000);
+  }
+
+  if (!sendResponse || !sendResponse.ok) {
     await appendWorkflowLog({
       scope: "delivery",
-      step: "mailchimp.schedule",
+      step: "mailchimp.send",
       status: "error",
-      message: "Mailchimp schedule request failed.",
+      message: "Mailchimp send request failed.",
       context: {
         newsletter_id: newsletter.id,
         issue_number: newsletter.issue_number,
         campaign_id: campaignId,
-        error: detail,
+        error: sendDetail,
       },
     });
-    throw new Error(`Mailchimp schedule failed: ${detail}`);
+    throw new Error(`Mailchimp send failed: ${sendDetail}`);
   }
 
   await appendWorkflowLog({
     scope: "delivery",
-    step: "mailchimp.schedule",
+    step: "mailchimp.send",
     status: "success",
-    message: "Mailchimp campaign scheduled.",
+    message: "Mailchimp campaign sent.",
     context: {
       newsletter_id: newsletter.id,
       issue_number: newsletter.issue_number,

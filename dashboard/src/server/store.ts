@@ -5,14 +5,56 @@ import type { DatabaseRecord } from "@/server/types";
 
 let writeQueue: Promise<unknown> = Promise.resolve();
 
+// The Supabase transaction pooler drops idle connections (e.g. while a long
+// OpenAI generation runs). The next query then fails with "Server has closed
+// the connection". Retry once after forcing a reconnect.
+function isConnectionDropError(error: unknown): boolean {
+  const message = String((error as { message?: string })?.message ?? "");
+  return (
+    message.includes("Server has closed the connection") ||
+    message.includes("Can't reach database server") ||
+    message.includes("ECONNRESET") ||
+    message.includes("Connection terminated") ||
+    message.includes("connection closed")
+  );
+}
+
+async function runWithDbRetry<T>(op: () => Promise<T>, attempts = 2): Promise<T> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    try {
+      return await op();
+    } catch (error) {
+      lastError = error;
+      if (!isConnectionDropError(error) || attempt === attempts - 1) {
+        throw error;
+      }
+      // Force a fresh connection before retrying.
+      try {
+        await prisma.$disconnect();
+      } catch {
+        /* ignore */
+      }
+      try {
+        await prisma.$connect();
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+  throw lastError;
+}
+
 export async function readDatabase(): Promise<DatabaseRecord> {
   await ensureDatabaseReady();
-  const [newsletters, drafts, articles, approvalLogs] = await Promise.all([
-    prisma.newsletter.findMany({ orderBy: { id: "asc" } }),
-    prisma.draft.findMany({ orderBy: { id: "asc" } }),
-    prisma.article.findMany({ orderBy: { id: "asc" } }),
-    prisma.approvalLog.findMany({ orderBy: { id: "asc" } }),
-  ]);
+  const [newsletters, drafts, articles, approvalLogs] = await runWithDbRetry(() =>
+    Promise.all([
+      prisma.newsletter.findMany({ orderBy: { id: "asc" } }),
+      prisma.draft.findMany({ orderBy: { id: "asc" } }),
+      prisma.article.findMany({ orderBy: { id: "asc" } }),
+      prisma.approvalLog.findMany({ orderBy: { id: "asc" } }),
+    ]),
+  );
 
   return mapDatabaseRows({
     newsletters,
@@ -192,7 +234,8 @@ export async function withDatabase<T>(
 
   const pendingWrite = writeQueue.then(async () => {
     await ensureDatabaseReady();
-    result = await prisma.$transaction(
+    result = await runWithDbRetry(() =>
+      prisma.$transaction(
       async (tx) => {
         const [newsletters, drafts, articles, approvalLogs] = await Promise.all([
           tx.newsletter.findMany({ orderBy: { id: "asc" } }),
@@ -217,6 +260,7 @@ export async function withDatabase<T>(
         maxWait: 120000,
         timeout: 120000,
       },
+      ),
     );
   });
 

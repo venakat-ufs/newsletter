@@ -9,6 +9,7 @@ import {
 } from "@/server/mailchimp";
 import { readDatabase, withDatabase, nextId } from "@/server/store";
 import { prisma, ensureDatabaseReady } from "@/server/prisma";
+import { getPipelineStats } from "@/lib/pipeline-stats";
 import { collectAllSources } from "@/server/sources";
 import type {
   ApprovalAction,
@@ -1211,6 +1212,7 @@ function buildStructuredSectionMetadata(
     news?: string;
     hiring?: string;
   },
+  stateLevelRows?: Array<Record<string, unknown>> | null,
 ): Record<string, Record<string, unknown>> {
   const defaultInsightsUrl = "https://clients.unitedffs.com/register/client";
   const listingsCtaUrl = insightsUrls?.listings ?? defaultInsightsUrl;
@@ -1290,30 +1292,42 @@ function buildStructuredSectionMetadata(
         };
       }),
     },
-    hot_markets: {
-      layout: "county_rankings",
-      eyebrow: "Hot Markets",
-      headline: "Top 5 Counties This Week",
-      cta_label: "More Listings \u2192",
-      cta_url: listingsCtaUrl,
-      rows: currentMarketRows.map((row, index) => {
-        const name = textValue(row.name);
-        const count = numericValue(row.count) ?? 0;
-        const rankDelta = (previousMarketRank.get(name) ?? index) - index;
-        const wow = wowDeltaWithMomentum(
-          count,
-          previousMarketMap.get(name) ?? null,
-          marketHistoryMap.get(name) ?? [],
-          rankDelta,
-        );
-        return {
-          ...row,
-          rank: index + 1,
-          wow_delta_pct: wow.value,
-          wow_delta_status: wow.status,
-        };
-      }),
-    },
+    // Prefer live Lead Pipeline state-level activity (matches the insights hub).
+    // Falls back to county rankings if pipeline data is unavailable.
+    hot_markets:
+      stateLevelRows && stateLevelRows.length > 0
+        ? {
+            layout: "state_activity",
+            eyebrow: "Lead Pipeline",
+            headline: "State-Level Activity",
+            cta_label: "More Listings \u2192",
+            cta_url: listingsCtaUrl,
+            rows: stateLevelRows,
+          }
+        : {
+            layout: "county_rankings",
+            eyebrow: "Hot Markets",
+            headline: "Top 5 Counties This Week",
+            cta_label: "More Listings \u2192",
+            cta_url: listingsCtaUrl,
+            rows: currentMarketRows.map((row, index) => {
+              const name = textValue(row.name);
+              const count = numericValue(row.count) ?? 0;
+              const rankDelta = (previousMarketRank.get(name) ?? index) - index;
+              const wow = wowDeltaWithMomentum(
+                count,
+                previousMarketMap.get(name) ?? null,
+                marketHistoryMap.get(name) ?? [],
+                rankDelta,
+              );
+              return {
+                ...row,
+                rank: index + 1,
+                wow_delta_pct: wow.value,
+                wow_delta_status: wow.status,
+              };
+            }),
+          },
     industry_news: {
       ...buildIndustryNewsMetadata(rawSections),
       cta_label: "Read More \u2192",
@@ -1400,6 +1414,7 @@ function decorateDraftSections(
     news?: string;
     hiring?: string;
   },
+  stateLevelRows?: Array<Record<string, unknown>> | null,
 ): DraftSection[] {
   const metadataBySection = buildStructuredSectionMetadata(
     rawSources,
@@ -1407,6 +1422,7 @@ function decorateDraftSections(
     previousSources,
     historicalSources,
     insightsUrls,
+    stateLevelRows,
   );
 
   return sections.map((section) => ({
@@ -1773,6 +1789,28 @@ export async function generateDraftForNewsletter(
       news: `${portalUrl}/go/news`,
       hiring: `${portalUrl}/go/insights`,
     };
+
+    // Live Lead Pipeline state-level activity — same data the insights hub
+    // shows in place of "Hot Markets". Falls back to county rankings if absent.
+    const pipelineStats = await getPipelineStats(undefined, AbortSignal.timeout(8000)).catch(
+      () => null,
+    );
+    const stateLevelRows =
+      pipelineStats && pipelineStats.rows.length > 0
+        ? [...pipelineStats.rows]
+            .sort((left, right) => (right.total_listings || 0) - (left.total_listings || 0))
+            .slice(0, 5)
+            .map((row, index) => ({
+              name: row.state,
+              count: row.total_listings || 0,
+              metro:
+                row.leads_inserted > 0
+                  ? `${row.leads_inserted.toLocaleString("en-US")} leads · ${row.with_agent.toLocaleString("en-US")} with agent`
+                  : `${row.with_agent.toLocaleString("en-US")} with agent`,
+              rank: index + 1,
+            }))
+        : null;
+
     const aiSections = decorateDraftSections(
       getSections(aiDraft),
       rawSources,
@@ -1780,6 +1818,7 @@ export async function generateDraftForNewsletter(
       previousSources,
       historicalSources,
       insightsUrls,
+      stateLevelRows,
     );
     const decoratedDraft = {
       ...aiDraft,
@@ -1993,6 +2032,30 @@ export async function listNewsletters(): Promise<NewsletterRecord[]> {
   }));
 }
 
+// Rewrite every section's CTA link for the target audience:
+//   registered → client-portal SSO routes (/go/*)  (logged out → /sign-in)
+//   prospect   → registration page (/register/client)
+function applyCtaVariant(
+  sections: DraftSection[],
+  variant: "registered" | "prospect",
+  portalUrl: string,
+): DraftSection[] {
+  const base = portalUrl.replace(/\/$/, "");
+  return sections.map((section) => {
+    let cta: string;
+    if (variant === "prospect") {
+      cta = `${base}/register/client`;
+    } else if (section.section_type === "market_pulse") {
+      cta = `${base}/go/pulse`;
+    } else if (section.section_type === "industry_news") {
+      cta = `${base}/go/news`;
+    } else {
+      cta = `${base}/go/insights`;
+    }
+    return { ...section, metadata: { ...(section.metadata ?? {}), cta_url: cta } };
+  });
+}
+
 export async function scheduleNewsletterSend(
   newsletterId: number,
 ): Promise<{
@@ -2102,7 +2165,39 @@ export async function scheduleNewsletterSend(
       };
     }
 
-    const campaignId = await scheduleCampaign(newsletter, articles, sections);
+    const settings = getSettings();
+    const portalUrl = settings.clientPortalUrl;
+
+    // Registered audience → SSO /go/* links.
+    const registeredSections = applyCtaVariant(sections, "registered", portalUrl);
+    const campaignId = await scheduleCampaign(
+      newsletter,
+      articles,
+      registeredSections,
+      settings.mailchimpListId,
+    );
+
+    // Non-registered audience → /register/client links (only if a prospect list is configured).
+    if (settings.mailchimpListIdProspect) {
+      const prospectSections = applyCtaVariant(sections, "prospect", portalUrl);
+      const prospectCampaignId = await scheduleCampaign(
+        newsletter,
+        articles,
+        prospectSections,
+        settings.mailchimpListIdProspect,
+      );
+      await appendWorkflowLog({
+        scope: "delivery",
+        step: "newsletter.schedule",
+        status: "success",
+        message: "Prospect (non-registered) campaign sent with /register links.",
+        context: {
+          newsletter_id: newsletterId,
+          campaign_id: prospectCampaignId,
+          audience_id: settings.mailchimpListIdProspect,
+        },
+      });
+    }
 
     const result = await withDatabase((db) => {
       const stored = db.newsletters.find((item) => item.id === newsletterId);

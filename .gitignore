@@ -23,3 +23,5 @@ data/*.db*
 graphify-out/cache/
 dashboard/graphify-out/
 .codex
+
+.vercel
