@@ -333,9 +333,6 @@ function aggregateForSections(
     { key: "newrez_shellpoint_reo", institution: "NewRez / Shellpoint", isBank: true },
     { key: "selene_finance_reo", institution: "Selene Finance", isBank: true },
     { key: "carrington_reo", institution: "Carrington Mortgage", isBank: true },
-    // VA REO — VRM Properties is the VA's official REO disposition vendor,
-    // so it belongs alongside HUD as a government-agency institution.
-    { key: "vrm_va_reo", institution: "VA (VRM Properties)", isBank: true },
   ];
 
   for (const lane of freeListingSources) {
@@ -735,8 +732,6 @@ function sourceRowsByInstitution(rawSources: RawSourceSnapshot): Array<Record<st
     { key: "newrez_shellpoint_reo", name: "NewRez / Shellpoint" },
     { key: "selene_finance_reo", name: "Selene Finance" },
     { key: "carrington_reo", name: "Carrington Mortgage" },
-    // VA REO — VRM Properties is the VA's official REO disposition vendor.
-    { key: "vrm_va_reo", name: "VA (VRM Properties)" },
   ];
 
   for (const lane of freeListingInstitutionRows) {
@@ -2033,18 +2028,35 @@ export async function listNewsletters(): Promise<NewsletterRecord[]> {
 }
 
 // Rewrite every section's CTA link for the target audience:
-//   registered → client-portal SSO routes (/go/*)  (logged out → /sign-in)
-//   prospect   → registration page (/register/client)
+//   registered → client-portal SSO routes (/go/*)
+//   prospect   → /join?from=<key> landing page (explains registration value),
+//                falls back to /register/client if insightsBaseUrl is absent
 function applyCtaVariant(
   sections: DraftSection[],
   variant: "registered" | "prospect",
   portalUrl: string,
+  insightsBaseUrl?: string,
 ): DraftSection[] {
   const base = portalUrl.replace(/\/$/, "");
+  const insightsBase = insightsBaseUrl ? insightsBaseUrl.replace(/\/$/, "") : "";
+
+  const prospectFromKey = (sectionType: string): string => {
+    switch (sectionType) {
+      case "market_pulse": return "pulse";
+      case "industry_news": return "news";
+      case "top_banks": return "banks";
+      case "hot_markets": return "markets";
+      case "bank_hiring_intel": return "hiring";
+      default: return "insights";
+    }
+  };
+
   return sections.map((section) => {
     let cta: string;
     if (variant === "prospect") {
-      cta = `${base}/register/client`;
+      cta = insightsBase
+        ? `${insightsBase}/join?from=${prospectFromKey(section.section_type)}`
+        : `${base}/register/client`;
     } else if (section.section_type === "market_pulse") {
       cta = `${base}/go/pulse`;
     } else if (section.section_type === "industry_news") {
@@ -2177,9 +2189,9 @@ export async function scheduleNewsletterSend(
       settings.mailchimpListId,
     );
 
-    // Non-registered audience → /register/client links (only if a prospect list is configured).
+    // Non-registered audience → /join landing page links (only if a prospect list is configured).
     if (settings.mailchimpListIdProspect) {
-      const prospectSections = applyCtaVariant(sections, "prospect", portalUrl);
+      const prospectSections = applyCtaVariant(sections, "prospect", portalUrl, settings.appPublicUrl);
       const prospectCampaignId = await scheduleCampaign(
         newsletter,
         articles,
