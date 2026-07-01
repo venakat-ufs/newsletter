@@ -11,7 +11,7 @@
     "dev:playwright": "dotenv -e ../.env -- node scripts/playwright-dev.mjs",
     "prebuild": "npm run db:prepare",
     "build": "dotenv -e ../.env -- next build --webpack",
-    "start": "dotenv -e ../.env -- next start",
+    "start": "dotenv -e ../.env --override -- next start",
     "lint": "dotenv -e ../.env -- eslint",
     "pretest:e2e": "npm run db:prepare",
     "test:e2e": "dotenv -e ../.env -- playwright test",
