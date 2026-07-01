@@ -180,6 +180,23 @@ export default function DraftEditorPage() {
     }
   }
 
+  async function handleResend() {
+    if (!draft) return;
+    try {
+      setSaving(true);
+      setMessage("Sending to Mailchimp...");
+      const delivery = await scheduleNewsletter(draft.newsletter_id);
+      setMessage(
+        delivery.message ??
+          (delivery.status === "scheduled" ? "Sent to Mailchimp." : "Send attempted."),
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Send failed");
+    } finally {
+      setSaving(false);
+    }
+  }
+
   useEffect(() => {
     loadDraft();
   }, [loadDraft]);
@@ -373,6 +390,25 @@ export default function DraftEditorPage() {
         <div className="rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-800 shadow-sm">
           {error}
         </div>
+      ) : null}
+
+      {draft.status === "approved" ? (
+        <section className="rounded-[32px] border border-white/70 bg-white/80 p-6 shadow-[0_28px_80px_rgba(26,26,26,0.10)] backdrop-blur-xl sm:p-8">
+          <p className="text-xs uppercase tracking-[0.28em] text-[#7a6b60]">Step 3 · Approve and send</p>
+          <p className="mt-2 text-sm leading-6 text-[#65584d]">
+            Approval happens inside the issue page. Sending runs after approval.
+          </p>
+          <div className="mt-4 rounded-2xl border border-black/5 bg-[#f7f5f2] px-4 py-3 text-sm text-[#65584d]">
+            {mailchimp?.summary ?? "Mailchimp status loading."}
+          </div>
+          <button
+            onClick={handleResend}
+            disabled={saving}
+            className="mt-4 rounded-2xl bg-[#72262a] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#5a1e1f] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {saving ? "Sending…" : "Send to Mailchimp"}
+          </button>
+        </section>
       ) : null}
 
       <section className="rounded-[32px] border border-white/70 bg-white/80 p-6 shadow-[0_28px_80px_rgba(26,26,26,0.10)] backdrop-blur-xl sm:p-8">
