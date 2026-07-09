@@ -21,8 +21,8 @@ const require = createRequire(import.meta.url);
 // Load .env file for local dev (Vercel injects these directly)
 try {
   const dotenv = require("dotenv");
-  dotenv.config({ path: resolve(__dirname, "../../.env") });
-  dotenv.config({ path: resolve(__dirname, "../.env") });
+  dotenv.config({ path: resolve(__dirname, "../../.env"), override: true });
+  dotenv.config({ path: resolve(__dirname, "../.env"), override: true });
 } catch {}
 
 const url = process.env.DIRECT_URL || process.env.DATABASE_URL;
