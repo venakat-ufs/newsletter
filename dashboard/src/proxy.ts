@@ -14,6 +14,7 @@ function isPublicPath(pathname: string): boolean {
   if (
     pathname === "/login" ||
     pathname === "/join" ||
+    pathname === "/sso/redirect" ||
     pathname === "/favicon.ico" ||
     pathname === "/api/auth/login" ||
     pathname === "/api/auth/logout" ||
@@ -57,14 +58,20 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     if (ssoToken) {
       const valid = await verifySsoToken(ssoToken);
       if (valid) {
-        // Redirect to the same URL without the token so the cookie is guaranteed
-        // to be set before any subsequent route handler redirects fire.
         const cleanUrl = new URL(request.url);
         cleanUrl.searchParams.delete("token");
         const isSecure =
           process.env.NODE_ENV === "production" &&
           process.env.COOKIE_SECURE !== "false";
-        const response = NextResponse.redirect(cleanUrl);
+        // Redirect to /sso/redirect (loading spinner page) so the user sees an
+        // animation instead of a blank white screen. The SSO cookie is set here
+        // so the onward request to /insights/* is already authenticated.
+        const loadingUrl = new URL("/sso/redirect", request.url);
+        loadingUrl.searchParams.set(
+          "next",
+          cleanUrl.pathname + (cleanUrl.search || ""),
+        );
+        const response = NextResponse.redirect(loadingUrl);
         response.cookies.set(SSO_COOKIE_NAME, "1", {
           httpOnly: true,
           sameSite: "lax",
