@@ -14,7 +14,6 @@ function isPublicPath(pathname: string): boolean {
   if (
     pathname === "/login" ||
     pathname === "/join" ||
-    pathname === "/sso/redirect" ||
     pathname === "/favicon.ico" ||
     pathname === "/api/auth/login" ||
     pathname === "/api/auth/logout" ||
@@ -63,15 +62,11 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
         const isSecure =
           process.env.NODE_ENV === "production" &&
           process.env.COOKIE_SECURE !== "false";
-        // Redirect to /sso/redirect (loading spinner page) so the user sees an
-        // animation instead of a blank white screen. The SSO cookie is set here
-        // so the onward request to /insights/* is already authenticated.
-        const loadingUrl = new URL("/sso/redirect", request.url);
-        loadingUrl.searchParams.set(
-          "next",
-          cleanUrl.pathname + (cleanUrl.search || ""),
-        );
-        const response = NextResponse.redirect(loadingUrl);
+        // Redirect directly to the clean insights URL. The SSO cookie is set
+        // on this response so the onward request is already authenticated.
+        // Next.js streams loading.tsx instantly before page data arrives,
+        // so the user sees the skeleton without a blank screen.
+        const response = NextResponse.redirect(cleanUrl);
         response.cookies.set(SSO_COOKIE_NAME, "1", {
           httpOnly: true,
           sameSite: "lax",
