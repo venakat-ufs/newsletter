@@ -7,9 +7,6 @@ import type { ArticleRecord, DraftSection, NewsletterRecord } from "@/server/typ
 
 export function getMailchimpBlockReason(): string | null {
   const settings = getSettings();
-  if (settings.mailchimpOnHold) {
-    return "Mailchimp delivery is on hold. Set MAILCHIMP_ON_HOLD=false to enable scheduling.";
-  }
   const missing: string[] = [];
 
   if (!settings.mailchimpApiKey) {
@@ -139,7 +136,7 @@ export async function scheduleCampaign(
       type: "regular",
       recipients: { list_id: targetListId },
       settings: {
-        subject_line: `The Disposition Desk - Issue #${newsletter.issue_number}`,
+        subject_line: `UFS Newsletter - Issue #${newsletter.issue_number}`,
         from_name: "United Field Services",
         reply_to: "newsletter@unitedffs.com",
         title: `Disposition Desk #${newsletter.issue_number}`,
