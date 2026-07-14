@@ -607,8 +607,11 @@ export function buildNewsletterHtml(
             <a href="https://unitedffs.com/help-center-for-clients/" style="color:${MUTED};text-decoration:none;font-weight:500;">Help Center</a>
             &nbsp;·&nbsp;
             <a href="https://clients.unitedffs.com/register/client" style="color:${MUTED};text-decoration:none;font-weight:500;">Register</a>
+            &nbsp;·&nbsp;
+            <a href="*|UNSUB|*" style="color:${MUTED};text-decoration:none;font-weight:500;">Unsubscribe</a>
           </p>
           <p style="font-family:${FONT};font-size:11px;color:#94A3B8;margin:0 0 4px;">United Field Services · Published weekly for registered REO agents &amp; partners</p>
+          <p style="font-family:${FONT};font-size:10px;color:#CBD5E1;margin:0 0 6px;">*|LIST:ADDRESS|*</p>
           <p style="font-family:${FONT};font-size:10px;color:#CBD5E1;margin:0;">© ${new Date(newsletter.issue_date).getUTCFullYear() || 2026} United Field Services. All rights reserved.</p>
         </div>
 
