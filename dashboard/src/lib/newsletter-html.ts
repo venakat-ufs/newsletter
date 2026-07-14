@@ -566,7 +566,7 @@ export function buildNewsletterHtml(
           <table width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td style="vertical-align:middle;">
-                <img src="https://united-estate.vercel.app/_next/image?url=%2Funited-assets%2Flogo.webp&w=256&q=75" alt="United Field Services" width="120" height="auto" style="display:block;border:0;max-width:120px;" />
+                <img src="https://insights.unitedffs.com/logo.jpeg" alt="United Field Services" width="120" height="auto" style="display:block;border:0;max-width:120px;" />
               </td>
               <td style="vertical-align:middle;text-align:right;font-family:${FONT};font-size:12px;color:${MUTED};">Issue #${newsletter.issue_number}<br><span style="color:#9CA3AF;">${escapeHtml(issueWeek)}</span></td>
             </tr>
