@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>United Field Services — Agent Registration</title>
+<title>United Field Services &mdash; Agent Registration</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap');
 
@@ -42,6 +42,7 @@
   .nav-inner{max-width:1160px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;}
   .brand{display:flex;align-items:center;gap:9px;}
   .brand-mark{width:16px;height:20px;}
+  .brand-logo-img{height:26px;width:auto;display:block;}
   .brand-word{font-family:'Inter',sans-serif;font-weight:700;font-size:16px;letter-spacing:0.05em;}
   .pill{
     display:inline-flex;align-items:center;gap:8px;
@@ -92,8 +93,7 @@
     border:1px solid var(--line-dark);border-radius:14px;overflow:hidden;
   }
   .exec-visual{
-    background:
-      linear-gradient(160deg, #1a2230 0%, #0d1116 60%);
+    background:linear-gradient(160deg, #1a2230 0%, #0d1116 60%);
     position:relative;min-height:340px;
     display:flex;align-items:center;justify-content:center;
   }
@@ -132,9 +132,6 @@
     height:140px;border-radius:8px 8px 0 0;margin-top:auto;
     background-size:cover;background-position:center;
   }
-  .photo-1{background:linear-gradient(135deg,#8a97a8,#4d5a6e);}
-  .photo-2{background:linear-gradient(135deg,#b7a688,#3a3630);}
-  .photo-3{background:linear-gradient(135deg,#6f8f7a,#293a30);}
 
   /* ---------- WHO THIS IS FOR / STEPS ---------- */
   .steps-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
@@ -147,7 +144,14 @@
   .step-card p{font-family:'Inter',sans-serif;font-size:14px;color:var(--muted-dark);margin:0;line-height:1.6;}
 
   /* ---------- STATS ---------- */
-  .stats-band{border-top:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark);}
+  .stats-band{
+    border-top:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark);
+    background-image:url('https://united-estate.vercel.app/175.svg');
+    background-repeat:no-repeat;background-position:center;background-size:520px;
+    background-blend-mode:screen;position:relative;
+  }
+  .stats-band::before{content:"";position:absolute;inset:0;background:rgba(10,10,10,0.82);}
+  .stats-band .stats-inner{position:relative;z-index:1;}
   .stats-inner{display:grid;grid-template-columns:repeat(3,1fr);}
   .stat{padding:40px 0;text-align:center;position:relative;}
   .stat + .stat::before{content:"";position:absolute;left:0;top:25%;bottom:25%;width:1px;background:var(--line-dark);}
@@ -172,8 +176,8 @@
     padding:56px 48px 32px;
   }
   .foot-top{display:grid;grid-template-columns:1.3fr 0.8fr 0.8fr;gap:40px;}
-  .foot-logo-word{font-family:'Inter',sans-serif;font-weight:800;font-size:34px;letter-spacing:0.02em;display:block;margin-top:14px;}
-  .foot-logo-tag{font-family:'Inter',sans-serif;font-size:13px;color:var(--muted-dark);}
+  .foot-logo-img{height:44px;width:auto;display:block;}
+  .foot-logo-tag{font-family:'Inter',sans-serif;font-size:13px;color:var(--muted-dark);display:block;margin-top:14px;}
   .foot-col h4{font-family:'Playfair Display',serif;font-style:italic;font-weight:500;font-size:17px;margin:0 0 16px;}
   .foot-col a{display:block;font-family:'Inter',sans-serif;font-size:13.5px;color:var(--muted-dark);margin-bottom:11px;transition:color .15s ease;}
   .foot-col a:hover{color:#fff;}
@@ -206,14 +210,11 @@
 <nav class="nav">
   <div class="nav-inner">
     <div class="brand">
-      <svg class="brand-mark" viewBox="0 0 20 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 0L13 10H16L10 26L4 10H7L10 0Z" fill="#fff"/>
-      </svg>
-      <span class="brand-word">UNITED</span>
+      <img src="https://united-estate.vercel.app/_next/image?url=%2Funited-assets%2Flogo.webp&w=256&q=75" alt="United Field Services" class="brand-logo-img">
     </div>
     <div class="nav-cta">
-      <a class="pill pill-ghost" href="https://clients.unitedffs.com">Login</a>
-      <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client">Register</a>
+      <a class="pill pill-ghost" href="https://clients.unitedffs.com" target="_blank" rel="noopener">Login</a>
+      <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client" target="_blank" rel="noopener">Register</a>
     </div>
   </div>
 </nav>
@@ -225,7 +226,7 @@
       <h1 class="serif reveal in">One registration,<br><em>every</em> edge unlocked.</h1>
       <p class="lede reveal in">One account gets you faster field dispatch, deeper weekly market intelligence, and the latest REO industry updates &mdash; everything below is included the moment you register.</p>
       <div class="hero-cta reveal in">
-        <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client">Create your account</a>
+        <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client" target="_blank" rel="noopener">Create your account</a>
         <a class="pill pill-ghost" href="#included">What you get</a>
       </div>
       <div class="hero-fine reveal in">~60 seconds to register &nbsp;&middot;&nbsp; verify email + phone to activate &nbsp;&middot;&nbsp; no paperwork</div>
@@ -236,15 +237,7 @@
 <section class="section" style="padding-top:0;">
   <div class="wrap">
     <div class="exec-block reveal">
-      <div class="exec-visual">
-        <svg class="glyph" width="150" height="150" viewBox="0 0 150 150" fill="none">
-          <rect x="20" y="60" width="110" height="70" rx="2" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-          <path d="M20 60L75 22L130 60" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-          <rect x="65" y="95" width="20" height="35" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-          <rect x="35" y="78" width="16" height="16" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
-          <rect x="99" y="78" width="16" height="16" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
-        </svg>
-      </div>
+      <div class="exec-visual" style="background-image:linear-gradient(180deg, rgba(10,10,10,0.15), rgba(10,10,10,0.55)), url('https://united-estate.vercel.app/_next/image?url=%2Funited-assets%2Fhouses1.webp&w=3840&q=75');background-size:cover;background-position:center;"></div>
       <div>
         <div class="exec-copy">
           <h2 class="serif">Reliable field execution,<br><em>from your first order.</em></h2>
@@ -263,7 +256,7 @@
         </div>
         <div class="exec-ctabar">
           <p>Keep your listings secure, compliant, and market-ready.</p>
-          <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client">Create your account &rarr;</a>
+          <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client" target="_blank" rel="noopener">Create your account &rarr;</a>
         </div>
       </div>
     </div>
@@ -280,17 +273,17 @@
       <div class="ccard reveal">
         <h3 class="serif">Order<br><em>Management</em></h3>
         <p class="desc">Submit inspections, trash-outs, lock changes, and preservation work &mdash; track status in real time.</p>
-        <div class="ccard-photo photo-1"></div>
+        <div class="ccard-photo" style="background-image:url('https://united-estate.vercel.app/_next/image?url=%2Funited-assets%2Fservices-1.webp&w=3840&q=75');"></div>
       </div>
       <div class="ccard reveal">
         <h3 class="serif">Documentation<br><em>&amp; Reporting</em></h3>
         <p class="desc">Photo-backed condition reports formatted for the paperwork your asset manager actually asks for.</p>
-        <div class="ccard-photo photo-2"></div>
+        <div class="ccard-photo" style="background-image:url('https://united-estate.vercel.app/_next/image?url=%2Fcard-2.png&w=3840&q=75');"></div>
       </div>
       <div class="ccard reveal">
         <h3 class="serif">The Disposition<br><em>Desk</em></h3>
         <p class="desc">More newsletter content and the latest industry updates &mdash; volume trends, hot counties, top listing banks &mdash; every Tuesday.</p>
-        <div class="ccard-photo photo-3"></div>
+        <div class="ccard-photo" style="background-image:url('https://united-estate.vercel.app/_next/image?url=%2Fcard.png&w=3840&q=75');"></div>
       </div>
     </div>
   </div>
@@ -335,7 +328,7 @@
     <div class="cta-panel reveal">
       <div class="kicker">Included free the moment you <b>register</b></div>
       <h2 class="serif">Order management, documentation,<br>more newsletter content, <em>and the latest industry updates.</em></h2>
-      <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client">Create your account &rarr;</a>
+      <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client" target="_blank" rel="noopener">Create your account &rarr;</a>
     </div>
   </div>
 </section>
@@ -345,27 +338,24 @@
     <div class="foot-card">
       <div class="foot-top">
         <div>
-          <svg width="26" height="34" viewBox="0 0 20 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 0L13 10H16L10 26L4 10H7L10 0Z" fill="#fff"/>
-          </svg>
-          <span class="foot-logo-word">UNITED</span>
+          <img src="https://united-estate.vercel.app/_next/image?url=%2Funited-assets%2Flogo.webp&w=384&q=75" alt="United Field Services" class="foot-logo-img">
           <span class="foot-logo-tag">Field Services &middot; Agent Portal</span>
         </div>
         <div class="foot-col">
           <h4 class="serif">Account</h4>
-          <a href="https://clients.unitedffs.com/register/client">Register</a>
-          <a href="https://clients.unitedffs.com">Login</a>
-          <a href="https://www.unitedffs.com/help-center-for-clients/">Help Center</a>
+          <a href="https://clients.unitedffs.com/register/client" target="_blank" rel="noopener">Register</a>
+          <a href="https://clients.unitedffs.com" target="_blank" rel="noopener">Login</a>
+          <a href="https://www.unitedffs.com/help-center-for-clients/" target="_blank" rel="noopener">Help Center</a>
         </div>
         <div class="foot-col">
           <h4 class="serif">Company</h4>
-          <a href="https://www.unitedffs.com/">unitedffs.com</a>
-          <a href="https://clients.unitedffs.com/register/client">Terms &amp; Conditions</a>
+          <a href="https://www.unitedffs.com/" target="_blank" rel="noopener">unitedffs.com</a>
+          <a href="https://clients.unitedffs.com/register/client" target="_blank" rel="noopener">Terms &amp; Conditions</a>
         </div>
       </div>
       <div class="foot-bottom">
         <span>United Field Services &copy; All Rights Reserved</span>
-        <a href="https://clients.unitedffs.com">Already have an account? Login &rarr;</a>
+        <a href="https://clients.unitedffs.com" target="_blank" rel="noopener">Already have an account? Login &rarr;</a>
       </div>
     </div>
   </div>
@@ -377,8 +367,6 @@
   }, {threshold:0.15});
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 </script>
-<!-- Start of HubSpot Embed Code -->
-<script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/2624693.js"></script>
-<!-- End of HubSpot Embed Code -->
+
 </body>
 </html>
