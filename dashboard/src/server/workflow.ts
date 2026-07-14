@@ -2055,7 +2055,7 @@ function applyCtaVariant(
     let cta: string;
     if (variant === "prospect") {
       cta = insightsBase
-        ? `${insightsBase}/join?from=${prospectFromKey(section.section_type)}`
+        ? `${insightsBase}/register`
         : `${base}/register/client`;
     } else if (section.section_type === "market_pulse") {
       cta = `${base}/go/pulse`;

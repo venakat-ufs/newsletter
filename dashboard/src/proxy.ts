@@ -14,6 +14,7 @@ function isPublicPath(pathname: string): boolean {
   if (
     pathname === "/login" ||
     pathname === "/join" ||
+    pathname === "/register" ||
     pathname === "/favicon.ico" ||
     pathname === "/api/auth/login" ||
     pathname === "/api/auth/logout" ||
