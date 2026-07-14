@@ -37,13 +37,10 @@
   .reveal.in{opacity:1;transform:translateY(0);}
   @media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none;transition:none;}}
 
-  /* ---------- NAV ---------- */
   .nav{position:sticky;top:0;z-index:50;padding:22px 0;background:linear-gradient(to bottom, rgba(10,10,10,0.9), rgba(10,10,10,0));}
   .nav-inner{max-width:1160px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;}
   .brand{display:flex;align-items:center;gap:9px;}
-  .brand-mark{width:16px;height:20px;}
   .brand-logo-img{height:26px;width:auto;display:block;}
-  .brand-word{font-family:'Inter',sans-serif;font-weight:700;font-size:16px;letter-spacing:0.05em;}
   .pill{
     display:inline-flex;align-items:center;gap:8px;
     padding:11px 22px;border-radius:99px;
@@ -56,7 +53,6 @@
   .pill-ghost:hover{border-color:#fff;background:rgba(255,255,255,0.06);}
   .nav-cta{display:flex;gap:10px;align-items:center;}
 
-  /* ---------- HERO ---------- */
   .hero{padding:110px 0 70px;position:relative;overflow:hidden;}
   .hero::before{
     content:"";position:absolute;inset:0;
@@ -66,90 +62,44 @@
     pointer-events:none;
   }
   .hero-inner{position:relative;max-width:820px;}
-  .eyebrow{
-    font-family:'Inter',sans-serif;font-size:12.5px;letter-spacing:0.14em;text-transform:uppercase;
-    color:var(--muted-dark);margin-bottom:22px;
-  }
+  .eyebrow{font-family:'Inter',sans-serif;font-size:12.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted-dark);margin-bottom:22px;}
   .eyebrow b{color:#fff;font-weight:700;}
-  .hero h1{
-    font-size:clamp(42px,5.6vw,66px);
-    font-weight:600;line-height:1.05;letter-spacing:-0.01em;
-  }
-  .hero p.lede{
-    font-family:'Inter',sans-serif;color:var(--muted-dark);font-size:17px;
-    max-width:480px;margin:24px 0 32px;
-  }
+  .hero h1{font-size:clamp(42px,5.6vw,66px);font-weight:600;line-height:1.05;letter-spacing:-0.01em;}
+  .hero p.lede{font-family:'Inter',sans-serif;color:var(--muted-dark);font-size:17px;max-width:480px;margin:24px 0 32px;}
   .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
   .hero-cta .pill{padding:14px 26px;font-size:15px;}
-  .hero-fine{
-    font-family:'Inter',sans-serif;font-size:12.5px;color:var(--muted-dark);
-    margin-top:22px;letter-spacing:0.02em;
-  }
+  .hero-fine{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--muted-dark);margin-top:22px;letter-spacing:0.02em;}
 
-  /* ---------- NUMBERED DARK CARD BLOCK ---------- */
   .section{padding:96px 0;}
-  .exec-block{
-    display:grid;grid-template-columns:0.85fr 1.15fr;gap:0;
-    border:1px solid var(--line-dark);border-radius:14px;overflow:hidden;
-  }
-  .exec-visual{
-    background:linear-gradient(160deg, #1a2230 0%, #0d1116 60%);
-    position:relative;min-height:340px;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .exec-visual .glyph{opacity:0.9;}
+  .exec-block{display:grid;grid-template-columns:0.85fr 1.15fr;gap:0;border:1px solid var(--line-dark);border-radius:14px;overflow:hidden;}
+  .exec-visual{background:linear-gradient(160deg, #1a2230 0%, #0d1116 60%);position:relative;min-height:340px;display:flex;align-items:center;justify-content:center;}
   .exec-copy{padding:44px 44px 0;}
   .exec-copy h2{font-size:clamp(26px,3vw,34px);font-weight:600;line-height:1.12;margin-bottom:28px;}
   .exec-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 44px;}
-  .ncard{
-    background:var(--bg-card);border:1px solid var(--line-dark);border-radius:10px;
-    padding:20px 20px 22px;
-  }
+  .ncard{background:var(--bg-card);border:1px solid var(--line-dark);border-radius:10px;padding:20px 20px 22px;}
   .ncard .num{font-family:'Playfair Display',serif;font-style:italic;color:var(--muted-dark);font-size:14px;margin-bottom:10px;}
   .ncard h3{font-family:'Inter',sans-serif;font-weight:600;font-size:15.5px;margin:0 0 8px;}
   .ncard p{font-family:'Inter',sans-serif;font-size:13.5px;color:var(--muted-dark);margin:0;line-height:1.55;}
-  .exec-ctabar{
-    margin:22px 44px 44px;padding:20px 24px;
-    background:var(--bg-card);border:1px solid var(--line-dark);border-radius:10px;
-    display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
-  }
+  .exec-ctabar{margin:22px 44px 44px;padding:20px 24px;background:var(--bg-card);border:1px solid var(--line-dark);border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
   .exec-ctabar p{font-family:'Inter',sans-serif;font-size:14.5px;color:#e8e8e5;margin:0;}
 
-  /* ---------- SECTION HEAD ---------- */
   .section-head{text-align:center;max-width:600px;margin:0 auto 54px;}
   .section-head h2{font-size:clamp(28px,3.6vw,42px);font-weight:600;}
   .section-head p{font-family:'Inter',sans-serif;color:var(--muted-dark);font-size:15.5px;margin-top:14px;}
 
-  /* ---------- CREAM SERVICE CARDS ---------- */
   .cream-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-  .ccard{
-    background:var(--cream);border-radius:12px;padding:26px 26px 0;
-    display:flex;flex-direction:column;overflow:hidden;
-  }
+  .ccard{background:var(--cream);border-radius:12px;padding:26px 26px 0;display:flex;flex-direction:column;overflow:hidden;}
   .ccard h3{color:var(--ink);font-size:21px;font-weight:500;line-height:1.15;margin-bottom:12px;}
   .ccard p.desc{font-family:'Inter',sans-serif;color:var(--muted-cream);font-size:14px;margin-bottom:20px;min-height:56px;}
-  .ccard-photo{
-    height:140px;border-radius:8px 8px 0 0;margin-top:auto;
-    background-size:cover;background-position:center;
-  }
+  .ccard-photo{height:140px;border-radius:8px 8px 0 0;margin-top:auto;background-size:cover;background-position:center;}
 
-  /* ---------- WHO THIS IS FOR / STEPS ---------- */
   .steps-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-  .step-card{
-    background:var(--bg-card);border:1px solid var(--line-dark);border-radius:12px;
-    padding:30px 26px;
-  }
+  .step-card{background:var(--bg-card);border:1px solid var(--line-dark);border-radius:12px;padding:30px 26px;}
   .step-card .num{font-family:'Playfair Display',serif;font-style:italic;font-size:15px;color:var(--muted-dark);margin-bottom:16px;display:block;}
   .step-card h3{font-family:'Inter',sans-serif;font-weight:600;font-size:18px;margin:0 0 10px;}
   .step-card p{font-family:'Inter',sans-serif;font-size:14px;color:var(--muted-dark);margin:0;line-height:1.6;}
 
-  /* ---------- STATS ---------- */
-  .stats-band{
-    border-top:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark);
-    background-image:url('https://united-estate.vercel.app/175.svg');
-    background-repeat:no-repeat;background-position:center;background-size:520px;
-    background-blend-mode:screen;position:relative;
-  }
+  .stats-band{border-top:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark);background-image:url('https://united-estate.vercel.app/175.svg');background-repeat:no-repeat;background-position:center;background-size:520px;background-blend-mode:screen;position:relative;}
   .stats-band::before{content:"";position:absolute;inset:0;background:rgba(10,10,10,0.82);}
   .stats-band .stats-inner{position:relative;z-index:1;}
   .stats-inner{display:grid;grid-template-columns:repeat(3,1fr);}
@@ -158,34 +108,22 @@
   .stat-num{font-family:'Playfair Display',serif;font-weight:600;font-size:40px;}
   .stat-label{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--muted-dark);margin-top:6px;letter-spacing:0.03em;}
 
-  /* ---------- NEWSLETTER CTA PANEL (cream) ---------- */
-  .cta-panel{
-    background:var(--cream-2);border-radius:20px;
-    padding:64px 40px;text-align:center;
-  }
+  .cta-panel{background:var(--cream-2);border-radius:20px;padding:64px 40px;text-align:center;}
   .cta-panel .kicker{font-family:'Inter',sans-serif;font-size:13.5px;color:var(--muted-cream);margin-bottom:14px;}
   .cta-panel .kicker b{color:var(--ink);font-weight:700;}
   .cta-panel h2{color:var(--ink);font-size:clamp(26px,3.4vw,38px);font-weight:600;margin-bottom:28px;}
   .cta-panel .pill-solid{background:var(--ink);color:#fff;padding:15px 30px;font-size:15px;}
   .cta-panel .pill-solid:hover{background:#000;}
 
-  /* ---------- FOOTER ---------- */
   footer{margin-top:20px;}
-  .foot-card{
-    background:var(--bg-card);border-radius:22px 22px 0 0;
-    padding:56px 48px 32px;
-  }
+  .foot-card{background:var(--bg-card);border-radius:22px 22px 0 0;padding:56px 48px 32px;}
   .foot-top{display:grid;grid-template-columns:1.3fr 0.8fr 0.8fr;gap:40px;}
   .foot-logo-img{height:44px;width:auto;display:block;}
   .foot-logo-tag{font-family:'Inter',sans-serif;font-size:13px;color:var(--muted-dark);display:block;margin-top:14px;}
   .foot-col h4{font-family:'Playfair Display',serif;font-style:italic;font-weight:500;font-size:17px;margin:0 0 16px;}
   .foot-col a{display:block;font-family:'Inter',sans-serif;font-size:13.5px;color:var(--muted-dark);margin-bottom:11px;transition:color .15s ease;}
   .foot-col a:hover{color:#fff;}
-  .foot-bottom{
-    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
-    margin-top:44px;padding-top:24px;border-top:1px solid var(--line-dark);
-    font-family:'Inter',sans-serif;font-size:12.5px;color:var(--muted-dark);
-  }
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:44px;padding-top:24px;border-top:1px solid var(--line-dark);font-family:'Inter',sans-serif;font-size:12.5px;color:var(--muted-dark);}
   .foot-bottom a:hover{color:#fff;}
 
   @media (max-width: 900px){
@@ -214,7 +152,7 @@
     </div>
     <div class="nav-cta">
       <a class="pill pill-ghost" href="https://clients.unitedffs.com" target="_blank" rel="noopener">Login</a>
-      <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client" target="_blank" rel="noopener">Register</a>
+      <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client?utm_source=agent_landing_page&utm_medium=cta&utm_campaign=reo_agent_registration&utm_content=nav_register" target="_blank" rel="noopener">Register</a>
     </div>
   </div>
 </nav>
@@ -226,7 +164,7 @@
       <h1 class="serif reveal in">One registration,<br><em>every</em> edge unlocked.</h1>
       <p class="lede reveal in">One account gets you faster field dispatch, deeper weekly market intelligence, and the latest REO industry updates &mdash; everything below is included the moment you register.</p>
       <div class="hero-cta reveal in">
-        <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client" target="_blank" rel="noopener">Create your account</a>
+        <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client?utm_source=agent_landing_page&utm_medium=cta&utm_campaign=reo_agent_registration&utm_content=hero_cta" target="_blank" rel="noopener">Create your account</a>
         <a class="pill pill-ghost" href="#included">What you get</a>
       </div>
       <div class="hero-fine reveal in">~60 seconds to register &nbsp;&middot;&nbsp; verify email + phone to activate &nbsp;&middot;&nbsp; no paperwork</div>
@@ -256,7 +194,7 @@
         </div>
         <div class="exec-ctabar">
           <p>Keep your listings secure, compliant, and market-ready.</p>
-          <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client" target="_blank" rel="noopener">Create your account &rarr;</a>
+          <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client?utm_source=agent_landing_page&utm_medium=cta&utm_campaign=reo_agent_registration&utm_content=exec_cta" target="_blank" rel="noopener">Create your account &rarr;</a>
         </div>
       </div>
     </div>
@@ -328,7 +266,7 @@
     <div class="cta-panel reveal">
       <div class="kicker">Included free the moment you <b>register</b></div>
       <h2 class="serif">Order management, documentation,<br>more newsletter content, <em>and the latest industry updates.</em></h2>
-      <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client" target="_blank" rel="noopener">Create your account &rarr;</a>
+      <a class="pill pill-solid" href="https://clients.unitedffs.com/register/client?utm_source=agent_landing_page&utm_medium=cta&utm_campaign=reo_agent_registration&utm_content=final_cta" target="_blank" rel="noopener">Create your account &rarr;</a>
     </div>
   </div>
 </section>
@@ -343,7 +281,7 @@
         </div>
         <div class="foot-col">
           <h4 class="serif">Account</h4>
-          <a href="https://clients.unitedffs.com/register/client" target="_blank" rel="noopener">Register</a>
+          <a href="https://clients.unitedffs.com/register/client?utm_source=agent_landing_page&utm_medium=cta&utm_campaign=reo_agent_registration&utm_content=footer_register" target="_blank" rel="noopener">Register</a>
           <a href="https://clients.unitedffs.com" target="_blank" rel="noopener">Login</a>
           <a href="https://www.unitedffs.com/help-center-for-clients/" target="_blank" rel="noopener">Help Center</a>
         </div>
@@ -367,6 +305,8 @@
   }, {threshold:0.15});
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 </script>
-
+<!-- Start of HubSpot Embed Code -->
+<script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/2624693.js"></script>
+<!-- End of HubSpot Embed Code -->
 </body>
 </html>

@@ -2057,12 +2057,8 @@ function applyCtaVariant(
       cta = insightsBase
         ? `${insightsBase}/register`
         : `${base}/register/client`;
-    } else if (section.section_type === "market_pulse") {
-      cta = `${base}/go/pulse`;
-    } else if (section.section_type === "industry_news") {
-      cta = `${base}/go/news`;
     } else {
-      cta = `${base}/go/insights`;
+      cta = `${base}/sign-in`;
     }
     return { ...section, metadata: { ...(section.metadata ?? {}), cta_url: cta } };
   });
