@@ -24,7 +24,7 @@ const MUTED = "#64748B";
 const BORDER = "#E5E7EB";
 const TILE_BG = "#F8FAFC";
 
-function escapeHtml(value: string): string {
+export function escapeHtml(value: string): string {
   return value
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")

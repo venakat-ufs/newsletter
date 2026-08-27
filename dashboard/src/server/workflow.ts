@@ -10,6 +10,7 @@ import {
 import { readDatabase, withDatabase, nextId } from "@/server/store";
 import { prisma, ensureDatabaseReady } from "@/server/prisma";
 import { getPipelineStats } from "@/lib/pipeline-stats";
+import { escapeHtml } from "@/lib/newsletter-html";
 import { collectAllSources } from "@/server/sources";
 import type {
   ApprovalAction,
@@ -1982,21 +1983,23 @@ export async function getPublicArticleMarkup(articleId: number): Promise<string>
     .split(/\n\n+/)
     .map((paragraph) => paragraph.trim())
     .filter(Boolean)
-    .map((paragraph) => `<p style="margin:0 0 22px;">${paragraph}</p>`)
+    .map((paragraph) => `<p style="margin:0 0 22px;">${escapeHtml(paragraph)}</p>`)
     .join("");
+  const safeTitle = escapeHtml(article.title);
+  const safeTeaser = escapeHtml(article.teaser);
 
   return `
     <html>
       <head>
-        <title>${article.title} | The Disposition Desk</title>
+        <title>${safeTitle} | The Disposition Desk</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body style="margin:0;background:#f4efe6;color:#17161d;font-family:Georgia,serif;">
         <div style="max-width:760px;margin:0 auto;padding:48px 24px;">
           <div style="margin-bottom:32px;padding:28px 32px;background:#10222d;color:#f8f3ea;border-radius:24px;">
             <div style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;opacity:0.72;">The Disposition Desk</div>
-            <h1 style="margin:14px 0 10px;font-size:40px;line-height:1.05;">${article.title}</h1>
-            <p style="margin:0;font-size:18px;line-height:1.6;color:#d4dde1;">${article.teaser}</p>
+            <h1 style="margin:14px 0 10px;font-size:40px;line-height:1.05;">${safeTitle}</h1>
+            <p style="margin:0;font-size:18px;line-height:1.6;color:#d4dde1;">${safeTeaser}</p>
           </div>
           <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;font-family:Arial,sans-serif;">
             <span style="padding:8px 12px;border-radius:999px;background:#eadbc8;color:#6a4e2f;font-size:12px;text-transform:uppercase;letter-spacing:0.08em;">Issue #${issueNumber}</span>

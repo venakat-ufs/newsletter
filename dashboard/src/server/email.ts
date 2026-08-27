@@ -1,5 +1,5 @@
 import { getSettings } from "@/server/env";
-import { buildPreviewNewsletterHtmlFromSections } from "@/lib/newsletter-html";
+import { buildPreviewNewsletterHtmlFromSections, escapeHtml } from "@/lib/newsletter-html";
 import { appendWorkflowLog } from "@/server/logs";
 import { buildHtmlContent } from "@/server/mailchimp";
 import type {
@@ -7,15 +7,6 @@ import type {
   DraftSection,
   NewsletterRecord,
 } from "@/server/types";
-
-function escapeHtml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
 
 function normalizeSmtpError(error: unknown): string {
   const message = error instanceof Error ? error.message : "unknown error";
