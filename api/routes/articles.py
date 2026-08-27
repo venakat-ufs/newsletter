@@ -5,6 +5,7 @@ from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 
 from database import get_db
+from dependencies import require_internal_api_key
 from models.article import Article
 from services.article_publisher import publish_articles_from_draft
 
@@ -12,7 +13,11 @@ router = APIRouter()
 
 
 @router.post("/publish/{newsletter_id}")
-def publish_articles(newsletter_id: int, db: Session = Depends(get_db)):
+def publish_articles(
+    newsletter_id: int,
+    db: Session = Depends(get_db),
+    _auth: None = Depends(require_internal_api_key),
+):
     """Publish approved draft content as public article pages."""
     articles = publish_articles_from_draft(db, newsletter_id)
     return {
@@ -23,7 +28,11 @@ def publish_articles(newsletter_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/{newsletter_id}")
-def get_articles(newsletter_id: int, db: Session = Depends(get_db)):
+def get_articles(
+    newsletter_id: int,
+    db: Session = Depends(get_db),
+    _auth: None = Depends(require_internal_api_key),
+):
     """Get all articles for a newsletter."""
     articles = db.query(Article).filter(Article.newsletter_id == newsletter_id).all()
     return [

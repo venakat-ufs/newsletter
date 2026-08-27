@@ -54,6 +54,7 @@ class Settings(BaseSettings):
     api_port: int = 8000
     api_public_url: str = "http://localhost:8000"
     dashboard_url: str = "http://localhost:3000"
+    internal_api_key: str = ""
 
     model_config = {
         "env_file": ".env",
