@@ -1892,10 +1892,32 @@ export async function publishArticlesForNewsletter(
         badRequest("Approved draft has no sections to publish");
       }
 
-      db.articles = db.articles.filter((article) => article.newsletter_id !== newsletterId);
+      const existingBySectionType = new Map(
+        db.articles
+          .filter((article) => article.newsletter_id === newsletterId)
+          .map((article) => [article.section_type, article] as const),
+      );
+      const keepSectionTypes = new Set(sections.map((section) => section.section_type));
+
+      // Drop only articles for sections that no longer exist in this draft —
+      // keep existing ids/URLs for sections that are still present, so links
+      // already emailed to subscribers keep working after a republish.
+      db.articles = db.articles.filter(
+        (article) => article.newsletter_id !== newsletterId || keepSectionTypes.has(article.section_type),
+      );
 
       const publishedAt = nowIso();
       const articles: ArticleRecord[] = sections.map((section) => {
+        const existing = existingBySectionType.get(section.section_type);
+        if (existing) {
+          existing.title = section.title;
+          existing.teaser = section.teaser;
+          existing.body = section.body;
+          existing.audience_tag = section.audience_tag ?? "REO";
+          existing.publish_date = publishedAt;
+          return existing;
+        }
+
         const id = nextId(db.articles);
         const article: ArticleRecord = {
           id,
