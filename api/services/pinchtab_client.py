@@ -112,36 +112,46 @@ class PinchTabClient:
         instance_url = self._instance_url_from_port(port)
         return profile_id, instance_url
 
+    def stop_profile(self, profile_id: str) -> None:
+        try:
+            self._request("POST", f"/profiles/{profile_id}/stop", timeout=15.0)
+        except Exception:
+            # Best-effort cleanup — don't let a stop failure mask the real result.
+            pass
+
     def prime_url(self, url: str) -> PinchTabSession:
-        _, instance_url = self.start_profile()
-        navigation = self._request(
-            "POST",
-            "/navigate",
-            base_url=instance_url,
-            json={"url": url, "newTab": True},
-            timeout=60.0,
-        )
-        tab_id = str(navigation.get("tabId", "")).strip()
-        if not tab_id:
-            raise RuntimeError(f"PinchTab navigate did not return tabId: {navigation}")
+        profile_id, instance_url = self.start_profile()
+        try:
+            navigation = self._request(
+                "POST",
+                "/navigate",
+                base_url=instance_url,
+                json={"url": url, "newTab": True},
+                timeout=60.0,
+            )
+            tab_id = str(navigation.get("tabId", "")).strip()
+            if not tab_id:
+                raise RuntimeError(f"PinchTab navigate did not return tabId: {navigation}")
 
-        if self.settings.pinchtab_settle_seconds > 0:
-            sleep(self.settings.pinchtab_settle_seconds)
+            if self.settings.pinchtab_settle_seconds > 0:
+                sleep(self.settings.pinchtab_settle_seconds)
 
-        cookie_result = self._request(
-            "GET",
-            f"/tabs/{tab_id}/cookies",
-            base_url=instance_url,
-            params={"url": url},
-            timeout=20.0,
-        )
-        cookies = cookie_result.get("cookies", [])
-        return PinchTabSession(
-            instance_url=instance_url,
-            tab_id=tab_id,
-            final_url=str(navigation.get("url") or url),
-            cookies=cookies if isinstance(cookies, list) else [],
-        )
+            cookie_result = self._request(
+                "GET",
+                f"/tabs/{tab_id}/cookies",
+                base_url=instance_url,
+                params={"url": url},
+                timeout=20.0,
+            )
+            cookies = cookie_result.get("cookies", [])
+            return PinchTabSession(
+                instance_url=instance_url,
+                tab_id=tab_id,
+                final_url=str(navigation.get("url") or url),
+                cookies=cookies if isinstance(cookies, list) else [],
+            )
+        finally:
+            self.stop_profile(profile_id)
 
 
 def get_pinchtab_cookie_header(url: str) -> tuple[str, list[str]]:
