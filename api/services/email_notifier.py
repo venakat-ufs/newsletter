@@ -1,3 +1,4 @@
+import html
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -17,10 +18,12 @@ def send_review_notification(draft_id: int, newsletter_issue: int, sections_prev
 
     sections_html = ""
     for section in sections_preview:
+        safe_title = html.escape(str(section.get("title", "Untitled")))
+        safe_teaser = html.escape(str(section.get("teaser", "")))
         sections_html += f"""
         <div style="margin-bottom:16px;padding:12px;background:#f8f8f8;border-radius:4px;">
-            <strong>{section.get('title', 'Untitled')}</strong>
-            <p style="color:#666;margin:4px 0 0;">{section.get('teaser', '')}</p>
+            <strong>{safe_title}</strong>
+            <p style="color:#666;margin:4px 0 0;">{safe_teaser}</p>
         </div>
         """
 

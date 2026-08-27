@@ -1,3 +1,4 @@
+import html
 from datetime import datetime, timedelta
 
 import mailchimp_marketing as MailchimpMarketing
@@ -55,10 +56,12 @@ def _build_html_content(newsletter, articles: list[Article]) -> str:
     for article in articles:
         icon = section_icons.get(article.section_type, "📋")
         article_url = article.ms_platform_url or "#"
+        safe_title = html.escape(article.title)
+        safe_teaser = html.escape(article.teaser)
         html_parts.append(f"""
         <div style="padding:24px;border-bottom:1px solid #eee;">
-            <h2 style="color:#1a1a2e;margin:0 0 8px;">{icon} {article.title}</h2>
-            <p style="color:#555;line-height:1.6;">{article.teaser}</p>
+            <h2 style="color:#1a1a2e;margin:0 0 8px;">{icon} {safe_title}</h2>
+            <p style="color:#555;line-height:1.6;">{safe_teaser}</p>
             <a href="{article_url}" style="display:inline-block;margin-top:12px;padding:10px 20px;background:#e94560;color:white;text-decoration:none;border-radius:4px;">Read More →</a>
         </div>
         """)
