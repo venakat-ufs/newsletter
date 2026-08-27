@@ -2,6 +2,14 @@ import os
 
 os.environ["INTERNAL_API_KEY"] = "test-secret-key"
 
+from config import get_settings
+
+# get_settings() is @lru_cache'd, so if another test module imported it
+# before INTERNAL_API_KEY was set above, the cached Settings would still
+# have an empty key. Clear it so this module's env var always takes effect
+# regardless of test run/import order.
+get_settings.cache_clear()
+
 from fastapi.testclient import TestClient
 
 from main import app
