@@ -1,5 +1,33 @@
 # UFS Newsletter System — The Disposition Desk
 
+## 2026-08-27 — Code Review Fixes (7 findings, uncommitted-to-main branch)
+
+### What Was Done
+A full read-only code review of the whole codebase (dashboard + api/) surfaced 10 findings, ranked by severity. One (`proxy.ts` SSO-cookie granting full `/api/*` access) was scoped out to be handled separately. The remaining 8 were planned in `docs/superpowers/plans/2026-08-27-code-review-fixes.md` and implemented one Mailzzy-hardening item was dropped by request (unshipped code, not worth hardening yet) — 7 fixes landed:
+
+1. **Duplicate newsletter sends** — `scheduleNewsletterSend` had no lock; two concurrent calls (double-click, retry) could both pass the guard and send the same newsletter twice to real subscribers. Added an atomic claim/release (`claimNewsletterForSending` / `releaseNewsletterClaim` in `workflow.ts`), plus a new `"sending"` `NewsletterStatus` value.
+2. **Stored XSS on the public article page** — `getPublicArticleMarkup` rendered article title/teaser/body as raw HTML on an unauthenticated route. Now escaped via a shared `escapeHtml` (exported from `lib/newsletter-html.ts`, de-duplicated out of `email.ts`).
+3. **Login rate-limit TOCTOU race** — `login-rate-limit.ts`'s read-then-write attempt counter could lose increments under a concurrent brute-force burst. Switched to Prisma's atomic `increment`.
+4. **Article republish not idempotent** — republishing deleted and recreated all articles with new ids, breaking links already emailed to subscribers. Now upserts by `section_type`, keeping the same id/URL for unchanged sections.
+5. **Python API had zero authentication** — every route in `api/` (including a real newsletter-send endpoint) was open to anyone who could reach the port. Added a shared-secret `X-Internal-Api-Key` header dependency on every route except `/api/health` and the public article page.
+6. **Python outbound-email HTML injection** — same class of bug as #2, in `mailchimp_client.py` and `email_notifier.py`'s outbound HTML. Escaped with `html.escape()`.
+7. **PinchTab (scraping helper) browser leak** — `pinchtab_client.py` started a remote browser profile per scrape and never closed it. Now stopped in a `finally` block.
+
+Each fix has its own commit with a real test (Playwright `tests/*.spec.ts` for TypeScript, `pytest` for Python), run individually and then all together — everything passes. No test touches the real Mailchimp/Mailzzy send APIs or the production database (local `.env` points at a separate dev Supabase project, `beapnobefsyhipwhpbyi`, not production's `irnmsoaqxjadmecinmoc`).
+
+### Current State
+- All 7 fixes are committed on branch `fix/code-review-findings-2026-08-27`, created off `main` at `48be45d`.
+- **Not pushed anywhere, not merged to `main`.** Production (EC2) and the deployed dashboard are untouched.
+- Full review findings and the implementation plan (exact diffs, test code) live in `docs/superpowers/plans/2026-08-27-code-review-fixes.md`.
+- Pre-existing uncommitted local changes (the Mailchimp→Mailzzy migration in `env.ts`/`mailchimp.ts`/`system-status.ts`, from an earlier session) were left untouched throughout — they still sit as uncommitted working-tree changes on top of this branch, separate from the 7 fixes above.
+
+### Known Follow-Ups
+- The Python API auth fix (#5) needs `INTERNAL_API_KEY` set in whatever environment runs `api/` once deployed, or every protected route will 503. Not urgent today since nothing in production currently calls that service.
+- The new `"sending"` newsletter status isn't in the history page's `statusColors` map yet, so it'll render as a plain gray badge (not broken, just unstyled) for the few seconds a send is in flight.
+- Not yet merged/pushed — needs a decision on PR vs. direct merge, and a call on what to do with the pending Mailzzy migration first.
+
+---
+
 ## Project Status: 15-Source Pipeline + Redesigned Data Page
 
 ---
