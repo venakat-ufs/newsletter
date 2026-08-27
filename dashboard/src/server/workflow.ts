@@ -20,6 +20,7 @@ import type {
   DraftSection,
   DraftStatus,
   NewsletterRecord,
+  NewsletterStatus,
 } from "@/server/types";
 
 function notFound(message: string): never {
@@ -2064,6 +2065,36 @@ function applyCtaVariant(
   });
 }
 
+export async function claimNewsletterForSending(
+  newsletterId: number,
+): Promise<{ claimed: boolean; status: NewsletterStatus; campaign_id: string | null }> {
+  return withDatabase((db) => {
+    const stored = db.newsletters.find((item) => item.id === newsletterId);
+    if (!stored) {
+      notFound("Newsletter not found");
+    }
+    if (stored.status === "scheduled" || stored.status === "sent" || stored.status === "sending") {
+      return { claimed: false, status: stored.status, campaign_id: stored.mailchimp_campaign_id };
+    }
+    stored.status = "sending";
+    stored.updated_at = nowIso();
+    return { claimed: true, status: "sending", campaign_id: stored.mailchimp_campaign_id };
+  });
+}
+
+export async function releaseNewsletterClaim(
+  newsletterId: number,
+  fallbackStatus: NewsletterStatus,
+): Promise<void> {
+  await withDatabase((db) => {
+    const stored = db.newsletters.find((item) => item.id === newsletterId);
+    if (stored && stored.status === "sending") {
+      stored.status = fallbackStatus;
+      stored.updated_at = nowIso();
+    }
+  });
+}
+
 export async function scheduleNewsletterSend(
   newsletterId: number,
 ): Promise<{
@@ -2097,21 +2128,22 @@ export async function scheduleNewsletterSend(
     const approvedContent = draft.human_edits ?? (draft.ai_draft as Record<string, unknown>);
     const sections = getSections(approvedContent);
 
-    if (newsletter.mailchimp_campaign_id && newsletter.status === "scheduled") {
+    const claim = await claimNewsletterForSending(newsletterId);
+    if (!claim.claimed) {
       await appendWorkflowLog({
         scope: "delivery",
         step: "newsletter.schedule",
         status: "warning",
-        message: "Newsletter is already scheduled.",
+        message: `Newsletter is already ${claim.status}.`,
         context: {
           newsletter_id: newsletterId,
-          campaign_id: newsletter.mailchimp_campaign_id,
+          campaign_id: claim.campaign_id,
         },
       });
 
       return {
         status: "already_scheduled",
-        campaign_id: newsletter.mailchimp_campaign_id,
+        campaign_id: claim.campaign_id ?? "",
       };
     }
 
@@ -2139,21 +2171,15 @@ export async function scheduleNewsletterSend(
         sectionsPreview: sections,
       });
 
-      await withDatabase((db) => {
-        const stored = db.newsletters.find((item) => item.id === newsletterId);
-        if (!stored) {
-          notFound("Newsletter not found");
-        }
-        stored.updated_at = nowIso();
-      });
+      await releaseNewsletterClaim(newsletterId, "approved");
 
       await appendWorkflowLog({
         scope: "delivery",
         step: "newsletter.schedule",
         status: previewSent ? "warning" : "error",
         message: previewSent
-          ? "Mailchimp is unavailable, so a preview email was sent instead."
-          : `Mailchimp is unavailable and no preview email could be sent: ${mailchimpBlockReason}`,
+          ? "Mailzzy is unavailable, so a preview email was sent instead."
+          : `Mailzzy is unavailable and no preview email could be sent: ${mailchimpBlockReason}`,
         context: {
           newsletter_id: newsletterId,
           article_count: articles.length,
@@ -2168,8 +2194,8 @@ export async function scheduleNewsletterSend(
         article_count: articles.length,
         preview_sent: previewSent,
         message: previewSent
-          ? "Mailchimp is not ready, so a preview copy of the latest newsletter was emailed to the reviewer instead."
-          : `Mailchimp is not ready: ${mailchimpBlockReason}`,
+          ? "Mailzzy is not ready, so a preview copy of the latest newsletter was emailed to the reviewer instead."
+          : `Mailzzy is not ready: ${mailchimpBlockReason}`,
       };
     }
 
@@ -2182,17 +2208,17 @@ export async function scheduleNewsletterSend(
       newsletter,
       articles,
       registeredSections,
-      settings.mailchimpListId,
+      settings.mailzzyGroupId,
     );
 
-    // Non-registered audience → /join landing page links (only if a prospect list is configured).
-    if (settings.mailchimpListIdProspect) {
+    // Non-registered audience → /join landing page links (only if a prospect group is configured).
+    if (settings.mailzzyGroupIdProspect) {
       const prospectSections = applyCtaVariant(sections, "prospect", portalUrl, settings.appPublicUrl);
       const prospectCampaignId = await scheduleCampaign(
         newsletter,
         articles,
         prospectSections,
-        settings.mailchimpListIdProspect,
+        settings.mailzzyGroupIdProspect,
       );
       await appendWorkflowLog({
         scope: "delivery",
@@ -2202,7 +2228,7 @@ export async function scheduleNewsletterSend(
         context: {
           newsletter_id: newsletterId,
           campaign_id: prospectCampaignId,
-          audience_id: settings.mailchimpListIdProspect,
+          audience_id: settings.mailzzyGroupIdProspect,
         },
       });
     }
@@ -2238,6 +2264,7 @@ export async function scheduleNewsletterSend(
 
     return result;
   } catch (error) {
+    await releaseNewsletterClaim(newsletterId, "approved");
     await appendWorkflowLog({
       scope: "delivery",
       step: "newsletter.schedule",

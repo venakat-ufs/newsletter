@@ -7,6 +7,7 @@ export type DraftStatus =
 export type NewsletterStatus =
   | "draft"
   | "approved"
+  | "sending"
   | "scheduled"
   | "sent"
   | "failed";
