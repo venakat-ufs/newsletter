@@ -130,48 +130,39 @@ async function recordFailedLoginInDatabase(key: string): Promise<void> {
   await ensureDatabaseReady();
   const now = nowMs();
   const nowText = nowIso();
-  const current = await prisma.loginAttempt.findUnique({ where: { key } });
+  const windowCutoff = new Date(now - WINDOW_MS).toISOString();
 
-  if (!current) {
-    await prisma.loginAttempt.create({
-      data: {
-        key,
-        attempts: 1,
-        windowStartedAt: nowText,
-        blockedUntil: null,
-        updatedAt: nowText,
-      },
-    });
-    return;
-  }
-
-  const currentWindowMs = Date.parse(current.windowStartedAt);
-  const windowExpired = !Number.isFinite(currentWindowMs) || now - currentWindowMs > WINDOW_MS;
-
-  if (windowExpired) {
-    await prisma.loginAttempt.update({
-      where: { key },
-      data: {
-        attempts: 1,
-        windowStartedAt: nowText,
-        blockedUntil: null,
-        updatedAt: nowText,
-      },
-    });
-    return;
-  }
-
-  const nextAttempts = current.attempts + 1;
-  const blockedUntil = nextAttempts >= MAX_ATTEMPTS ? new Date(now + BLOCK_MS).toISOString() : null;
-
-  await prisma.loginAttempt.update({
-    where: { key },
+  // Atomic: only increments if the row still exists AND its window hasn't
+  // expired. Prisma's `increment` is a single UPDATE ... SET attempts =
+  // attempts + 1 at the DB level, so concurrent callers can't lose a count.
+  const incremented = await prisma.loginAttempt.updateMany({
+    where: { key, windowStartedAt: { gt: windowCutoff } },
     data: {
-      attempts: nextAttempts,
-      blockedUntil,
+      attempts: { increment: 1 },
       updatedAt: nowText,
     },
   });
+
+  if (incremented.count === 0) {
+    // No row yet, or the window expired — start a fresh window at attempts=1.
+    // upsert here is fine even under a race: worst case two callers both
+    // upsert to attempts=1, which just under-counts by one attempt, never
+    // over-counts or bypasses the eventual block.
+    await prisma.loginAttempt.upsert({
+      where: { key },
+      create: { key, attempts: 1, windowStartedAt: nowText, blockedUntil: null, updatedAt: nowText },
+      update: { attempts: 1, windowStartedAt: nowText, blockedUntil: null, updatedAt: nowText },
+    });
+    return;
+  }
+
+  const updated = await prisma.loginAttempt.findUniqueOrThrow({ where: { key } });
+  if (updated.attempts >= MAX_ATTEMPTS && !updated.blockedUntil) {
+    await prisma.loginAttempt.update({
+      where: { key },
+      data: { blockedUntil: new Date(now + BLOCK_MS).toISOString() },
+    });
+  }
 }
 
 function recordFailedLoginInMemory(key: string): void {
