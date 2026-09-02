@@ -1,5 +1,35 @@
 # UFS Newsletter System — The Disposition Desk
 
+## 2026-09-02 — Post-Approve Send Popup + Store Scalability Fix (branch `fix/code-review-findings-2026-08-27`)
+
+### What Was Done
+
+Replaced the newsletter auto-send-on-approve flow with an explicit popup (Mailzzy-only for now; Mailchimp shown disabled) that lets a reviewer pick audience group(s) — Registered (Mailzzy group `1085`) and/or Not Registered (`1086`) — and a live-fetched sender, with per-group send-status tracking so a partial failure can be resent for just the failed group without risking a duplicate send to the group that already succeeded.
+
+Full design: `docs/superpowers/specs/2026-09-02-post-approve-send-popup-design.md`. Full plan: `docs/superpowers/plans/2026-09-02-post-approve-send-popup.md`. Mailzzy API/MCP reference (with corrections found live): `docs/mailzzy-api-reference.md`.
+
+**Along the way, found and fixed a real, unrelated, pre-existing scalability bug**: `readDatabase()`/`withDatabase()` (the shared data-loading function behind almost every operation in this app) loads every row of every table on every call. Once the dev drafts table grew to 52 real rows with 500-700KB of `raw_data` each (~26MB total), Prisma's query engine started hanging indefinitely (confirmed by letting it run 4+ minutes with zero result, vs. ~4 seconds for the identical data over a raw driver — reproduced against both the transaction and session poolers, ruled out as a pgbouncer/prepared-statement issue). This wasn't caused by anything in this session's work — it's how the store has always behaved, just never tripped over until the table grew large enough. Given this function backs nearly every real user action (approving, sending, checking status), this was very likely responsible for real latency/hangs in actual use, not just in testing.
+
+**Fix**: `drafts.raw_data` is now excluded from the bulk read by default (`DraftRecord` carries a `RAW_DATA_NOT_LOADED` sentinel) and hydrated on demand via `getDraftsRawData()` for the one place that genuinely needs it (AI draft generation's current + historical comparison). `persistDatabase()`'s draft upsert checks the sentinel before ever writing `raw_data` back, so an update triggered by an unrelated field change can never overwrite a draft's real stored data with the placeholder — this data-loss risk was caught and designed around before shipping, not after. Scales however large the drafts table gets, since the one large field is never part of the bulk fetch regardless of row count. Considered switching away from Prisma entirely (raw SQL/Drizzle) — concluded it wouldn't meaningfully help beyond this fix and isn't worth the migration risk; see the conversation for the full reasoning.
+
+**Also fixed in passing**: a second, genuinely separate race condition in `login-rate-limit.ts` — concurrent *first-ever* failed-login attempts for a brand-new key could race on create-vs-increment and undercount, bypassing the lockout threshold. Fixed with a single atomic `INSERT ... ON CONFLICT ... DO UPDATE` statement. Verified with repeated test runs, no flakes.
+
+### Current State
+
+- All of the above is committed on branch `fix/code-review-findings-2026-08-27` (same branch as the 2026-08-27 code review fixes), on top of commit `fc4f6b8`. **Still not pushed or merged to `main`.**
+- Full regression pass: 8/8 tests passing together (per-group send ×2, Mailzzy group/sender lookups ×2, XSS, send-lock, article-republish, login-rate-limit-race).
+- Verified with `tsc --noEmit`, `eslint`, and a full `next build` (production build succeeds, both new routes appear correctly in the route manifest).
+- Real Mailzzy groups exist and are ready: Registered = `1085`, Not Registered = `1086` (both currently empty — contact import is a separate manual step). One sender configured (`venakat@unitedffs.com`), domain **not yet verified** — needs fixing in the Mailzzy dashboard before a real send.
+
+### Known Follow-Ups
+
+- Mailchimp is still just a disabled placeholder in the popup — only Mailzzy actually sends.
+- Sender picker currently has only one real option (see above) — the UI is built for multiple, just nothing to pick from yet.
+- The pre-existing Mailchimp→Mailzzy migration files (`env.ts`/`mailchimp.ts`/`system-status.ts` uncommitted changes from an earlier session) are still sitting uncommitted, untouched by any of today's work.
+- `getMailzzyGroupCounts`/`getMailzzySenders` call the real, live-confirmed MCP tool names (`mcp_crm_groups_list`, `mcp_crm_senders_list`) — but the pre-existing `scheduleCampaign()`'s tool name (`mcp_crm_campaigns_send`) has not been independently re-verified against a live call in this session (only inferred from the confirmed `mcp_crm_<domain>_<verb>` naming convention).
+
+---
+
 ## 2026-08-27 — Code Review Fixes (7 findings, uncommitted-to-main branch)
 
 ### What Was Done
