@@ -204,7 +204,34 @@ An earlier version of this doc flagged a naming mismatch and claimed the uncommi
 
 Both groups are currently **empty** — no contacts imported yet. That's a separate step from group creation.
 
-**Senders** — `mcp_crm_senders_list` (or equivalent) shows exactly **one** sender configured: `venakat@unitedffs.com` ("venakat D"). Its `domainVerified` flag is **`false`**. This needs to be fixed in the Mailzzy dashboard before any real campaign send — an unverified sending domain risks landing in spam or being rejected outright by receiving mail servers, independent of anything the application code does.
+**Senders** — `mcp_crm_senders_list` shows exactly **one** sender configured: `venakat@unitedffs.com` ("venakat D"). Its `domainVerified` flag is **`false`**. This needs to be fixed in the Mailzzy dashboard before any real campaign send — an unverified sending domain risks landing in spam or being rejected outright by receiving mail servers, independent of anything the application code does.
+
+### Confirmed tool schemas (called live 2026-09-02, via plain bearer-token `fetch()` — no Claude Code MCP client needed, same pattern `scheduleCampaign()` already uses)
+
+**`mcp_crm_groups_list`** — there is no per-group count tool; this is the only way to get member counts, and it returns every group at once:
+```
+tools/call mcp_crm_groups_list { "page": 1, "limit": 100 }
+→ {
+    "items": [
+      { "id": 1086, "name": "not registered", "contactCount": 0, "visibility": "private" },
+      { "id": 1085, "name": "registered", "contactCount": 0, "visibility": "private" }
+    ],
+    "page": 1, "limit": 20, "hasMore": false, "sort": "updated_on_desc"
+  }
+```
+
+**`mcp_crm_senders_list`**:
+```
+tools/call mcp_crm_senders_list {}
+→ {
+    "items": [
+      { "id": 2856, "email": "venakat@unitedffs.com", "name": "venakat D", "status": 1, "domainVerified": false }
+    ],
+    "page": 1, "limit": 25, "hasMore": false, "sort": "updated_on_desc"
+  }
+```
+
+**Auth note:** the `/core/public/api/access` response's token field is `Token` (capital T), not `authToken` as an earlier draft of this doc's example suggested — `mailchimp.ts`'s existing `getMailzzyToken()` already reads the correct field. A quick debug script that read `authToken` instead got a false "unauthorized" from every subsequent `tools/call` (empty bearer token, not an actual permissions issue) — worth remembering if this ever gets debugged again from scratch.
 
 ---
 

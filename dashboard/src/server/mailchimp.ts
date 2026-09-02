@@ -5,84 +5,132 @@ import { getSettings } from "@/server/env";
 import { appendWorkflowLog } from "@/server/logs";
 import type { ArticleRecord, DraftSection, NewsletterRecord } from "@/server/types";
 
+// ---------------------------------------------------------------------------
+// Mailzzy helpers
+// ---------------------------------------------------------------------------
+
+function mailzzyBasicAuth(clientId: string, clientSecret: string): string {
+  return `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString("base64")}`;
+}
+
+async function getMailzzyToken(clientId: string, clientSecret: string): Promise<string> {
+  const response = await fetch("https://api.mailzzy.com/core/public/api/access", {
+    headers: {
+      App: "mailzzy",
+      Authorization: mailzzyBasicAuth(clientId, clientSecret),
+    },
+    cache: "no-store",
+    signal: AbortSignal.timeout(30_000),
+  });
+  if (!response.ok) {
+    throw new Error(`Mailzzy auth HTTP ${response.status}: ${await response.text()}`);
+  }
+
+  if (!response.ok) {
+    throw new Error(`Mailzzy auth failed: ${await response.text()}`);
+  }
+
+  const data = (await response.json()) as { Token?: string };
+  if (!data.Token) {
+    throw new Error("Mailzzy auth returned no token");
+  }
+  return data.Token;
+}
+
+async function initMcpSession(token: string): Promise<string> {
+  const response = await fetch("https://api.mailzzy.com/crm/mcp", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Accept: "application/json, text/event-stream",
+    },
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      id: 1,
+      method: "initialize",
+      params: {
+        protocolVersion: "2024-11-05",
+        capabilities: {},
+        clientInfo: { name: "ufs-newsletter", version: "1.0" },
+      },
+    }),
+    cache: "no-store",
+  });
+
+  const sessionId = response.headers.get("Mcp-Session-Id");
+  if (!sessionId) {
+    throw new Error("Mailzzy MCP did not return a session ID");
+  }
+  return sessionId;
+}
+
+async function mcpToolCall(
+  token: string,
+  sessionId: string,
+  toolName: string,
+  args: Record<string, unknown>,
+): Promise<unknown> {
+  const response = await fetch("https://api.mailzzy.com/crm/mcp", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Accept: "application/json, text/event-stream",
+      "Mcp-Session-Id": sessionId,
+    },
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      id: 2,
+      method: "tools/call",
+      params: { name: toolName, arguments: args },
+    }),
+    cache: "no-store",
+  });
+
+  const text = await response.text();
+
+  // Parse SSE: extract the data: {...} line
+  const dataLine = text
+    .split("\n")
+    .find((line) => line.startsWith("data:"));
+  const json = dataLine ? JSON.parse(dataLine.slice(5).trim()) : JSON.parse(text);
+
+  const result = (json as { result?: { content?: Array<{ text?: string }>; isError?: boolean } })
+    .result;
+  if (!result) {
+    throw new Error(`MCP call failed: ${text.slice(0, 300)}`);
+  }
+  if (result.isError) {
+    const msg = result.content?.[0]?.text ?? "unknown MCP error";
+    throw new Error(`Mailzzy MCP tool error: ${msg}`);
+  }
+
+  const raw = result.content?.[0]?.text;
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return raw;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Public API (mirrors the previous Mailchimp interface)
+// ---------------------------------------------------------------------------
+
 export function getMailchimpBlockReason(): string | null {
   const settings = getSettings();
   const missing: string[] = [];
 
-  if (!settings.mailchimpApiKey) {
-    missing.push("MAILCHIMP_API_KEY");
-  }
-  if (!settings.mailchimpServerPrefix) {
-    missing.push("MAILCHIMP_SERVER_PREFIX");
-  }
-  if (!settings.mailchimpListId) {
-    missing.push("MAILCHIMP_LIST_ID");
-  }
+  if (!settings.mailzzyClientId) missing.push("MAILZZY_CLIENT_ID");
+  if (!settings.mailzzyClientSecret) missing.push("MAILZZY_CLIENT_SECRET");
+  if (!settings.mailzzyGroupId) missing.push("MAILZZY_GROUP_ID");
 
   if (missing.length > 0) {
-    return `Mailchimp not configured: ${missing.join(", ")}`;
+    return `Mailzzy not configured: ${missing.join(", ")}`;
   }
-
   return null;
-}
-
-function requireMailchimpSettings() {
-  const reason = getMailchimpBlockReason();
-  if (reason) {
-    throw new Error(reason);
-  }
-
-  return getSettings();
-}
-
-function mailchimpHeaders(apiKey: string): HeadersInit {
-  return {
-    Authorization: `Basic ${Buffer.from(`ufs:${apiKey}`).toString("base64")}`,
-    "Content-Type": "application/json",
-  };
-}
-
-function nextTuesdayAt9Utc(): string {
-  const now = new Date();
-  const next = new Date(now);
-  const daysUntilTuesday = (2 - now.getUTCDay() + 7) % 7;
-  next.setUTCDate(now.getUTCDate() + (daysUntilTuesday === 0 && now.getUTCHours() >= 9 ? 7 : daysUntilTuesday));
-  next.setUTCHours(9, 0, 0, 0);
-  return next.toISOString();
-}
-
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-// When a campaign is created via the API, Mailchimp computes the recipient
-// count asynchronously. Calling /actions/send before that finishes returns
-// "Your Campaign is not ready to send. recipients not ready". Poll the campaign
-// until the recipient count is populated (or we run out of attempts).
-async function waitForRecipientsReady(
-  baseUrl: string,
-  headers: HeadersInit,
-  campaignId: string,
-  attempts = 8,
-): Promise<number> {
-  let lastCount = 0;
-  for (let attempt = 0; attempt < attempts; attempt += 1) {
-    const response = await fetch(
-      `${baseUrl}/campaigns/${campaignId}?fields=recipients.recipient_count,status`,
-      { headers, cache: "no-store" },
-    );
-    if (response.ok) {
-      const payload = (await response.json()) as {
-        recipients?: { recipient_count?: number };
-      };
-      lastCount = payload.recipients?.recipient_count ?? 0;
-      if (lastCount > 0) {
-        return lastCount;
-      }
-    }
-    await delay(1500);
-  }
-  return lastCount;
 }
 
 export function buildHtmlContent(
@@ -109,173 +157,57 @@ export async function scheduleCampaign(
   newsletter: NewsletterRecord,
   articles: ArticleRecord[],
   sections?: DraftSection[],
-  listId?: string,
+  groupId?: string,
 ): Promise<string> {
-  const settings = requireMailchimpSettings();
-  const targetListId = listId || settings.mailchimpListId;
-  const baseUrl = `https://${settings.mailchimpServerPrefix}.api.mailchimp.com/3.0`;
-  const headers = mailchimpHeaders(settings.mailchimpApiKey);
+  const settings = getSettings();
+  const targetGroupId = groupId ?? settings.mailzzyGroupId;
 
   await appendWorkflowLog({
     scope: "delivery",
     step: "mailchimp.create_campaign",
     status: "info",
-    message: "Creating Mailchimp campaign.",
+    message: "Creating Mailzzy campaign.",
     context: {
       newsletter_id: newsletter.id,
       issue_number: newsletter.issue_number,
       article_count: articles.length,
-      audience_id: targetListId,
+      group_id: targetGroupId,
     },
   });
 
-  const createResponse = await fetch(`${baseUrl}/campaigns`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({
-      type: "regular",
-      recipients: { list_id: targetListId },
-      settings: {
-        subject_line: `UFS Newsletter - Issue #${newsletter.issue_number}`,
-        from_name: "United Field Services",
-        reply_to: "newsletter@unitedffs.com",
-        title: `Disposition Desk #${newsletter.issue_number}`,
-      },
-    }),
-  });
+  const token = await getMailzzyToken(settings.mailzzyClientId, settings.mailzzyClientSecret);
+  const sessionId = await initMcpSession(token);
 
-  if (!createResponse.ok) {
-    const detail = await createResponse.text();
-    await appendWorkflowLog({
-      scope: "delivery",
-      step: "mailchimp.create_campaign",
-      status: "error",
-      message: "Mailchimp campaign creation failed.",
-      context: {
-        newsletter_id: newsletter.id,
-        issue_number: newsletter.issue_number,
-        error: detail,
-      },
-    });
-    throw new Error(`Mailchimp create campaign failed: ${detail}`);
-  }
+  const html = buildHtmlContent(newsletter, articles, sections);
+  const subject = `UFS Newsletter - Issue #${newsletter.issue_number}`;
+  const campaignName = `UFS Newsletter #${newsletter.issue_number}`;
 
-  const created = (await createResponse.json()) as { id?: string };
-  const campaignId = created.id;
-  if (!campaignId) {
-    throw new Error("Mailchimp did not return a campaign id");
-  }
-
-  await appendWorkflowLog({
-    scope: "delivery",
-    step: "mailchimp.create_campaign",
-    status: "success",
-    message: "Mailchimp campaign created.",
-    context: {
-      newsletter_id: newsletter.id,
-      issue_number: newsletter.issue_number,
-      campaign_id: campaignId,
+  const result = await mcpToolCall(token, sessionId, "mcp_crm_campaigns_send", {
+    campaign: {
+      name: campaignName,
+      subject,
+      content: html,
+      displayName: "United Field Services",
+      senderEmail: settings.mailzzySenderEmail || "venakat@unitedffs.com",
+      replyToEmail: "newsletter@unitedffs.com",
     },
-  });
-
-  const contentResponse = await fetch(`${baseUrl}/campaigns/${campaignId}/content`, {
-    method: "PUT",
-    headers,
-    body: JSON.stringify({
-      html: buildHtmlContent(newsletter, articles, sections),
-    }),
-  });
-
-  if (!contentResponse.ok) {
-    const detail = await contentResponse.text();
-    await appendWorkflowLog({
-      scope: "delivery",
-      step: "mailchimp.set_content",
-      status: "error",
-      message: "Mailchimp content upload failed.",
-      context: {
-        newsletter_id: newsletter.id,
-        issue_number: newsletter.issue_number,
-        campaign_id: campaignId,
-        error: detail,
-      },
-    });
-    throw new Error(`Mailchimp set content failed: ${detail}`);
-  }
-
-  await appendWorkflowLog({
-    scope: "delivery",
-    step: "mailchimp.set_content",
-    status: "success",
-    message: "Mailchimp campaign content updated.",
-    context: {
-      newsletter_id: newsletter.id,
-      issue_number: newsletter.issue_number,
-      campaign_id: campaignId,
+    campaignSegments: {
+      segmentTypeId: 1,
+      segmentIds: [Number(targetGroupId)],
     },
-  });
+  }) as Record<string, unknown> | null;
 
-  // Mailchimp computes the recipient list asynchronously after a campaign is
-  // created. Wait for it to be ready before sending, otherwise /actions/send
-  // returns "Your Campaign is not ready to send. recipients not ready".
-  const recipientCount = await waitForRecipientsReady(baseUrl, headers, campaignId);
-  await appendWorkflowLog({
-    scope: "delivery",
-    step: "mailchimp.recipients_ready",
-    status: recipientCount > 0 ? "info" : "warning",
-    message:
-      recipientCount > 0
-        ? `Recipient list ready (${recipientCount}).`
-        : "Recipient list still showing 0 after polling; attempting send anyway.",
-    context: {
-      newsletter_id: newsletter.id,
-      issue_number: newsletter.issue_number,
-      campaign_id: campaignId,
-      recipient_count: recipientCount,
-    },
-  });
-
-  // Send immediately on approval. (Scheduling can be re-introduced later via
-  // the /actions/schedule endpoint + nextTuesdayAt9Utc helper below.)
-  // Retry on the transient "recipients not ready" error.
-  let sendResponse: Response | null = null;
-  let sendDetail = "";
-  for (let attempt = 0; attempt < 4; attempt += 1) {
-    sendResponse = await fetch(`${baseUrl}/campaigns/${campaignId}/actions/send`, {
-      method: "POST",
-      headers,
-    });
-    if (sendResponse.ok) {
-      break;
-    }
-    sendDetail = await sendResponse.text();
-    if (!sendDetail.includes("recipients not ready") || attempt === 3) {
-      break;
-    }
-    await delay(2000);
-  }
-
-  if (!sendResponse || !sendResponse.ok) {
-    await appendWorkflowLog({
-      scope: "delivery",
-      step: "mailchimp.send",
-      status: "error",
-      message: "Mailchimp send request failed.",
-      context: {
-        newsletter_id: newsletter.id,
-        issue_number: newsletter.issue_number,
-        campaign_id: campaignId,
-        error: sendDetail,
-      },
-    });
-    throw new Error(`Mailchimp send failed: ${sendDetail}`);
-  }
+  const campaignId = String(
+    (result as Record<string, unknown>)?.campaignId ??
+    (result as Record<string, unknown>)?.id ??
+    Date.now(),
+  );
 
   await appendWorkflowLog({
     scope: "delivery",
     step: "mailchimp.send",
     status: "success",
-    message: "Mailchimp campaign sent.",
+    message: "Mailzzy campaign sent.",
     context: {
       newsletter_id: newsletter.id,
       issue_number: newsletter.issue_number,
@@ -288,41 +220,83 @@ export async function scheduleCampaign(
 
 export async function getCampaignStatus(campaignId: string): Promise<Record<string, unknown>> {
   const settings = getSettings();
-  if (settings.mailchimpOnHold) {
-    return {
-      status: "hold",
-      campaign_id: campaignId,
-      error: "Mailchimp delivery is on hold",
-    };
+
+  if (settings.mailzzyOnHold) {
+    return { status: "hold", campaign_id: campaignId, error: "Mailzzy delivery is on hold" };
   }
-  if (!settings.mailchimpApiKey || !settings.mailchimpServerPrefix) {
-    return {
-      status: "unconfigured",
-      campaign_id: campaignId,
-      error: "Mailchimp not configured",
-    };
+  if (!settings.mailzzyClientId || !settings.mailzzyClientSecret) {
+    return { status: "unconfigured", campaign_id: campaignId };
   }
 
-  const response = await fetch(
-    `https://${settings.mailchimpServerPrefix}.api.mailchimp.com/3.0/campaigns/${campaignId}`,
-    {
-      headers: mailchimpHeaders(settings.mailchimpApiKey),
-      cache: "no-store",
-    },
-  );
+  try {
+    const token = await getMailzzyToken(settings.mailzzyClientId, settings.mailzzyClientSecret);
+    const sessionId = await initMcpSession(token);
 
-  if (!response.ok) {
-    return {
-      status: "error",
-      campaign_id: campaignId,
-      error: await response.text(),
-    };
+    const numericId = Number(campaignId);
+    if (!Number.isNaN(numericId)) {
+      const campaign = await mcpToolCall(token, sessionId, "mcp_crm_campaigns_get", {
+        campaignId: numericId,
+      }) as Record<string, unknown> | null;
+
+      return {
+        status: campaign?.status ?? "unknown",
+        campaign_id: campaignId,
+        emails_sent: campaign?.sentCount ?? null,
+      };
+    }
+  } catch {
+    // fall through
   }
 
-  const payload = (await response.json()) as Record<string, unknown>;
-  return {
-    status: payload.status ?? "unknown",
-    send_time: payload.send_time ?? null,
-    emails_sent: payload.emails_sent ?? null,
-  };
+  return { status: "unknown", campaign_id: campaignId };
+}
+
+export interface MailzzySender {
+  email: string;
+  displayName: string;
+  domainVerified: boolean;
+}
+
+// Confirmed live 2026-09-02: there is no per-group count tool. The real tool
+// is mcp_crm_groups_list, which returns every group with its contactCount:
+//   { items: [{ id, name, contactCount, visibility }], page, limit, hasMore, sort }
+export async function getMailzzyGroupCounts(): Promise<Record<string, number>> {
+  const settings = getSettings();
+  const token = await getMailzzyToken(settings.mailzzyClientId, settings.mailzzyClientSecret);
+  const sessionId = await initMcpSession(token);
+
+  const result = (await mcpToolCall(token, sessionId, "mcp_crm_groups_list", {
+    page: 1,
+    limit: 100,
+  })) as { items?: Array<Record<string, unknown>> } | null;
+
+  const counts: Record<string, number> = {};
+  for (const item of result?.items ?? []) {
+    const id = item.id;
+    const contactCount = item.contactCount;
+    if ((typeof id === "number" || typeof id === "string") && typeof contactCount === "number") {
+      counts[String(id)] = contactCount;
+    }
+  }
+  return counts;
+}
+
+// Confirmed live 2026-09-02:
+//   { items: [{ id, email, name, status, domainVerified }], page, limit, hasMore, sort }
+export async function getMailzzySenders(): Promise<MailzzySender[]> {
+  const settings = getSettings();
+  const token = await getMailzzyToken(settings.mailzzyClientId, settings.mailzzyClientSecret);
+  const sessionId = await initMcpSession(token);
+
+  const result = (await mcpToolCall(token, sessionId, "mcp_crm_senders_list", {})) as
+    | { items?: Array<Record<string, unknown>> }
+    | null;
+
+  return (result?.items ?? [])
+    .map((row) => ({
+      email: String(row.email ?? ""),
+      displayName: String(row.name ?? ""),
+      domainVerified: Boolean(row.domainVerified ?? false),
+    }))
+    .filter((sender) => sender.email);
 }
