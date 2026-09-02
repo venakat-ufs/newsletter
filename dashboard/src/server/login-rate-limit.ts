@@ -132,32 +132,42 @@ async function recordFailedLoginInDatabase(key: string): Promise<void> {
   const nowText = nowIso();
   const windowCutoff = new Date(now - WINDOW_MS).toISOString();
 
-  // Atomic: only increments if the row still exists AND its window hasn't
-  // expired. Prisma's `increment` is a single UPDATE ... SET attempts =
-  // attempts + 1 at the DB level, so concurrent callers can't lose a count.
-  const incremented = await prisma.loginAttempt.updateMany({
-    where: { key, windowStartedAt: { gt: windowCutoff } },
-    data: {
-      attempts: { increment: 1 },
-      updatedAt: nowText,
-    },
-  });
+  // A prior version of this function did "UPDATE if row exists and window
+  // is fresh, else UPSERT to attempts=1" as two separate steps. That left a
+  // real race: when several requests are ALL the first-ever attempt for a
+  // brand-new key, none of them sees the others' not-yet-committed insert,
+  // so multiple can take the "create at attempts=1" path at once and the
+  // final count lands under MAX_ATTEMPTS instead of at it.
+  //
+  // INSERT ... ON CONFLICT ... DO UPDATE is a single atomic statement at the
+  // database level - there is no window between "check" and "write" for
+  // Postgres to interleave two callers in, no matter how many requests hit
+  // a brand-new key at the exact same instant. window_started_at is stored
+  // as ISO-8601 UTC text (e.g. "2026-09-02T12:00:00.000Z"), which sorts
+  // lexicographically the same as chronologically, so plain text comparison
+  // is safe here without a timestamp cast.
+  const rows = await prisma.$queryRaw<Array<{ attempts: number; blocked_until: string | null }>>`
+    INSERT INTO "login_attempts" (key, attempts, window_started_at, blocked_until, updated_at)
+    VALUES (${key}, 1, ${nowText}, NULL, ${nowText})
+    ON CONFLICT (key) DO UPDATE SET
+      attempts = CASE
+        WHEN login_attempts.window_started_at <= ${windowCutoff} THEN 1
+        ELSE login_attempts.attempts + 1
+      END,
+      window_started_at = CASE
+        WHEN login_attempts.window_started_at <= ${windowCutoff} THEN ${nowText}
+        ELSE login_attempts.window_started_at
+      END,
+      blocked_until = CASE
+        WHEN login_attempts.window_started_at <= ${windowCutoff} THEN NULL
+        ELSE login_attempts.blocked_until
+      END,
+      updated_at = ${nowText}
+    RETURNING attempts, blocked_until
+  `;
 
-  if (incremented.count === 0) {
-    // No row yet, or the window expired — start a fresh window at attempts=1.
-    // upsert here is fine even under a race: worst case two callers both
-    // upsert to attempts=1, which just under-counts by one attempt, never
-    // over-counts or bypasses the eventual block.
-    await prisma.loginAttempt.upsert({
-      where: { key },
-      create: { key, attempts: 1, windowStartedAt: nowText, blockedUntil: null, updatedAt: nowText },
-      update: { attempts: 1, windowStartedAt: nowText, blockedUntil: null, updatedAt: nowText },
-    });
-    return;
-  }
-
-  const updated = await prisma.loginAttempt.findUniqueOrThrow({ where: { key } });
-  if (updated.attempts >= MAX_ATTEMPTS && !updated.blockedUntil) {
+  const result = rows[0];
+  if (result && result.attempts >= MAX_ATTEMPTS && !result.blocked_until) {
     await prisma.loginAttempt.update({
       where: { key },
       data: { blockedUntil: new Date(now + BLOCK_MS).toISOString() },
