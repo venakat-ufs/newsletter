@@ -22,6 +22,12 @@ model Newsletter {
   createdAt             String  @map("created_at")
   updatedAt             String  @map("updated_at")
 
+  // Matches the real "articles_newsletter_id_fkey" FK constraint that
+  // already exists in the database (see prisma/migrations) - this just
+  // tells Prisma about it so it can fetch an article + its newsletter in
+  // one query (a join) instead of two separate round-trips.
+  articles Article[]
+
   @@index([issueDate])
   @@index([status])
   @@map("newsletters")
@@ -50,6 +56,7 @@ model Draft {
 model Article {
   id            Int    @id
   newsletterId  Int    @map("newsletter_id")
+  newsletter    Newsletter @relation(fields: [newsletterId], references: [id])
   sectionType   String @map("section_type")
   title         String
   teaser        String
