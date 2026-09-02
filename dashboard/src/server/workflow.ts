@@ -5,9 +5,12 @@ import { appendWorkflowLog } from "@/server/logs";
 import {
   getCampaignStatus,
   getMailchimpBlockReason,
+  getMailzzyGroupCounts,
+  getMailzzySenders,
   scheduleCampaign,
+  type MailzzySender,
 } from "@/server/mailchimp";
-import { readDatabase, withDatabase, nextId } from "@/server/store";
+import { readDatabase, withDatabase, nextId, getDraftsRawData } from "@/server/store";
 import { prisma, ensureDatabaseReady } from "@/server/prisma";
 import { getPipelineStats } from "@/lib/pipeline-stats";
 import { escapeHtml } from "@/lib/newsletter-html";
@@ -16,10 +19,12 @@ import type {
   ApprovalAction,
   ApprovalLogRecord,
   ArticleRecord,
+  AudienceGroupKey,
   DatabaseRecord,
   DraftRecord,
   DraftSection,
   DraftStatus,
+  GroupSendStatus,
   NewsletterRecord,
   NewsletterStatus,
 } from "@/server/types";
@@ -1339,10 +1344,14 @@ function buildStructuredSectionMetadata(
   };
 }
 
-function previousRawSourcesForNewsletter(
+// db.drafts never carries raw_data by default (the bulk snapshot excludes
+// it - see store.ts). Both functions below hydrate it on demand, one or a
+// few specific drafts at a time, instead of relying on it being present.
+
+async function previousRawSourcesForNewsletter(
   db: DatabaseRecord,
   newsletterId: number,
-): RawSourceSnapshot | undefined {
+): Promise<RawSourceSnapshot | undefined> {
   const currentNewsletter = db.newsletters.find((item) => item.id === newsletterId);
   if (!currentNewsletter) {
     return undefined;
@@ -1362,7 +1371,11 @@ function previousRawSourcesForNewsletter(
 
   for (const newsletter of candidates) {
     const draft = getLatestDraftForNewsletter(db, newsletter.id);
-    const rawSources = draft?.raw_data?.sources as RawSourceSnapshot | undefined;
+    if (!draft) {
+      continue;
+    }
+    const hydrated = (await getDraftsRawData([draft.id])).get(draft.id);
+    const rawSources = hydrated?.sources as RawSourceSnapshot | undefined;
     if (rawSources) {
       return rawSources;
     }
@@ -1371,11 +1384,11 @@ function previousRawSourcesForNewsletter(
   return undefined;
 }
 
-function historicalRawSourcesForNewsletter(
+async function historicalRawSourcesForNewsletter(
   db: DatabaseRecord,
   newsletterId: number,
   limit = 6,
-): RawSourceSnapshot[] {
+): Promise<RawSourceSnapshot[]> {
   const currentNewsletter = db.newsletters.find((item) => item.id === newsletterId);
   if (!currentNewsletter) {
     return [];
@@ -1386,11 +1399,22 @@ function historicalRawSourcesForNewsletter(
     .sort((left, right) => right.issue_number - left.issue_number)
     .slice(0, limit);
 
-  const snapshots: RawSourceSnapshot[] = [];
+  const draftsByNewsletter = previousNewsletters.map((newsletter) => ({
+    newsletter,
+    draft: getLatestDraftForNewsletter(db, newsletter.id),
+  }));
+  const draftIds = draftsByNewsletter
+    .map((item) => item.draft?.id)
+    .filter((id): id is number => id !== undefined);
+  const hydratedRawData = await getDraftsRawData(draftIds);
 
-  for (const newsletter of previousNewsletters) {
-    const draft = getLatestDraftForNewsletter(db, newsletter.id);
-    const rawSources = draft?.raw_data?.sources as RawSourceSnapshot | undefined;
+  const snapshots: RawSourceSnapshot[] = [];
+  for (const { draft } of draftsByNewsletter) {
+    if (!draft) {
+      continue;
+    }
+    const hydrated = hydratedRawData.get(draft.id);
+    const rawSources = hydrated?.sources as RawSourceSnapshot | undefined;
     if (rawSources) {
       snapshots.push(rawSources);
     }
@@ -1771,16 +1795,21 @@ export async function generateDraftForNewsletter(
     if (!draft) {
       notFound("No draft found for this newsletter. Run pipeline first.");
     }
-    if (!draft.raw_data) {
+
+    // draft.raw_data is never populated by the bulk snapshot above (see
+    // store.ts) - hydrate this one draft's real raw_data on demand.
+    const hydratedCurrent = (await getDraftsRawData([draft.id])).get(draft.id);
+    if (!hydratedCurrent || Object.keys(hydratedCurrent).length === 0) {
       badRequest("No raw data collected. Run pipeline first.");
     }
+    draft.raw_data = hydratedCurrent;
 
     const aiDraft = await generateAiDraft(draft.raw_data);
     const rawSources = (draft.raw_data.sources as RawSourceSnapshot | undefined) ?? {};
     const rawSections =
       (draft.raw_data.sections as RawSectionSnapshot | undefined) ?? {};
-    const previousSources = previousRawSourcesForNewsletter(snapshot, newsletterId);
-    const historicalSources = historicalRawSourcesForNewsletter(snapshot, newsletterId, 6);
+    const previousSources = await previousRawSourcesForNewsletter(snapshot, newsletterId);
+    const historicalSources = await historicalRawSourcesForNewsletter(snapshot, newsletterId, 6);
     // Newsletter buttons must route through the client portal's SSO entry
     // routes (/go/*), never directly to the insights portal. The portal checks
     // the client's login, then silently signs them into insights.
@@ -2098,6 +2127,175 @@ function applyCtaVariant(
     }
     return { ...section, metadata: { ...(section.metadata ?? {}), cta_url: cta } };
   });
+}
+
+function groupIdFor(group: AudienceGroupKey, settings: ReturnType<typeof getSettings>): string {
+  return group === "registered" ? settings.mailzzyGroupId : settings.mailzzyGroupIdProspect;
+}
+
+function statusFieldFor(group: AudienceGroupKey): "registered_send_status" | "prospect_send_status" {
+  return group === "registered" ? "registered_send_status" : "prospect_send_status";
+}
+
+function campaignFieldFor(group: AudienceGroupKey): "registered_campaign_id" | "prospect_campaign_id" {
+  return group === "registered" ? "registered_campaign_id" : "prospect_campaign_id";
+}
+
+export async function getNewsletterSendOptions(newsletterId: number): Promise<{
+  groups: Array<{ key: AudienceGroupKey; label: string; mailzzyGroupId: string; memberCount: number }>;
+  senders: MailzzySender[];
+  priorSendStatus: Record<AudienceGroupKey, { status: GroupSendStatus; campaignId: string | null }>;
+}> {
+  const db = await readDatabase();
+  const newsletter = db.newsletters.find((item) => item.id === newsletterId);
+  if (!newsletter) {
+    notFound("Newsletter not found");
+  }
+
+  const settings = getSettings();
+  const [groupCounts, senders] = await Promise.all([
+    getMailzzyGroupCounts(),
+    getMailzzySenders(),
+  ]);
+
+  return {
+    groups: [
+      {
+        key: "registered",
+        label: "Registered",
+        mailzzyGroupId: settings.mailzzyGroupId,
+        memberCount: groupCounts[settings.mailzzyGroupId] ?? 0,
+      },
+      {
+        key: "prospect",
+        label: "Not Registered",
+        mailzzyGroupId: settings.mailzzyGroupIdProspect,
+        memberCount: groupCounts[settings.mailzzyGroupIdProspect] ?? 0,
+      },
+    ],
+    senders,
+    priorSendStatus: {
+      registered: { status: newsletter.registered_send_status, campaignId: newsletter.registered_campaign_id },
+      prospect: { status: newsletter.prospect_send_status, campaignId: newsletter.prospect_campaign_id },
+    },
+  };
+}
+
+export async function sendNewsletterToGroups(
+  newsletterId: number,
+  groups: AudienceGroupKey[],
+  senderEmail: string,
+): Promise<{
+  results: Record<AudienceGroupKey, { attempted: boolean; status: GroupSendStatus; campaignId: string | null; error?: string }>;
+}> {
+  if (groups.length === 0) {
+    badRequest("Select at least one audience group to send to.");
+  }
+
+  const claim = await claimNewsletterForSending(newsletterId);
+  if (!claim.claimed && claim.status !== "approved") {
+    badRequest(`Newsletter is already ${claim.status}.`);
+  }
+
+  const results: Record<AudienceGroupKey, { attempted: boolean; status: GroupSendStatus; campaignId: string | null; error?: string }> = {
+    registered: { attempted: false, status: null, campaignId: null },
+    prospect: { attempted: false, status: null, campaignId: null },
+  };
+
+  try {
+    const snapshot = await readDatabase();
+    const newsletter = snapshot.newsletters.find((item) => item.id === newsletterId);
+    if (!newsletter) {
+      notFound("Newsletter not found");
+    }
+
+    const draft = getLatestDraftForNewsletter(snapshot, newsletterId);
+    if (!draft || draft.status !== "approved") {
+      badRequest("No approved draft for this newsletter");
+    }
+    const approvedContent = draft.human_edits ?? (draft.ai_draft as Record<string, unknown>);
+    const sections = getSections(approvedContent);
+
+    let articles = snapshot.articles.filter((item) => item.newsletter_id === newsletterId);
+    if (articles.length === 0) {
+      await publishArticlesForNewsletter(newsletterId);
+      articles = (await readDatabase()).articles.filter((item) => item.newsletter_id === newsletterId);
+    }
+
+    const settings = getSettings();
+    const portalUrl = settings.clientPortalUrl;
+
+    for (const group of groups) {
+      const alreadySent =
+        group === "registered" ? newsletter.registered_send_status === "sent" : newsletter.prospect_send_status === "sent";
+      if (alreadySent) {
+        results[group] = {
+          attempted: false,
+          status: "sent",
+          campaignId: group === "registered" ? newsletter.registered_campaign_id : newsletter.prospect_campaign_id,
+        };
+        continue;
+      }
+
+      results[group].attempted = true;
+      await withDatabase((db) => {
+        const stored = db.newsletters.find((item) => item.id === newsletterId);
+        if (stored) {
+          stored[statusFieldFor(group)] = "pending";
+          stored.sender_email = senderEmail;
+        }
+      });
+
+      try {
+        const variantSections = applyCtaVariant(sections, group, portalUrl, settings.appPublicUrl);
+        const campaignId = await scheduleCampaign(newsletter, articles, variantSections, groupIdFor(group, settings));
+
+        await withDatabase((db) => {
+          const stored = db.newsletters.find((item) => item.id === newsletterId);
+          if (stored) {
+            stored[statusFieldFor(group)] = "sent";
+            stored[campaignFieldFor(group)] = campaignId;
+          }
+        });
+        results[group] = { attempted: true, status: "sent", campaignId };
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "unknown error";
+        await withDatabase((db) => {
+          const stored = db.newsletters.find((item) => item.id === newsletterId);
+          if (stored) {
+            stored[statusFieldFor(group)] = "failed";
+          }
+        });
+        await appendWorkflowLog({
+          scope: "delivery",
+          step: "newsletter.send_group",
+          status: "error",
+          message: `Send to ${group} group failed: ${message}`,
+          context: { newsletter_id: newsletterId, group },
+        });
+        results[group] = { attempted: true, status: "failed", campaignId: null, error: message };
+      }
+    }
+
+    const anySent = results.registered.status === "sent" || results.prospect.status === "sent";
+    const bothDone =
+      (results.registered.status === "sent" || results.registered.status === null) &&
+      (results.prospect.status === "sent" || results.prospect.status === null) &&
+      anySent;
+
+    await withDatabase((db) => {
+      const stored = db.newsletters.find((item) => item.id === newsletterId);
+      if (stored) {
+        stored.status = bothDone ? "scheduled" : "approved";
+        stored.updated_at = nowIso();
+      }
+    });
+
+    return { results };
+  } catch (error) {
+    await releaseNewsletterClaim(newsletterId, "approved");
+    throw error;
+  }
 }
 
 export async function claimNewsletterForSending(

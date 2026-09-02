@@ -1,6 +1,7 @@
 import type { Prisma } from "@prisma/client";
 
 import { prisma, ensureDatabaseReady, mapDatabaseRows } from "@/server/prisma";
+import { isRawDataLoaded } from "@/server/types";
 import type { DatabaseRecord } from "@/server/types";
 
 let writeQueue: Promise<unknown> = Promise.resolve();
@@ -45,23 +46,88 @@ async function runWithDbRetry<T>(op: () => Promise<T>, attempts = 2): Promise<T>
   throw lastError;
 }
 
+// drafts.raw_data can run 500-700KB per row once the table has real pipeline
+// history (52 rows / ~26MB total observed) - Prisma's query engine hangs
+// indefinitely (not just slowly, confirmed by letting it run 4+ minutes vs.
+// ~4 seconds for the same data over a raw driver, reproduced against both
+// the transaction pooler and the session pooler) when findMany() pulls many
+// rows with that field included. It is never needed for the bulk
+// read-everything/diff/write pattern this store uses - only a handful of
+// call sites need one or a few specific drafts' raw_data (AI draft
+// generation, comparing against historical issues), and they fetch it
+// on demand via getDraftsRawData() below. This scales however large the
+// drafts table gets, since the one large field is never part of the bulk
+// fetch, no matter how many rows exist.
+const DRAFT_BULK_SELECT = {
+  id: true,
+  newsletterId: true,
+  aiDraft: true,
+  humanEdits: true,
+  status: true,
+  reviewerEmail: true,
+  reviewedAt: true,
+  sourcesUsed: true,
+  sourcesWarning: true,
+  sourcesFailed: true,
+  createdAt: true,
+  updatedAt: true,
+  // rawData intentionally excluded - see comment above.
+} as const;
+
+interface FetchClient {
+  newsletter: { findMany: (args: { orderBy: { id: "asc" } }) => Promise<unknown[]> };
+  draft: {
+    findMany: (args: {
+      orderBy: { id: "asc" };
+      select: typeof DRAFT_BULK_SELECT;
+    }) => Promise<unknown[]>;
+  };
+  article: { findMany: (args: { orderBy: { id: "asc" } }) => Promise<unknown[]> };
+  approvalLog: { findMany: (args: { orderBy: { id: "asc" } }) => Promise<unknown[]> };
+}
+
+async function fetchAllTables(client: FetchClient) {
+  const [newsletters, drafts, articles, approvalLogs] = await Promise.all([
+    client.newsletter.findMany({ orderBy: { id: "asc" } }),
+    client.draft.findMany({ orderBy: { id: "asc" }, select: DRAFT_BULK_SELECT }),
+    client.article.findMany({ orderBy: { id: "asc" } }),
+    client.approvalLog.findMany({ orderBy: { id: "asc" } }),
+  ]);
+  return { newsletters, drafts, articles, approvalLogs } as Parameters<typeof mapDatabaseRows>[0];
+}
+
 export async function readDatabase(): Promise<DatabaseRecord> {
   await ensureDatabaseReady();
-  const [newsletters, drafts, articles, approvalLogs] = await runWithDbRetry(() =>
-    Promise.all([
-      prisma.newsletter.findMany({ orderBy: { id: "asc" } }),
-      prisma.draft.findMany({ orderBy: { id: "asc" } }),
-      prisma.article.findMany({ orderBy: { id: "asc" } }),
-      prisma.approvalLog.findMany({ orderBy: { id: "asc" } }),
-    ]),
-  );
+  const rows = await runWithDbRetry(() => fetchAllTables(prisma));
+  return mapDatabaseRows(rows);
+}
 
-  return mapDatabaseRows({
-    newsletters,
-    drafts,
-    articles,
-    approvalLogs,
-  });
+// Fetch raw_data for a small, specific set of drafts on demand. This is the
+// only place raw_data is ever read for more than one draft at a time - use
+// it instead of pulling raw_data through the bulk readDatabase()/
+// withDatabase() path (which never carries it - see DRAFT_BULK_SELECT above).
+export async function getDraftsRawData(
+  draftIds: number[],
+): Promise<Map<number, Record<string, unknown>>> {
+  if (draftIds.length === 0) {
+    return new Map();
+  }
+  await ensureDatabaseReady();
+  const rows = await runWithDbRetry(() =>
+    prisma.draft.findMany({
+      where: { id: { in: draftIds } },
+      select: { id: true, rawData: true },
+    }),
+  );
+  return new Map(
+    rows.map((row) => {
+      try {
+        return [row.id, JSON.parse(row.rawData) as Record<string, unknown>];
+      } catch {
+        return [row.id, {}];
+      }
+    }),
+  );
 }
 
 function mapById<T extends { id: number }>(rows: T[]): Map<number, T> {
@@ -143,12 +209,24 @@ async function persistDatabase(
   for (const draft of next.drafts) {
     const previousRow = previousDrafts.get(draft.id);
     if (!previousRow || rowsDiffer(previousRow, draft)) {
+      // raw_data is never part of the bulk-loaded snapshot (see
+      // DRAFT_BULK_SELECT in readDatabase/withDatabase above) - it carries
+      // the RAW_DATA_NOT_LOADED sentinel unless something explicitly
+      // hydrated it via getDraftsRawData(). Only include it in the write
+      // when it was genuinely hydrated/set, so an update triggered by some
+      // other field (status, human_edits, ...) can never overwrite a
+      // draft's real stored raw_data with this placeholder.
+      const rawDataLoaded = isRawDataLoaded(draft.raw_data);
       await tx.draft.upsert({
         where: { id: draft.id },
         create: {
           id: draft.id,
           newsletterId: draft.newsletter_id,
-          rawData: JSON.stringify(draft.raw_data ?? {}),
+          // NOT NULL column - a genuinely new draft must supply real data
+          // (it was just constructed in memory, never lazy-loaded), but
+          // fall back to {} rather than throw if that invariant is ever
+          // violated, since a new empty draft row is still valid.
+          rawData: JSON.stringify(rawDataLoaded ? draft.raw_data : {}),
           aiDraft: JSON.stringify(draft.ai_draft ?? {}),
           humanEdits: draft.human_edits ? JSON.stringify(draft.human_edits) : null,
           status: draft.status,
@@ -162,7 +240,7 @@ async function persistDatabase(
         },
         update: {
           newsletterId: draft.newsletter_id,
-          rawData: JSON.stringify(draft.raw_data ?? {}),
+          ...(rawDataLoaded ? { rawData: JSON.stringify(draft.raw_data) } : {}),
           aiDraft: JSON.stringify(draft.ai_draft ?? {}),
           humanEdits: draft.human_edits ? JSON.stringify(draft.human_edits) : null,
           status: draft.status,
@@ -247,19 +325,8 @@ export async function withDatabase<T>(
     result = await runWithDbRetry(() =>
       prisma.$transaction(
       async (tx) => {
-        const [newsletters, drafts, articles, approvalLogs] = await Promise.all([
-          tx.newsletter.findMany({ orderBy: { id: "asc" } }),
-          tx.draft.findMany({ orderBy: { id: "asc" } }),
-          tx.article.findMany({ orderBy: { id: "asc" } }),
-          tx.approvalLog.findMany({ orderBy: { id: "asc" } }),
-        ]);
-
-        const db = mapDatabaseRows({
-          newsletters,
-          drafts,
-          articles,
-          approvalLogs,
-        });
+        const rows = await fetchAllTables(tx);
+        const db = mapDatabaseRows(rows);
         const beforeUpdate = JSON.parse(JSON.stringify(db)) as DatabaseRecord;
 
         const updated = await updater(db);

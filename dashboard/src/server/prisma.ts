@@ -5,6 +5,7 @@ import { PrismaClient } from "@prisma/client";
 
 import { getSettings } from "@/server/env";
 import { resolveDashboardPath, resolveRepoPath } from "@/server/paths";
+import { RAW_DATA_NOT_LOADED } from "@/server/types";
 import type { DatabaseRecord, DraftSection } from "@/server/types";
 
 const DATA_DIR = resolveRepoPath("data");
@@ -173,7 +174,7 @@ export function mapDatabaseRows(rows: {
   drafts: Array<{
     id: number;
     newsletterId: number;
-    rawData: string;
+    rawData?: string;
     aiDraft: string;
     humanEdits: string | null;
     status: string;
@@ -224,7 +225,15 @@ export function mapDatabaseRows(rows: {
     drafts: rows.drafts.map((draft) => ({
       id: draft.id,
       newsletter_id: draft.newsletterId,
-      raw_data: parseJson<Record<string, unknown>>(draft.rawData, {}),
+      // draft.rawData is undefined whenever the caller's select excluded it
+      // (the normal bulk-load path - see store.ts) - in that case the row
+      // carries the RAW_DATA_NOT_LOADED sentinel rather than a real value,
+      // so it never gets mistaken for "this draft's raw data is genuinely
+      // empty" or accidentally written back over real stored data.
+      raw_data:
+        draft.rawData === undefined
+          ? RAW_DATA_NOT_LOADED
+          : parseJson<Record<string, unknown>>(draft.rawData, {}),
       ai_draft: parseJson<Record<string, unknown>>(draft.aiDraft, {}),
       human_edits: parseJson<{ sections?: DraftSection[] } | null>(draft.humanEdits, null),
       status: draft.status as DatabaseRecord["drafts"][number]["status"],

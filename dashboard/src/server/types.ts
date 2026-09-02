@@ -41,6 +41,23 @@ export interface NewsletterRecord {
   updated_at: string;
 }
 
+// Sentinel value for DraftRecord.raw_data when it was NOT loaded from the
+// database. drafts.raw_data can run 500-700KB per row once the table has
+// real pipeline history, and Prisma's query engine hangs (not just slows
+// down) when findMany() pulls many of those at once. So the bulk
+// readDatabase()/withDatabase() path never loads raw_data by default - it
+// carries this sentinel instead, and the handful of call sites that
+// genuinely need it (AI draft generation, comparing against historical
+// issues) hydrate specific drafts on demand via getDraftsRawData() in
+// store.ts. persistDatabase() in store.ts checks this sentinel before ever
+// writing raw_data back, so an un-hydrated draft can never have its real
+// stored data overwritten by this placeholder.
+export const RAW_DATA_NOT_LOADED: Record<string, unknown> = Object.freeze({ __unloaded: true });
+
+export function isRawDataLoaded(rawData: Record<string, unknown>): boolean {
+  return rawData !== RAW_DATA_NOT_LOADED && rawData.__unloaded !== true;
+}
+
 export interface DraftRecord {
   id: number;
   newsletter_id: number;
