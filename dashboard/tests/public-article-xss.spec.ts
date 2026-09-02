@@ -14,6 +14,11 @@ test("public article markup escapes a malicious title", async () => {
       issue_date: now,
       status: "sent",
       mailchimp_campaign_id: null,
+      registered_send_status: null,
+      registered_campaign_id: null,
+      prospect_send_status: null,
+      prospect_campaign_id: null,
+      sender_email: null,
       created_at: now,
       updated_at: now,
     });

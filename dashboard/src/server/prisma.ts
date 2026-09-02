@@ -162,6 +162,11 @@ export function mapDatabaseRows(rows: {
     issueDate: string;
     status: string;
     mailchimpCampaignId: string | null;
+    registeredSendStatus: string | null;
+    registeredCampaignId: string | null;
+    prospectSendStatus: string | null;
+    prospectCampaignId: string | null;
+    senderEmail: string | null;
     createdAt: string;
     updatedAt: string;
   }>;
@@ -208,6 +213,11 @@ export function mapDatabaseRows(rows: {
       issue_date: newsletter.issueDate,
       status: newsletter.status as DatabaseRecord["newsletters"][number]["status"],
       mailchimp_campaign_id: newsletter.mailchimpCampaignId,
+      registered_send_status: newsletter.registeredSendStatus as DatabaseRecord["newsletters"][number]["registered_send_status"],
+      registered_campaign_id: newsletter.registeredCampaignId,
+      prospect_send_status: newsletter.prospectSendStatus as DatabaseRecord["newsletters"][number]["prospect_send_status"],
+      prospect_campaign_id: newsletter.prospectCampaignId,
+      sender_email: newsletter.senderEmail,
       created_at: newsletter.createdAt,
       updated_at: newsletter.updatedAt,
     })),

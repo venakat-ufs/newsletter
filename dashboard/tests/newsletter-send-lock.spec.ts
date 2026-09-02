@@ -13,6 +13,11 @@ test("claimNewsletterForSending only lets one concurrent caller win", async () =
       issue_date: now,
       status: "approved",
       mailchimp_campaign_id: null,
+      registered_send_status: null,
+      registered_campaign_id: null,
+      prospect_send_status: null,
+      prospect_campaign_id: null,
+      sender_email: null,
       created_at: now,
       updated_at: now,
     });

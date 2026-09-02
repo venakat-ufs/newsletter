@@ -1520,6 +1520,11 @@ export async function runPipeline(force = false): Promise<Record<string, unknown
         issue_date: currentIso,
         status: "draft",
         mailchimp_campaign_id: null,
+        registered_send_status: null,
+        registered_campaign_id: null,
+        prospect_send_status: null,
+        prospect_campaign_id: null,
+        sender_email: null,
         created_at: currentIso,
         updated_at: currentIso,
       };
@@ -2048,6 +2053,11 @@ export async function listNewsletters(): Promise<NewsletterRecord[]> {
     issue_date: n.issueDate,
     status: n.status as NewsletterRecord["status"],
     mailchimp_campaign_id: n.mailchimpCampaignId ?? null,
+    registered_send_status: n.registeredSendStatus as NewsletterRecord["registered_send_status"],
+    registered_campaign_id: n.registeredCampaignId ?? null,
+    prospect_send_status: n.prospectSendStatus as NewsletterRecord["prospect_send_status"],
+    prospect_campaign_id: n.prospectCampaignId ?? null,
+    sender_email: n.senderEmail ?? null,
     created_at: n.createdAt,
     updated_at: n.updatedAt,
   }));

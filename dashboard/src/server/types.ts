@@ -23,12 +23,20 @@ export interface DraftSection {
   metadata?: Record<string, unknown>;
 }
 
+export type AudienceGroupKey = "registered" | "prospect";
+export type GroupSendStatus = "pending" | "sent" | "failed" | null;
+
 export interface NewsletterRecord {
   id: number;
   issue_number: number;
   issue_date: string;
   status: NewsletterStatus;
   mailchimp_campaign_id: string | null;
+  registered_send_status: GroupSendStatus;
+  registered_campaign_id: string | null;
+  prospect_send_status: GroupSendStatus;
+  prospect_campaign_id: string | null;
+  sender_email: string | null;
   created_at: string;
   updated_at: string;
 }

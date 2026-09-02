@@ -145,3 +145,10 @@ BEGIN
       NOT VALID;
   END IF;
 END $$;
+
+-- Per-group send status for the post-approve send popup (2026-09-02)
+ALTER TABLE "newsletters" ADD COLUMN IF NOT EXISTS "registered_send_status" TEXT;
+ALTER TABLE "newsletters" ADD COLUMN IF NOT EXISTS "registered_campaign_id" TEXT;
+ALTER TABLE "newsletters" ADD COLUMN IF NOT EXISTS "prospect_send_status" TEXT;
+ALTER TABLE "newsletters" ADD COLUMN IF NOT EXISTS "prospect_campaign_id" TEXT;
+ALTER TABLE "newsletters" ADD COLUMN IF NOT EXISTS "sender_email" TEXT;

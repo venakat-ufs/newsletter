@@ -9,13 +9,18 @@ datasource db {
 }
 
 model Newsletter {
-  id                  Int    @id
-  issueNumber         Int    @map("issue_number")
-  issueDate           String @map("issue_date")
-  status              String
-  mailchimpCampaignId String? @map("mailchimp_campaign_id")
-  createdAt           String @map("created_at")
-  updatedAt           String @map("updated_at")
+  id                    Int     @id
+  issueNumber           Int     @map("issue_number")
+  issueDate             String  @map("issue_date")
+  status                String
+  mailchimpCampaignId   String? @map("mailchimp_campaign_id")
+  registeredSendStatus  String? @map("registered_send_status")
+  registeredCampaignId  String? @map("registered_campaign_id")
+  prospectSendStatus    String? @map("prospect_send_status")
+  prospectCampaignId    String? @map("prospect_campaign_id")
+  senderEmail           String? @map("sender_email")
+  createdAt             String  @map("created_at")
+  updatedAt             String  @map("updated_at")
 
   @@index([issueDate])
   @@index([status])
