@@ -1,7 +1,7 @@
 # Mailzzy API Reference
 
 > Saved from https://mailzzy.com/docs/ and https://mailzzy.stoplight.io/docs/mailzzy/branches/main/9i9g54aalgc95-obtain-api-access on 2026-09-02.
-> This is a reference document only — nothing in this file was executed against the live Mailzzy account.
+> Sections 1-4 are the published docs, saved as reference. Section 5 records real state confirmed live against the account (group creation, sender check) once an MCP-connected session was available — see the correction note in Section 4 for where the docs and live behavior diverged.
 
 ## Credentials
 
@@ -117,7 +117,7 @@ Body: `{ "searchText": "test" }` (optional) → response:
 ]
 ```
 
-**Note:** These are the only documented REST group/contact endpoints — there is **no documented REST endpoint for bulk contact import** or for creating a group. That matches what's in session memory from the earlier migration attempt: bulk import and group creation both had to go through MCP, and both were reported failing with `internal_error` at the time.
+**Note:** These are the only documented REST group/contact endpoints — there is **no REST endpoint for bulk contact import or for creating a group.** Group creation **is** possible, just not via REST — see the corrected MCP tool list below (`mcp_crm_groups_create`), confirmed working live on 2026-09-02. Bulk contact import still has no confirmed working path as of this writing.
 
 ---
 
@@ -169,9 +169,9 @@ Rate limit: **100 requests/minute**, 100ms processing timeout per request.
 - Service/internal agents: **bearer token** (the same JWT from the REST auth step above).
 - "Tools never accept an account ID" — the account is bound to the token.
 
-**Full tool list** (domain.verb naming):
+**Tool list per the docs site** (domain.verb naming — kept for reference, but see the correction below):
 
-| Domain | Tools |
+| Domain | Tools (as documented) |
 |---|---|
 | Contacts | `contacts.list`, `contacts.get`, `contacts.create`, `contacts.update`, `contacts.delete.preview`, `contacts.delete.commit` |
 | Groups | `groups.list`, `groups.count`, `groups.add_contact` |
@@ -185,15 +185,30 @@ Rate limit: **100 requests/minute**, 100ms processing timeout per request.
 
 Destructive actions follow a **preview → commit** pattern (e.g. `campaigns.send.preview` then `campaigns.send.commit`, `contacts.delete.preview` then `contacts.delete.commit`) so nothing irreversible fires without a separate confirming call.
 
-The docs don't publish the exact JSON-RPC parameter schema per tool — only the tool names and categories above. The session-based connection mechanics (JSON-RPC `initialize`, `Mcp-Session-Id` response header, `tools/call` method) match what's already implemented in `dashboard/src/server/mailchimp.ts`'s `initMcpSession()` / `mcpToolCall()`.
+The docs don't publish the exact JSON-RPC parameter schema per tool — only the tool names and categories above.
 
-### ⚠️ Naming mismatch worth knowing about
+### ✅ Correction (2026-09-02): real live tool names use `mcp_crm_<domain>_<verb>`, not `domain.verb`
 
-The **uncommitted local code** in `dashboard/src/server/mailchimp.ts` calls the tool name `mcp_crm_campaigns_send` (and `mcp_crm_campaigns_get`) — but the current published docs list the tool as **`campaigns.send.commit`** (and `campaigns.get`), using dot-separated `domain.verb` naming, not the `mcp_crm_*` prefix style. If that local code is ever run against the live MCP server as documented today, the tool name is very likely wrong and the call would fail. This wasn't fixed — just flagging it here since it directly affects whether that in-progress Mailzzy migration would actually work.
+An earlier version of this doc flagged a naming mismatch and claimed the uncommitted `mailchimp.ts` code's tool names (`mcp_crm_campaigns_send`, `mcp_crm_campaigns_get`) were wrong compared to what the docs site publishes (`campaigns.send.commit`, `campaigns.get`). **That flag was backwards.** With a live, authenticated MCP connection, `mcp_crm_groups_create` was called directly and worked (see Section 6 below — it created two real groups). So the actual live tool naming convention is `mcp_crm_<domain>_<verb>` — matching what's already in `mailchimp.ts` — and the docs site's `domain.verb` notation is either stale, aspirational, or describes an internal/different naming layer than what's actually exposed over MCP. Treat the `mcp_crm_*` prefix style as the one to code against; re-verify each specific tool name against a live `tools/list` call before relying on it, rather than trusting the docs site's naming for anything not yet tested live.
 
 ---
 
-## 5. Connecting this session to the Mailzzy MCP server
+## 5. Live account state (confirmed 2026-09-02, via a session with an active MCP connection)
+
+**Groups** — created via `mcp_crm_groups_create` for the send-popup design (see the 2026-09-02 brainstorming session):
+
+| Purpose | Group ID | Stored name |
+|---|---|---|
+| Registered audience | `1085` | `registered` (Mailzzy lowercases names on save) |
+| Not-registered audience | `1086` | `not registered` |
+
+Both groups are currently **empty** — no contacts imported yet. That's a separate step from group creation.
+
+**Senders** — `mcp_crm_senders_list` (or equivalent) shows exactly **one** sender configured: `venakat@unitedffs.com` ("venakat D"). Its `domainVerified` flag is **`false`**. This needs to be fixed in the Mailzzy dashboard before any real campaign send — an unverified sending domain risks landing in spam or being rejected outright by receiving mail servers, independent of anything the application code does.
+
+---
+
+## 6. Connecting this session to the Mailzzy MCP server
 
 I did **not** connect this session to it, for a concrete reason: the documented auth for AI-assistant clients is **OAuth 2.1 + PKCE**, which requires an interactive browser sign-in — and this session is running non-interactively, so I can't complete that login flow myself (same restriction that applies to the other pending connectors like Supabase/Vercel in this environment).
 
