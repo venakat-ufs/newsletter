@@ -338,6 +338,47 @@ export async function scheduleNewsletter(newsletterId: number): Promise<{
   });
 }
 
+export interface SendOptionsGroup {
+  key: "registered" | "prospect";
+  label: string;
+  mailzzyGroupId: string;
+  memberCount: number;
+}
+
+export interface SendOptionsSender {
+  email: string;
+  displayName: string;
+  domainVerified: boolean;
+}
+
+export interface SendOptions {
+  groups: SendOptionsGroup[];
+  senders: SendOptionsSender[];
+  priorSendStatus: Record<"registered" | "prospect", { status: string | null; campaignId: string | null }>;
+}
+
+export async function getSendOptions(newsletterId: number): Promise<SendOptions> {
+  return fetchApi(`/api/newsletter/send-options/${newsletterId}`);
+}
+
+export interface SendResult {
+  results: Record<
+    "registered" | "prospect",
+    { attempted: boolean; status: string | null; campaignId: string | null; error?: string }
+  >;
+}
+
+export async function sendNewsletterToGroups(
+  newsletterId: number,
+  groups: Array<"registered" | "prospect">,
+  senderEmail: string,
+): Promise<SendResult> {
+  return fetchApi(`/api/newsletter/send/${newsletterId}`, {
+    method: "POST",
+    body: JSON.stringify({ groups, senderEmail }),
+  });
+}
+
 export async function listNewsletters(): Promise<Newsletter[]> {
   return fetchApi<Newsletter[]>(`/api/newsletter/`);
 }
