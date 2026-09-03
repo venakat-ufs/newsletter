@@ -153,6 +153,35 @@ export function buildHtmlContent(
   return buildNewsletterHtml(newsletter, contentBlocks);
 }
 
+const MAX_SUBJECT_LENGTH = 100;
+
+function buildCampaignSubject(
+  newsletter: NewsletterRecord,
+  articles: ArticleRecord[],
+  sections?: DraftSection[],
+): string {
+  const lead = (sections && sections.length > 0 ? sections[0] : articles[0]) as
+    | { title?: string; teaser?: string }
+    | undefined;
+
+  const headline = lead?.title?.trim();
+  if (!headline) {
+    return `UFS Newsletter - Issue #${newsletter.issue_number}`;
+  }
+
+  const subject = `${headline} — UFS Weekly Issue #${newsletter.issue_number}`;
+  if (subject.length <= MAX_SUBJECT_LENGTH) {
+    return subject;
+  }
+
+  // Keep the headline intact (that's the catchy, meaningful part) and drop
+  // the issue tag first; only truncate the headline itself as a last resort.
+  if (headline.length <= MAX_SUBJECT_LENGTH) {
+    return headline;
+  }
+  return `${headline.slice(0, MAX_SUBJECT_LENGTH - 1).trimEnd()}…`;
+}
+
 export async function scheduleCampaign(
   newsletter: NewsletterRecord,
   articles: ArticleRecord[],
@@ -179,7 +208,7 @@ export async function scheduleCampaign(
   const sessionId = await initMcpSession(token);
 
   const html = buildHtmlContent(newsletter, articles, sections);
-  const subject = `UFS Newsletter - Issue #${newsletter.issue_number}`;
+  const subject = buildCampaignSubject(newsletter, articles, sections);
   const campaignName = `UFS Newsletter #${newsletter.issue_number}`;
 
   const result = await mcpToolCall(token, sessionId, "mcp_crm_campaigns_send", {

@@ -44,14 +44,16 @@ test("republishing keeps the same article URL for an unchanged section", async (
     return newsletterIdInner;
   });
 
-  const first = await publishArticlesForNewsletter(newsletterId);
-  const second = await publishArticlesForNewsletter(newsletterId);
+  try {
+    const first = await publishArticlesForNewsletter(newsletterId);
+    const second = await publishArticlesForNewsletter(newsletterId);
 
-  expect(first.article_urls).toEqual(second.article_urls);
-
-  await withDatabase((db) => {
-    db.articles = db.articles.filter((item) => item.newsletter_id !== newsletterId);
-    db.drafts = db.drafts.filter((item) => item.newsletter_id !== newsletterId);
-    db.newsletters = db.newsletters.filter((item) => item.id !== newsletterId);
-  });
+    expect(first.article_urls).toEqual(second.article_urls);
+  } finally {
+    await withDatabase((db) => {
+      db.articles = db.articles.filter((item) => item.newsletter_id !== newsletterId);
+      db.drafts = db.drafts.filter((item) => item.newsletter_id !== newsletterId);
+      db.newsletters = db.newsletters.filter((item) => item.id !== newsletterId);
+    });
+  }
 });

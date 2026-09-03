@@ -39,12 +39,14 @@ test("public article markup escapes a malicious title", async () => {
     return id;
   });
 
-  const html = await getPublicArticleMarkup(articleId);
-  expect(html).not.toContain("<script>window.__pwned");
-  expect(html).toContain("&lt;script&gt;");
-
-  await withDatabase((db) => {
-    db.articles = db.articles.filter((item) => item.id !== articleId);
-    db.newsletters = db.newsletters.filter((item) => item.id !== newsletterId);
-  });
+  try {
+    const html = await getPublicArticleMarkup(articleId);
+    expect(html).not.toContain("<script>window.__pwned");
+    expect(html).toContain("&lt;script&gt;");
+  } finally {
+    await withDatabase((db) => {
+      db.articles = db.articles.filter((item) => item.id !== articleId);
+      db.newsletters = db.newsletters.filter((item) => item.id !== newsletterId);
+    });
+  }
 });

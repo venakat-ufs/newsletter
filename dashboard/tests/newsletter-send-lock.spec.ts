@@ -24,19 +24,21 @@ test("claimNewsletterForSending only lets one concurrent caller win", async () =
     return id;
   });
 
-  const [first, second] = await Promise.all([
-    claimNewsletterForSending(newsletterId),
-    claimNewsletterForSending(newsletterId),
-  ]);
+  try {
+    const [first, second] = await Promise.all([
+      claimNewsletterForSending(newsletterId),
+      claimNewsletterForSending(newsletterId),
+    ]);
 
-  const claimedCount = [first, second].filter((result) => result.claimed).length;
-  expect(claimedCount).toBe(1);
+    const claimedCount = [first, second].filter((result) => result.claimed).length;
+    expect(claimedCount).toBe(1);
 
-  await releaseNewsletterClaim(newsletterId, "approved");
-  const afterRelease = await claimNewsletterForSending(newsletterId);
-  expect(afterRelease.claimed).toBe(true);
-
-  await withDatabase((db) => {
-    db.newsletters = db.newsletters.filter((item) => item.id !== newsletterId);
-  });
+    await releaseNewsletterClaim(newsletterId, "approved");
+    const afterRelease = await claimNewsletterForSending(newsletterId);
+    expect(afterRelease.claimed).toBe(true);
+  } finally {
+    await withDatabase((db) => {
+      db.newsletters = db.newsletters.filter((item) => item.id !== newsletterId);
+    });
+  }
 });

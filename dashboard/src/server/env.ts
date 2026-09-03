@@ -18,12 +18,12 @@ export interface Settings {
   homestepsConcurrency: number;
   homepathEnabled: boolean;
   homepathCookie: string;
-  mailchimpApiKey: string;
-  mailchimpServerPrefix: string;
-  mailchimpListId: string;
-  mailchimpListIdProspect: string;
-  mailchimpTemplateId: string;
-  mailchimpOnHold: boolean;
+  mailzzyClientId: string;
+  mailzzyClientSecret: string;
+  mailzzyGroupId: string;
+  mailzzyGroupIdProspect: string;
+  mailzzySenderEmail: string;
+  mailzzyOnHold: boolean;
   smtpHost: string;
   smtpPort: number;
   smtpUser: string;
@@ -143,12 +143,12 @@ export function getSettings(): Settings {
     homestepsConcurrency: Math.max(1, toNumber(env.HOMESTEPS_CONCURRENCY, 6)),
     homepathEnabled: toBoolean(env.HOMEPATH_ENABLED, false),
     homepathCookie: env.HOMEPATH_COOKIE ?? "",
-    mailchimpApiKey: env.MAILCHIMP_API_KEY ?? "",
-    mailchimpServerPrefix: env.MAILCHIMP_SERVER_PREFIX ?? "",
-    mailchimpListId: env.MAILCHIMP_LIST_ID ?? "",
-    mailchimpListIdProspect: env.MAILCHIMP_LIST_ID_PROSPECT ?? "",
-    mailchimpTemplateId: env.MAILCHIMP_TEMPLATE_ID ?? "",
-    mailchimpOnHold: toBoolean(env.MAILCHIMP_ON_HOLD, true),
+    mailzzyClientId: env.MAILZZY_CLIENT_ID ?? "",
+    mailzzyClientSecret: env.MAILZZY_CLIENT_SECRET ?? "",
+    mailzzyGroupId: env.MAILZZY_GROUP_ID ?? "",
+    mailzzyGroupIdProspect: env.MAILZZY_GROUP_ID_PROSPECT ?? "",
+    mailzzySenderEmail: env.MAILZZY_SENDER_EMAIL ?? "venakat@unitedffs.com",
+    mailzzyOnHold: toBoolean(env.MAILZZY_ON_HOLD, false),
     smtpHost: env.SMTP_HOST ?? "",
     smtpPort: toNumber(env.SMTP_PORT, 587),
     smtpUser: env.SMTP_USER ?? "",

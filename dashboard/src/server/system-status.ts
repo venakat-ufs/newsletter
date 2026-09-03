@@ -352,25 +352,22 @@ export async function getSystemStatus(): Promise<{
       },
       {
         key: "mailchimp",
-        label: "Mailchimp send",
-        state: settings.mailchimpOnHold
+        label: "Mailzzy send",
+        state: settings.mailzzyOnHold
           ? "warning"
-          :
-          settings.mailchimpApiKey && settings.mailchimpServerPrefix && settings.mailchimpListId
+          : settings.mailzzyClientId && settings.mailzzyClientSecret && settings.mailzzyGroupId
             ? "ready"
             : "blocked",
-        summary: settings.mailchimpOnHold
-          ? "Mailchimp delivery is intentionally on hold. Approval sends a reviewer preview copy instead."
-          :
-          settings.mailchimpApiKey && settings.mailchimpServerPrefix && settings.mailchimpListId
+        summary: settings.mailzzyOnHold
+          ? "Mailzzy delivery is intentionally on hold. Approval sends a reviewer preview copy instead."
+          : settings.mailzzyClientId && settings.mailzzyClientSecret && settings.mailzzyGroupId
             ? "Audience delivery is configured."
-            : "Mailchimp is incomplete. Approval can still send a preview copy, but live audience delivery needs API key, server prefix, and list id.",
-        action: settings.mailchimpOnHold
-          ? "Keep reviewing with preview emails, or set MAILCHIMP_ON_HOLD=false when you are ready for live scheduling."
-          :
-          settings.mailchimpApiKey && settings.mailchimpServerPrefix && settings.mailchimpListId
+            : "Mailzzy is incomplete. Approval can still send a preview copy, but live delivery needs client ID, client secret, and group ID.",
+        action: settings.mailzzyOnHold
+          ? "Keep reviewing with preview emails, or set MAILZZY_ON_HOLD=false when you are ready for live scheduling."
+          : settings.mailzzyClientId && settings.mailzzyClientSecret && settings.mailzzyGroupId
             ? "Approve and send when the issue is ready."
-            : "Fill MAILCHIMP_API_KEY, MAILCHIMP_SERVER_PREFIX, and MAILCHIMP_LIST_ID for live audience sends.",
+            : "Fill MAILZZY_CLIENT_ID, MAILZZY_CLIENT_SECRET, and MAILZZY_GROUP_ID for live audience sends.",
       },
     ] satisfies IntegrationStatus[];
 

@@ -40,25 +40,30 @@ test("sending only the registered group leaves prospect untouched", async () => 
     return id;
   });
 
-  // The real .env has MAILZZY_ON_HOLD=false with live credentials configured,
-  // so this test MUST be run with MAILZZY_ON_HOLD=true set in the shell
-  // environment (dotenv-cli does not override already-set vars) to force
-  // getMailchimpBlockReason() to short-circuit before any real send call —
-  // otherwise this would attempt a real campaign send. See the exact
-  // command in the test-running instructions for this file.
-  // This test only asserts prospect stays untouched; it does not assert
-  // registered actually reached "sent".
-  await sendNewsletterToGroups(newsletterId, ["registered"], "venakat@unitedffs.com").catch(() => {
-    // A failed/blocked send is an acceptable outcome for this assertion.
-  });
+  try {
+    // The real .env has MAILZZY_ON_HOLD=false with live credentials configured,
+    // so this test MUST be run with MAILZZY_ON_HOLD=true set in the shell
+    // environment (dotenv-cli does not override already-set vars) to force
+    // getMailchimpBlockReason() to short-circuit before any real send call —
+    // otherwise this would attempt a real campaign send. See the exact
+    // command in the test-running instructions for this file.
+    // This test only asserts prospect stays untouched; it does not assert
+    // registered actually reached "sent".
+    await sendNewsletterToGroups(newsletterId, ["registered"], "venakat@unitedffs.com").catch(() => {
+      // A failed/blocked send is an acceptable outcome for this assertion.
+    });
 
-  const after = await withDatabase((db) => db.newsletters.find((item) => item.id === newsletterId));
-  expect(after?.prospect_send_status).toBeNull();
-
-  await withDatabase((db) => {
-    db.newsletters = db.newsletters.filter((item) => item.id !== newsletterId);
-    db.drafts = db.drafts.filter((item) => item.newsletter_id !== newsletterId);
-  });
+    const after = await withDatabase((db) => db.newsletters.find((item) => item.id === newsletterId));
+    expect(after?.prospect_send_status).toBeNull();
+  } finally {
+    // Runs even if an assertion above throws — a fixture left behind by a
+    // failed run has previously polluted real newsletter data (issue_number
+    // collisions cascading into the real pipeline's next-issue calculation).
+    await withDatabase((db) => {
+      db.newsletters = db.newsletters.filter((item) => item.id !== newsletterId);
+      db.drafts = db.drafts.filter((item) => item.newsletter_id !== newsletterId);
+    });
+  }
 });
 
 test("a group already marked sent is not re-attempted on a second call", async () => {
@@ -98,12 +103,14 @@ test("a group already marked sent is not re-attempted on a second call", async (
     return id;
   });
 
-  const { results } = await sendNewsletterToGroups(newsletterId, ["registered"], "venakat@unitedffs.com");
-  expect(results.registered.attempted).toBe(false);
-  expect(results.registered.campaignId).toBe("existing-campaign-123");
-
-  await withDatabase((db) => {
-    db.newsletters = db.newsletters.filter((item) => item.id !== newsletterId);
-    db.drafts = db.drafts.filter((item) => item.newsletter_id !== newsletterId);
-  });
+  try {
+    const { results } = await sendNewsletterToGroups(newsletterId, ["registered"], "venakat@unitedffs.com");
+    expect(results.registered.attempted).toBe(false);
+    expect(results.registered.campaignId).toBe("existing-campaign-123");
+  } finally {
+    await withDatabase((db) => {
+      db.newsletters = db.newsletters.filter((item) => item.id !== newsletterId);
+      db.drafts = db.drafts.filter((item) => item.newsletter_id !== newsletterId);
+    });
+  }
 });
