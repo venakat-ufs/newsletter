@@ -1810,15 +1810,14 @@ export async function generateDraftForNewsletter(
       (draft.raw_data.sections as RawSectionSnapshot | undefined) ?? {};
     const previousSources = await previousRawSourcesForNewsletter(snapshot, newsletterId);
     const historicalSources = await historicalRawSourcesForNewsletter(snapshot, newsletterId, 6);
-    // Newsletter buttons must route through the client portal's SSO entry
-    // routes (/go/*), never directly to the insights portal. The portal checks
-    // the client's login, then silently signs them into insights.
+    // Newsletter buttons for registered clients go straight to the client
+    // portal's sign-in page. The /go/* SSO entry routes are not live.
     const portalUrl = getSettings().clientPortalUrl.replace(/\/$/, "");
     const insightsUrls = {
-      listings: `${portalUrl}/go/insights`,
-      pulse: `${portalUrl}/go/pulse`,
-      news: `${portalUrl}/go/news`,
-      hiring: `${portalUrl}/go/insights`,
+      listings: `${portalUrl}/sign-in`,
+      pulse: `${portalUrl}/sign-in`,
+      news: `${portalUrl}/sign-in`,
+      hiring: `${portalUrl}/sign-in`,
     };
 
     // Live Lead Pipeline state-level activity — same data the insights hub
