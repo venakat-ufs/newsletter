@@ -2266,7 +2266,7 @@ export async function sendNewsletterToGroups(
 
       try {
         const variantSections = applyCtaVariant(sections, group, portalUrl, settings.appPublicUrl);
-        const campaignId = await scheduleCampaign(newsletter, articles, variantSections, groupIdFor(group, settings));
+        const campaignId = await scheduleCampaign(newsletter, articles, variantSections, groupIdFor(group, settings), senderEmail);
 
         await withDatabase((db) => {
           const stored = db.newsletters.find((item) => item.id === newsletterId);

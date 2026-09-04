@@ -187,6 +187,7 @@ export async function scheduleCampaign(
   articles: ArticleRecord[],
   sections?: DraftSection[],
   groupId?: string,
+  senderEmail?: string,
 ): Promise<string> {
   const settings = getSettings();
   const targetGroupId = groupId ?? settings.mailzzyGroupId;
@@ -217,7 +218,7 @@ export async function scheduleCampaign(
       subject,
       content: html,
       displayName: "United Field Services",
-      senderEmail: settings.mailzzySenderEmail || "venakat@unitedffs.com",
+      senderEmail: senderEmail || settings.mailzzySenderEmail || "venakat@unitedffs.com",
       replyToEmail: "newsletter@unitedffs.com",
     },
     campaignSegments: {
