@@ -4,8 +4,8 @@ import { claimNewsletterForSending, releaseNewsletterClaim } from "@/server/work
 import { withDatabase, nextId } from "@/server/store";
 
 test("claimNewsletterForSending only lets one concurrent caller win", async () => {
-  const newsletterId = await withDatabase((db) => {
-    const id = nextId(db.newsletters);
+  const newsletterId = await withDatabase(async (db) => {
+    const id = await nextId("newsletters");
     const now = new Date().toISOString();
     db.newsletters.push({
       id,

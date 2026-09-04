@@ -4,9 +4,9 @@ import { publishArticlesForNewsletter } from "@/server/workflow";
 import { withDatabase, nextId } from "@/server/store";
 
 test("republishing keeps the same article URL for an unchanged section", async () => {
-  const newsletterId = await withDatabase((db) => {
-    const draftId = nextId(db.drafts);
-    const newsletterIdInner = nextId(db.newsletters);
+  const newsletterId = await withDatabase(async (db) => {
+    const draftId = await nextId("drafts");
+    const newsletterIdInner = await nextId("newsletters");
     const now = new Date().toISOString();
     db.newsletters.push({
       id: newsletterIdInner,

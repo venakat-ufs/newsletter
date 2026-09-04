@@ -1484,7 +1484,7 @@ export async function runPipeline(force = false): Promise<Record<string, unknown
       },
     });
 
-    const result = await withDatabase((db) => {
+    const result = await withDatabase(async (db) => {
       const lastNewsletter = [...db.newsletters].sort(
         (left, right) => right.issue_number - left.issue_number,
       )[0];
@@ -1539,7 +1539,7 @@ export async function runPipeline(force = false): Promise<Record<string, unknown
 
       const nextIssueNumber = lastNewsletter ? lastNewsletter.issue_number + 1 : 1;
       const newsletter: NewsletterRecord = {
-        id: nextId(db.newsletters),
+        id: await nextId("newsletters"),
         issue_number: nextIssueNumber,
         issue_date: currentIso,
         status: "draft",
@@ -1555,7 +1555,7 @@ export async function runPipeline(force = false): Promise<Record<string, unknown
       db.newsletters.push(newsletter);
 
       const draft: DraftRecord = {
-        id: nextId(db.drafts),
+        id: await nextId("drafts"),
         newsletter_id: newsletter.id,
         raw_data: { sources: rawData, sections: sectionData },
         ai_draft: {},
@@ -1704,7 +1704,7 @@ export async function updateDraft(
     badRequest("Invalid draft status");
   }
 
-  const result = await withDatabase((db) => {
+  const result = await withDatabase(async (db) => {
     const draft = db.drafts.find((item) => item.id === draftId);
     if (!draft) {
       notFound("Draft not found");
@@ -1742,7 +1742,7 @@ export async function updateDraft(
       const action = actionMap[update.status];
       if (action) {
         const log: ApprovalLogRecord = {
-          id: nextId(db.approval_logs),
+          id: await nextId("approval_logs"),
           draft_id: draft.id,
           action,
           reviewer: update.reviewer_email || "unknown",
@@ -1913,7 +1913,7 @@ export async function publishArticlesForNewsletter(
   });
 
   try {
-    const result = await withDatabase((db) => {
+    const result = await withDatabase(async (db) => {
       const draft = getLatestDraftForNewsletter(db, newsletterId);
       if (!draft || draft.status !== "approved") {
         badRequest("No approved draft for this newsletter");
@@ -1940,7 +1940,8 @@ export async function publishArticlesForNewsletter(
       );
 
       const publishedAt = nowIso();
-      const articles: ArticleRecord[] = sections.map((section) => {
+      const articles: ArticleRecord[] = [];
+      for (const section of sections) {
         const existing = existingBySectionType.get(section.section_type);
         if (existing) {
           existing.title = section.title;
@@ -1948,10 +1949,11 @@ export async function publishArticlesForNewsletter(
           existing.body = section.body;
           existing.audience_tag = section.audience_tag ?? "REO";
           existing.publish_date = publishedAt;
-          return existing;
+          articles.push(existing);
+          continue;
         }
 
-        const id = nextId(db.articles);
+        const id = await nextId("articles");
         const article: ArticleRecord = {
           id,
           newsletter_id: newsletterId,
@@ -1965,8 +1967,8 @@ export async function publishArticlesForNewsletter(
           created_at: publishedAt,
         };
         db.articles.push(article);
-        return article;
-      });
+        articles.push(article);
+      }
 
       return {
         published: articles.length,

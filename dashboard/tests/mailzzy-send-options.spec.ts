@@ -11,7 +11,7 @@ test("getMailzzyGroupCounts returns counts for the Registered and Not Registered
 test("getMailzzySenders returns at least the one known configured sender", async () => {
   const senders = await getMailzzySenders();
   expect(Array.isArray(senders)).toBe(true);
-  const known = senders.find((sender) => sender.email === "venakat@unitedffs.com");
+  const known = senders.find((sender) => sender.email === "insights@ufsmedia.com");
   expect(known).toBeDefined();
-  expect(known?.domainVerified).toBe(false);
+  expect(known?.domainVerified).toBe(true);
 });

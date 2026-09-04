@@ -346,6 +346,18 @@ export async function withDatabase<T>(
   return result as T;
 }
 
-export function nextId(values: Array<{ id: number }>): number {
-  return values.reduce((maxId, value) => Math.max(maxId, value.id), 0) + 1;
+const ID_SEQUENCE_NAMES = {
+  newsletters: "newsletters_id_seq",
+  drafts: "drafts_id_seq",
+  articles: "articles_id_seq",
+  approval_logs: "approval_logs_id_seq",
+} as const;
+
+// Ids for these tables come from a real Postgres sequence (nextval is
+// atomic and collision-free under concurrent callers), not from scanning
+// an in-memory snapshot for max(id)+1 - the latter lets two concurrent
+// writers compute the same "next" id. See migration 20260904000000.
+export async function nextId(table: keyof typeof ID_SEQUENCE_NAMES): Promise<number> {
+  const rows = await prisma.$queryRaw<Array<{ nextval: bigint }>>`SELECT nextval(${ID_SEQUENCE_NAMES[table]})`;
+  return Number(rows[0].nextval);
 }

@@ -4,9 +4,9 @@ import { sendNewsletterToGroups } from "@/server/workflow";
 import { withDatabase, nextId } from "@/server/store";
 
 test("sending only the registered group leaves prospect untouched", async () => {
-  const newsletterId = await withDatabase((db) => {
-    const draftId = nextId(db.drafts);
-    const id = nextId(db.newsletters);
+  const newsletterId = await withDatabase(async (db) => {
+    const draftId = await nextId("drafts");
+    const id = await nextId("newsletters");
     const now = new Date().toISOString();
     db.newsletters.push({
       id,
@@ -67,9 +67,9 @@ test("sending only the registered group leaves prospect untouched", async () => 
 });
 
 test("a group already marked sent is not re-attempted on a second call", async () => {
-  const newsletterId = await withDatabase((db) => {
-    const draftId = nextId(db.drafts);
-    const id = nextId(db.newsletters);
+  const newsletterId = await withDatabase(async (db) => {
+    const draftId = await nextId("drafts");
+    const id = await nextId("newsletters");
     const now = new Date().toISOString();
     db.newsletters.push({
       id,

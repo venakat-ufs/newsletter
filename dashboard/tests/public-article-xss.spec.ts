@@ -5,8 +5,8 @@ import { withDatabase, nextId } from "@/server/store";
 
 test("public article markup escapes a malicious title", async () => {
   let newsletterId = 0;
-  const articleId = await withDatabase((db) => {
-    newsletterId = nextId(db.newsletters);
+  const articleId = await withDatabase(async (db) => {
+    newsletterId = await nextId("newsletters");
     const now = new Date().toISOString();
     db.newsletters.push({
       id: newsletterId,
@@ -23,7 +23,7 @@ test("public article markup escapes a malicious title", async () => {
       updated_at: now,
     });
 
-    const id = nextId(db.articles);
+    const id = await nextId("articles");
     db.articles.push({
       id,
       newsletter_id: newsletterId,
